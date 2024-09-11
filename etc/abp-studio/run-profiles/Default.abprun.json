@@ -1,0 +1,10 @@
+﻿{
+  "applications": {
+    "TvTracker.HttpApi.Host": {
+      "type": "dotnet-project",
+      "launchUrl": "https://localhost:44305",
+      "path": "../../../src/TvTracker.HttpApi.Host/TvTracker.HttpApi.Host.csproj",
+      "kubernetesService": ".*-httpapihost$"  
+    }
+  }
+}
