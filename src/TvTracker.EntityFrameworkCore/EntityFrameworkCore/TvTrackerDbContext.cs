@@ -14,6 +14,7 @@ using Volo.Abp.SettingManagement.EntityFrameworkCore;
 using Volo.Abp.OpenIddict.EntityFrameworkCore;
 using Volo.Abp.TenantManagement;
 using Volo.Abp.TenantManagement.EntityFrameworkCore;
+using TvTracker.Series;
 
 namespace TvTracker.EntityFrameworkCore;
 
@@ -26,7 +27,7 @@ public class TvTrackerDbContext :
     IIdentityDbContext
 {
     /* Add DbSet properties for your Aggregate Roots / Entities here. */
-
+    public DbSet<Serie> Series { get; set; }
 
     #region Entities from the modules
 
@@ -68,6 +69,32 @@ public class TvTrackerDbContext :
         base.OnModelCreating(builder);
 
         /* Include modules to your migration db context */
+        builder.Entity<Serie>(b =>
+        {
+            b.ToTable(TvTrackerConsts.DbTablePrefix + "Series",
+                TvTrackerConsts.DbSchema);
+            b.ConfigureByConvention(); //auto configure for the base class props
+            b.Property(x => x.Title).IsRequired().HasMaxLength(50).HasDefaultValue("");
+            b.Property(x => x.Year).IsRequired().HasMaxLength(9);
+            b.Property(x => x.Rated).IsRequired().HasMaxLength(15);
+            b.Property(x => x.Released).IsRequired().HasMaxLength(15);
+            b.Property(x => x.Runtime).IsRequired().HasMaxLength(15);
+            b.Property(x => x.Genre).IsRequired().HasMaxLength(128);
+            b.Property(x => x.Director).IsRequired().HasMaxLength(256).HasDefaultValue("N/A");
+            b.Property(x => x.Writer).IsRequired().HasMaxLength(256).HasDefaultValue("N/A");
+            b.Property(x => x.Actors).IsRequired().HasMaxLength(256).HasDefaultValue("N/A");
+            b.Property(x => x.Plot).IsRequired().HasMaxLength(256);
+            b.Property(x => x.Language).IsRequired().HasMaxLength(128);
+            b.Property(x => x.Country).IsRequired().HasMaxLength(50);
+            b.Property(x => x.Awards).IsRequired().HasMaxLength(128);
+            b.Property(x => x.Poster).IsRequired().HasMaxLength(256);
+            b.Property(x => x.Metascore).IsRequired().HasMaxLength(10).HasDefaultValue("N/A");
+            b.Property(x => x.IMDBRating).IsRequired().HasMaxLength(4);
+            b.Property(x => x.IMDBVotes).IsRequired().HasMaxLength(15);
+            b.Property(x => x.IMDBID).IsRequired().HasMaxLength(20);
+            b.Property(x => x.Type).IsRequired().HasMaxLength(6);
+            b.Property(x => x.TotalSeasons).IsRequired().HasMaxLength(2);
+        });
 
         builder.ConfigurePermissionManagement();
         builder.ConfigureSettingManagement();
