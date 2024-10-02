@@ -9,6 +9,18 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <Compile Remove="WatchList\**" />
+    <EmbeddedResource Remove="WatchList\**" />
+    <None Remove="WatchList\**" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Compile Remove="Series\ISerieApiService.cs" />
+    <Compile Remove="Series\ISeriesService.cs" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\TvTracker.Application.Contracts\TvTracker.Application.Contracts.csproj" />
     <ProjectReference Include="..\TvTracker.Domain.Shared\TvTracker.Domain.Shared.csproj" />
   </ItemGroup>
 
