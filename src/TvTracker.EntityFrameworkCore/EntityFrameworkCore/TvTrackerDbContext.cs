@@ -112,7 +112,7 @@ public class TvTrackerDbContext :
         //{
         //    b.ToTable(TvTrackerConsts.DbTablePrefix + "YourEntities", TvTrackerConsts.DbSchema);
         //    b.ConfigureByConvention(); //auto configure for the base class props
-        //    //...
+        //    //....
         //});
     }
 }
