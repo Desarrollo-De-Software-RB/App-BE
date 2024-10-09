@@ -6,6 +6,9 @@ using Volo.Abp.AutoMapper;
 using Volo.Abp.FeatureManagement;
 using Volo.Abp.Modularity;
 using Volo.Abp.TenantManagement;
+using Polly;
+using Microsoft.Extensions.DependencyInjection;
+using TvTracker.Series;
 
 namespace TvTracker;
 
@@ -27,5 +30,7 @@ public class TvTrackerApplicationModule : AbpModule
         {
             options.AddMaps<TvTrackerApplicationModule>();
         });
+
+        context.Services.AddTransient<ISeriesApiService, OmdbService>();
     }
 }
