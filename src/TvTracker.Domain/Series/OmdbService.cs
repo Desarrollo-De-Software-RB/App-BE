@@ -1,66 +1,70 @@
-﻿using System;
+﻿using Newtonsoft.Json;
+using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Net.Http;
+using System.Net.Http.Json;
+using System.Text;
 using System.Threading.Tasks;
-using Newtonsoft.Json;
-using Microsoft.Extensions.Options;
-using System.Text.Json;
 
 namespace TvTracker.Series
 {
     public class OmdbService : ISeriesApiService
     {
-        private readonly HttpClient _httpClient;
-        private readonly string _apiKey;  // Reemplaza con tu clave API de OMDb.
-        private const string OmdbApiUrl = "http://www.omdbapi.com/";
-        public class OmdbOptions
-        {
-            public string ApiKey { get; set; }
-        }
-        public OmdbService(HttpClient httpClient, IOptions<OmdbOptions> options)
-        {
-            _httpClient = httpClient;
-            _apiKey = options.Value.ApiKey;
-        }
+        private static readonly string apiKey = "80da1536"; // Reemplaza con tu clave API de OMDb.
+        private static readonly string baseUrl = "http://www.omdbapi.com/";
 
-        public async Task<ICollection<SerieDto>> GetSeriesAsync(string title, string genre)
+        public async Task<ICollection<SerieDto>> GetSeriesAsync(string title, string gender)
         {
-            var url = $"?apikey={_apiKey}&s={title}&type=series";
+            using HttpClient client = new HttpClient();
 
-            var response = await _httpClient.GetStringAsync(url);
-            Console.WriteLine(response); // Para depuración
-            var omdbResponse = System.Text.Json.JsonSerializer.Deserialize<OmdbApiResponse>(response);
+            List<SerieDto> series = new List<SerieDto>();
 
-            var series = new List<SerieDto>();
-            if (omdbResponse.Search != null)
+            string url = $"{baseUrl}?s={title}&apikey={apiKey}&type=series";
+
+            try
             {
-                foreach (var omdbSerie in omdbResponse.Search)
+                // Hacer la solicitud HTTP y obtener la respuesta como string
+                var response = await client.GetAsync(url);
+                response.EnsureSuccessStatusCode();
+
+                string jsonResponse = await response.Content.ReadAsStringAsync();
+
+                // Deserializar la respuesta JSON a un objeto SearchResponse
+                var searchResponse = JsonConvert.DeserializeObject<SearchResponse>(jsonResponse);
+
+                // Retornar la lista de series si existen
+                var seriesOmdb = searchResponse?.Search ?? new List<SerieOmdb>();
+
+                foreach (var serieOmdb in seriesOmdb)
                 {
-                    series.Add(new SerieDto
-                    {
-                        Title = omdbSerie.Title,
-                        Year = omdbSerie.Year,
-                        IMDBID = omdbSerie.imdbID,
-                        Poster = omdbSerie.Poster
+                    series.Add(new SerieDto { 
+                        Title = serieOmdb.Title ,
+                        Year = serieOmdb.Year ,
+                        IMDBID = serieOmdb.IMDBID,
+                        Type = serieOmdb.Type ,
+                        Poster = serieOmdb.Poster ,
                     });
                 }
+
+                return series;
             }
-
-            return series;
+            catch (HttpRequestException e)
+            {
+                throw new Exception("Se ha producido un error en la búsqueda de la serie", e);
+            }
         }
-        // Clases de apoyo para mapear la respuesta de OMDb.
-        public class OmdbApiResponse
+
+        private class SearchResponse
         {
-            public List<OmdbSerie> Search { get; set; }
-            public string totalResults { get; set; }
-            public string Response { get; set; }
+            [JsonProperty("Search")]
+            public List<SerieOmdb> Search { get; set; }
         }
-
-        public class OmdbSerie
+        private class SerieOmdb
         {
             public string Title { get; set; }
             public string Year { get; set; }
-            public string imdbID { get; set; }
+            public string IMDBID { get; set; }
             public string Type { get; set; }
             public string Poster { get; set; }
         }

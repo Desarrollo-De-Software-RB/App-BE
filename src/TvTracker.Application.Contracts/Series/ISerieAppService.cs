@@ -10,6 +10,6 @@ namespace TvTracker.Series
 {
     public interface ISerieAppService : ICrudAppService<SerieDto, int, PagedAndSortedResultRequestDto, CreateUpdateSerieDto, CreateUpdateSerieDto>
     {
-        Task<ICollection<SerieDto>> SearchAsync(string title, string gender);
+        Task<ICollection<SerieDto>> SearchAsync(string? title, string? gender);
     }
 }
