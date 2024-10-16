@@ -28,7 +28,8 @@ public class TvTrackerDbContext :
 {
     /* Add DbSet properties for your Aggregate Roots / Entities here. */
     public DbSet<Serie> Series { get; set; }
-
+    public DbSet<Notification> Notifications { get; set; }
+    public DbSet<TrackedSeries> TrackedSeries { get; set; }
     #region Entities from the modules
 
     /* Notice: We only implemented IIdentityProDbContext 
