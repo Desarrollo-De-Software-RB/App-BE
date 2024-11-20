@@ -3,6 +3,8 @@ using System.Threading.Tasks;
 using System;
 using Volo.Abp.Domain.Repositories;
 
+namespace TvTracker.Notificationes
+{ 
 public class SeriesChangeDetectionService : ISeriesChangeDetectionService
 {
     private readonly IRepository<TrackedSeries, Guid> _trackedSeriesRepository;
@@ -39,4 +41,6 @@ public class SeriesChangeDetectionService : ISeriesChangeDetectionService
         // Implementar lógica para detectar cambios (ej. fecha de último episodio)
         return true; // Placeholder
     }
+}
+
 }

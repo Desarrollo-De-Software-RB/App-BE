@@ -15,6 +15,7 @@ using Volo.Abp.OpenIddict.EntityFrameworkCore;
 using Volo.Abp.TenantManagement;
 using Volo.Abp.TenantManagement.EntityFrameworkCore;
 using TvTracker.Series;
+using TvTracker.Notificationes;
 
 namespace TvTracker.EntityFrameworkCore;
 

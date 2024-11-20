@@ -13,6 +13,7 @@ using Volo.Abp.PermissionManagement.EntityFrameworkCore;
 using Volo.Abp.SettingManagement.EntityFrameworkCore;
 using Volo.Abp.BlobStoring.Database.EntityFrameworkCore;
 using Volo.Abp.TenantManagement.EntityFrameworkCore;
+using TvTracker.Notificationes;
 
 namespace TvTracker.EntityFrameworkCore;
 
@@ -52,6 +53,6 @@ public class TvTrackerEntityFrameworkCoreModule : AbpModule
                  * See also TvTrackerDbContextFactory for EF Core tooling. */
             options.UseSqlServer();
         });
-        
+        context.Services.AddTransient<INotificationRepository, NotificationRepository>();
     }
 }
