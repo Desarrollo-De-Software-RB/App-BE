@@ -1,0 +1,85 @@
+{
+  "template": "app",
+  "imports": {
+    "Volo.Abp.Account": {
+      "version": "8.2.3",
+      "isInstalled": true
+    },
+    "Volo.Abp.OpenIddict": {
+      "version": "8.2.3",
+      "isInstalled": true
+    },
+    "Volo.Abp.Identity": {
+      "version": "8.2.3",
+      "isInstalled": true
+    },
+    "Volo.Abp.TenantManagement": {
+      "version": "8.2.3",
+      "isInstalled": true
+    }
+  },
+  "folders": {
+    "items": {
+      "src": {},
+      "test": {}
+    }
+  },
+  "packages": {
+    "TvTracker.Application": {
+      "path": "src/TvTracker.Application/TvTracker.Application.abppkg",
+      "folder": "src"
+    },
+    "TvTracker.Application.Tests": {
+      "path": "test/TvTracker.Application.Tests/TvTracker.Application.Tests.abppkg",
+      "folder": "test"
+    },
+    "TvTracker.Domain.Shared": {
+      "path": "src/TvTracker.Domain.Shared/TvTracker.Domain.Shared.abppkg",
+      "folder": "src"
+    },
+    "TvTracker.Application.Contracts": {
+      "path": "src/TvTracker.Application.Contracts/TvTracker.Application.Contracts.abppkg",
+      "folder": "src"
+    },
+    "TvTracker.HttpApi": {
+      "path": "src/TvTracker.HttpApi/TvTracker.HttpApi.abppkg",
+      "folder": "src"
+    },
+    "TvTracker.HttpApi.Client": {
+      "path": "src/TvTracker.HttpApi.Client/TvTracker.HttpApi.Client.abppkg",
+      "folder": "src"
+    },
+    "TvTracker.EntityFrameworkCore.Tests": {
+      "path": "test/TvTracker.EntityFrameworkCore.Tests/TvTracker.EntityFrameworkCore.Tests.abppkg",
+      "folder": "test"
+    },
+    "TvTracker.EntityFrameworkCore": {
+      "path": "src/TvTracker.EntityFrameworkCore/TvTracker.EntityFrameworkCore.abppkg",
+      "folder": "src"
+    },
+    "TvTracker.TestBase": {
+      "path": "test/TvTracker.TestBase/TvTracker.TestBase.abppkg",
+      "folder": "test"
+    },
+    "TvTracker.Domain.Tests": {
+      "path": "test/TvTracker.Domain.Tests/TvTracker.Domain.Tests.abppkg",
+      "folder": "test"
+    },
+    "TvTracker.HttpApi.Client.ConsoleTestApp": {
+      "path": "test/TvTracker.HttpApi.Client.ConsoleTestApp/TvTracker.HttpApi.Client.ConsoleTestApp.abppkg",
+      "folder": "test"
+    },
+    "TvTracker.DbMigrator": {
+      "path": "src/TvTracker.DbMigrator/TvTracker.DbMigrator.abppkg",
+      "folder": "src"
+    },
+    "TvTracker.HttpApi.Host": {
+      "path": "src/TvTracker.HttpApi.Host/TvTracker.HttpApi.Host.abppkg",
+      "folder": "src"
+    },
+    "TvTracker.Domain": {
+      "path": "src/TvTracker.Domain/TvTracker.Domain.abppkg",
+      "folder": "src"
+    }
+  }
+}
