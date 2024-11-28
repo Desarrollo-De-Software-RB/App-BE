@@ -1,0 +1,25 @@
+<h2>Buscar Series</h2>
+<form class="search-form mb-3" (ngSubmit)="searchSeries()">
+    <div class="input-group">
+        <input type="text" [(ngModel)]="serieTitle" name="title" class="form-control"
+            placeholder="Ingrese el título de la serie" required />
+        <div class="input-group-append">
+            <button type="submit" class="btn btn-primary">Buscar</button>
+        </div>
+    </div>
+</form>
+<div class="alert alert-warning" *ngIf="!series.length && searchPerformed">
+    No se encontraron resultados para "{{ lastSearchedTitle }}". Intente con otro título.
+</div>
+<div class="datatable-container" *ngIf="series.length > 0">
+    <ngx-datatable class="bootstrap table table-striped table-bordered" [rows]="series" [columnMode]="'force'"
+        [headerHeight]="50" [footerHeight]="50" [rowHeight]="'auto'">
+        <ngx-datatable-column name="Título" prop="title"></ngx-datatable-column>
+        <ngx-datatable-column name="Año" prop="year"></ngx-datatable-column>
+        <ngx-datatable-column name="Poster" [sortable]="false">
+            <ng-template let-row="row" ngx-datatable-cell-template>
+                <img *ngIf="row.poster !== 'N/A'" [src]="row.poster" alt="{{ row.title }}" width="50" />
+            </ng-template>
+        </ngx-datatable-column>
+    </ngx-datatable>
+</div>
