@@ -16,6 +16,9 @@ using Volo.Abp.TenantManagement;
 using Volo.Abp.TenantManagement.EntityFrameworkCore;
 using TvTracker.Series;
 using TvTracker.WatchLists;
+using Microsoft.Extensions.DependencyInjection;
+using Microsoft.EntityFrameworkCore.Infrastructure;
+using TvTracker.User;
 
 namespace TvTracker.EntityFrameworkCore;
 
@@ -30,6 +33,8 @@ public class TvTrackerDbContext :
     /* Add DbSet properties for your Aggregate Roots / Entities here. */
     public DbSet<Serie> Series { get; set; }
     public DbSet<Watchlist> Whatchlists { get; set; }
+
+    private readonly CurrentUserService _currentUserService;
 
     #region Entities from the modules
 
@@ -63,12 +68,14 @@ public class TvTrackerDbContext :
     public TvTrackerDbContext(DbContextOptions<TvTrackerDbContext> options)
         : base(options)
     {
-
+        _currentUserService = this.GetService<CurrentUserService>();
     }
 
     protected override void OnModelCreating(ModelBuilder builder)
     {
         base.OnModelCreating(builder);
+
+        builder.Entity<Serie>().HasQueryFilter(serie => serie.CreatorId == _currentUserService.GetCurrentUserId());
 
         /* Include modules to your migration db context */
         builder.Entity<Serie>(b =>
