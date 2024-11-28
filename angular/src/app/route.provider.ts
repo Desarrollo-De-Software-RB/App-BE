@@ -14,6 +14,12 @@ function configureRoutes(routes: RoutesService) {
         iconClass: 'fas fa-home',
         order: 1,
         layout: eLayoutType.application,
+      },      {
+        path: '/series',
+        name: 'Busqueda de Series',
+        iconClass: 'fas fa-film',
+        order: 2,
+        layout: eLayoutType.application,
       },
     ]);
   };
