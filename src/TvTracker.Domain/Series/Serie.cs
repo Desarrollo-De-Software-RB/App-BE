@@ -4,10 +4,11 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Volo.Abp.Domain.Entities;
+using Volo.Abp.Auditing;
 
 namespace TvTracker.Series
 {
-    public class Serie : AggregateRoot<int>
+    public class Serie : AggregateRoot<int>, IMustHaveCreator<Guid>
     {
         public string Title { get; set; }
         public string Year { get; set; }
@@ -29,5 +30,7 @@ namespace TvTracker.Series
         public string IMDBID { get; set; }
         public string Type { get; set; }
         public int TotalSeasons { get; set; }
+        public Guid Creator { get; set; }
+        public Guid CreatorId { get; set; }
     }
 }
