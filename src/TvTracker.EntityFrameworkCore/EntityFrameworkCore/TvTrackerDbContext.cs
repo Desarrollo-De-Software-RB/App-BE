@@ -15,6 +15,7 @@ using Volo.Abp.OpenIddict.EntityFrameworkCore;
 using Volo.Abp.TenantManagement;
 using Volo.Abp.TenantManagement.EntityFrameworkCore;
 using TvTracker.Series;
+using TvTracker.Notificationes;
 using TvTracker.WatchLists;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.EntityFrameworkCore.Infrastructure;
@@ -32,8 +33,9 @@ public class TvTrackerDbContext :
 {
     /* Add DbSet properties for your Aggregate Roots / Entities here. */
     public DbSet<Serie> Series { get; set; }
+    public DbSet<Notification> Notifications { get; set; }
+    public DbSet<TrackedSeries> TrackedSeries { get; set; }
     public DbSet<Watchlist> Whatchlists { get; set; }
-
     private readonly CurrentUserService _currentUserService;
 
     #region Entities from the modules
