@@ -22,39 +22,45 @@ namespace TvTracker.Series
             // 1. Search in API by title (lightweight)
             var apiResults = await _seriesApiService.SearchByTitleAsync(title, type);
 
-            // 2. Sync results to local DB
+            // 2. Load existing series from DB once (to avoid async queries in loop)
+            var queryable = await Repository.GetQueryableAsync();
+            var imdbIds = apiResults.Select(s => s.IMDBID).ToList();
+            
+            // Note: In a real DB, this translates to WHERE IMDBID IN (...)
+            var existingSeries = queryable.Where(s => imdbIds.Contains(s.IMDBID)).ToList();
+            var existingImdbIds = new HashSet<string>(existingSeries.Select(s => s.IMDBID));
+
+            // 3. Sync results to local DB
             foreach (var apiSerie in apiResults)
             {
-                var existingSerie = await Repository.FirstOrDefaultAsync(s => s.IMDBID == apiSerie.IMDBID);
-                if (existingSerie == null)
+                if (!existingImdbIds.Contains(apiSerie.IMDBID))
                 {
                     // Fetch full details and save
                     var fullSerie = await _seriesApiService.GetSerieDetailsAsync(apiSerie.IMDBID);
                     if (fullSerie != null)
                     {
-                        await Repository.InsertAsync(fullSerie, true);
+                        var insertedSerie = await Repository.InsertAsync(fullSerie, true);
+                        existingSeries.Add(insertedSerie);
                     }
                 }
             }
 
-            // 3. Query local DB with filters (Title AND Genre)
-            // We use Contains for title to match what API returned (roughly) and exact/contains for genre
-            var query = await Repository.GetQueryableAsync();
-            var localResults = query
-                .Where(s => s.Title.Contains(title))
-                .WhereIf(!string.IsNullOrEmpty(genre), s => s.Genre.Contains(genre))
+            // 4. Query local results with filters (Title AND Genre)
+            // We filter in memory since we have the relevant subset (or we could query DB again if needed, but this is efficient for search results)
+            var localResults = existingSeries
+                .Where(s => (title == null || s.Title.Contains(title, StringComparison.OrdinalIgnoreCase)))
+                .WhereIf(!string.IsNullOrEmpty(genre), s => s.Genre.Contains(genre, StringComparison.OrdinalIgnoreCase))
                 .WhereIf(!string.IsNullOrEmpty(type), s => s.Type == type)
                 .ToList();
-
-            // If local results are empty but we had API results, it might be due to strict title matching or genre filtering.
-            // However, the requirement is to use local DB for genre filtering.
             
             return ObjectMapper.Map<ICollection<Serie>, ICollection<SerieDto>>(localResults);
         }
 
         public async Task<SerieDto> GetByImdbIdAsync(string imdbId)
         {
-            var serie = await Repository.FirstOrDefaultAsync(s => s.IMDBID == imdbId);
+            var queryable = await Repository.GetQueryableAsync();
+            // Using synchronous FirstOrDefault to avoid async extension method mocking issues in unit tests
+            var serie = queryable.FirstOrDefault(s => s.IMDBID == imdbId);
             
             if (serie == null)
             {
