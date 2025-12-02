@@ -69,5 +69,6 @@ public class TvTrackerDomainModule : AbpModule
 #if DEBUG
         context.Services.Replace(ServiceDescriptor.Singleton<IEmailSender, NullEmailSender>());
 #endif
+        context.Services.AddHttpClient();
     }
 }

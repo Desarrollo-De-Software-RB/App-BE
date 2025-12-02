@@ -17,9 +17,10 @@ namespace TvTracker.Series
             _seriesApiService = seriesapiService;
         }
 
-        public async Task<ICollection<SerieDto>> SearchAsync(string? title, string? gender)
+        public async Task<ICollection<SerieDto>> SearchAsync(string? title, string? genre)
         {
-            return await _seriesApiService.GetSeriesAsync(title, gender);
+            var series = await _seriesApiService.GetSeriesAsync(title, genre);
+            return ObjectMapper.Map<ICollection<Serie>, ICollection<SerieDto>>(series);
         }
     }
 }

@@ -1,50 +1,87 @@
-﻿using Newtonsoft.Json;
+﻿using Microsoft.Extensions.Configuration;
+using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
-using System.Linq;
+using System.Globalization;
 using System.Net.Http;
-using System.Net.Http.Json;
-using System.Text;
 using System.Threading.Tasks;
+using Volo.Abp.DependencyInjection;
 
 namespace TvTracker.Series
 {
-    public class OmdbService : ISeriesApiService
+    public class OmdbService : ISeriesApiService, ITransientDependency
     {
-        private static readonly string apiKey = "80da1536"; // Reemplaza con tu clave API de OMDb.
-        private static readonly string baseUrl = "http://www.omdbapi.com/";
+        private readonly IHttpClientFactory _httpClientFactory;
+        private readonly IConfiguration _configuration;
 
-        public async Task<ICollection<SerieDto>> GetSeriesAsync(string title, string gender)
+        public OmdbService(IHttpClientFactory httpClientFactory, IConfiguration configuration)
         {
-            using HttpClient client = new HttpClient();
+            _httpClientFactory = httpClientFactory;
+            _configuration = configuration;
+        }
 
-            List<SerieDto> series = new List<SerieDto>();
+        public async Task<ICollection<Serie>> GetSeriesAsync(string title, string? genre)
+        {
+            var apiKey = _configuration["Omdb:ApiKey"];
+            var baseUrl = "http://www.omdbapi.com/";
 
-            string url = $"{baseUrl}?s={title}&apikey={apiKey}&type=series";
+            using var client = _httpClientFactory.CreateClient();
+
+            List<Serie> series = new List<Serie>();
+
+            // 1. Search by title
+            string searchUrl = $"{baseUrl}?s={title}&apikey={apiKey}&type=series";
 
             try
             {
-                // Hacer la solicitud HTTP y obtener la respuesta como string
-                var response = await client.GetAsync(url);
+                var response = await client.GetAsync(searchUrl);
                 response.EnsureSuccessStatusCode();
 
                 string jsonResponse = await response.Content.ReadAsStringAsync();
-
-                // Deserializar la respuesta JSON a un objeto SearchResponse
                 var searchResponse = JsonConvert.DeserializeObject<SearchResponse>(jsonResponse);
 
-                // Retornar la lista de series si existen
-                var seriesOmdb = searchResponse?.Search ?? new List<SerieOmdb>();
+                var searchResults = searchResponse?.Search ?? new List<SerieOmdb>();
 
-                foreach (var serieOmdb in seriesOmdb)
+                // 2. For each result, fetch full details
+                foreach (var searchResult in searchResults)
                 {
-                    series.Add(new SerieDto { 
-                        Title = serieOmdb.Title ,
-                        Year = serieOmdb.Year ,
-                        IMDBID = serieOmdb.IMDBID,
-                        Type = serieOmdb.Type ,
-                        Poster = serieOmdb.Poster ,
-                    });
+                    string detailUrl = $"{baseUrl}?i={searchResult.IMDBID}&apikey={apiKey}&plot=full";
+                    var detailResponse = await client.GetAsync(detailUrl);
+                    
+                    if (detailResponse.IsSuccessStatusCode)
+                    {
+                        string detailJson = await detailResponse.Content.ReadAsStringAsync();
+                        var fullDetail = JsonConvert.DeserializeObject<SerieOmdb>(detailJson);
+
+                        // 3. Filter by genre if provided
+                        if (!string.IsNullOrEmpty(genre))
+                        {
+                            Console.WriteLine($"Filtering by genre: '{genre}'. Found genre: '{fullDetail.Genre}'");
+                            if (string.IsNullOrEmpty(fullDetail.Genre) || 
+                                !fullDetail.Genre.Contains(genre, StringComparison.OrdinalIgnoreCase))
+                            {
+                                Console.WriteLine("Filtered out.");
+                                continue;
+                            }
+                            Console.WriteLine("Match found.");
+                        }
+
+                        // 4. Map to Serie entity
+                        float.TryParse(fullDetail.IMDBRating, NumberStyles.Any, CultureInfo.InvariantCulture, out float rating);
+
+                        series.Add(new Serie
+                        {
+                            Title = fullDetail.Title,
+                            Year = fullDetail.Year,
+                            IMDBID = fullDetail.IMDBID,
+                            Type = fullDetail.Type,
+                            Poster = fullDetail.Poster,
+                            Genre = fullDetail.Genre,
+                            Plot = fullDetail.Plot,
+                            Actors = fullDetail.Actors,
+                            IMDBRating = rating
+                        });
+                    }
                 }
 
                 return series;
@@ -60,6 +97,7 @@ namespace TvTracker.Series
             [JsonProperty("Search")]
             public List<SerieOmdb> Search { get; set; }
         }
+        
         private class SerieOmdb
         {
             public string Title { get; set; }
@@ -67,6 +105,10 @@ namespace TvTracker.Series
             public string IMDBID { get; set; }
             public string Type { get; set; }
             public string Poster { get; set; }
+            public string Genre { get; set; }
+            public string Plot { get; set; }
+            public string Actors { get; set; }
+            public string IMDBRating { get; set; }
         }
     }
 }
