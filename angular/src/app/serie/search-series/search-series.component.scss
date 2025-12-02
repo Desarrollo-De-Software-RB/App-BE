@@ -2,13 +2,31 @@
     .image-container {
         position: relative;
         overflow: hidden;
+        height: 300px;
 
         img {
             transition: filter 0.3s ease, transform 0.3s ease;
             width: 100%;
-            height: auto;
+            height: 100%;
             object-fit: cover;
             display: block;
+        }
+
+        .no-poster {
+            width: 100%;
+            height: 100%;
+            background-color: #e0e0e0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+            padding: 1rem;
+
+            span {
+                font-size: 1.5rem;
+                font-weight: bold;
+                color: #666;
+            }
         }
 
         .overlay {
@@ -19,6 +37,7 @@
                 -webkit-mask-image: linear-gradient(to bottom, black 60%, transparent 100%);
             }
 
+            user-select: none;
             position: absolute;
             top: 0;
             left: 0;
@@ -37,6 +56,7 @@
             overflow-y: auto;
             font-size: 0.95rem;
             backdrop-filter: blur(2px);
+
             p {
                 margin-bottom: 0.5rem;
                 text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.8);

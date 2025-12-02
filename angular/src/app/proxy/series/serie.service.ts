@@ -44,11 +44,11 @@ export class SerieService {
     { apiName: this.apiName,...config });
   
 
-  search = (title: string, genre: string, config?: Partial<Rest.Config>) =>
+  search = (title: string, genre: string, type?: string, config?: Partial<Rest.Config>) =>
     this.restService.request<any, SerieDto[]>({
       method: 'POST',
       url: '/api/app/serie/search',
-      params: { title, genre },
+      params: { title, genre, type },
     },
     { apiName: this.apiName,...config });
   

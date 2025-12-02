@@ -1,4 +1,4 @@
- import { Environment } from '@abp/ng.core';
+import { Environment } from '@abp/ng.core';
 
 const baseUrl = 'http://localhost:4200';
 
@@ -8,7 +8,7 @@ const oAuthConfig = {
   clientId: 'TvTracker_App',
   responseType: 'code',
   scope: 'offline_access TvTracker',
-  requireHttps: true,
+  requireHttps: false,
 };
 
 export const environment = {

@@ -12,6 +12,8 @@ export class SearchSeriesComponent {
     series: SerieDto[] = [];
     searchTitle: string = '';
     searchGenre: string = '';
+    searchType: string = '';
+    hasSearched: boolean = false;
 
     constructor(private serieService: SerieService) { }
 
@@ -20,8 +22,13 @@ export class SearchSeriesComponent {
             return;
         }
 
-        this.serieService.search(this.searchTitle, this.searchGenre).subscribe((response) => {
+        this.serieService.search(this.searchTitle, this.searchGenre, this.searchType).subscribe((response) => {
             this.series = response;
+            this.hasSearched = true;
         });
+    }
+
+    handleImageError(serie: SerieDto) {
+        serie.poster = 'N/A';
     }
 }

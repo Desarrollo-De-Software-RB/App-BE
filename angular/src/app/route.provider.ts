@@ -16,7 +16,7 @@ function configureRoutes(routes: RoutesService) {
         layout: eLayoutType.application,
       }, {
         path: '/series/search',
-        name: 'Busqueda de Series',
+        name: 'Busqueda de contenido',
         iconClass: 'fas fa-film',
         order: 2,
         layout: eLayoutType.application,
