@@ -1,8 +1,18 @@
 .series-card {
+    transition: all 0.3s ease;
+    border: none;
+    box-shadow: 0 2px 15px rgba(0, 0, 0, 0.1);
+
+    &:hover {
+        transform: translateY(-5px);
+        box-shadow: 0 5px 20px rgba(0, 0, 0, 0.2);
+    }
+
     .image-container {
         position: relative;
         overflow: hidden;
         height: 300px;
+        cursor: pointer;
 
         img {
             transition: filter 0.3s ease, transform 0.3s ease;
