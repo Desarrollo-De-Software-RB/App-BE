@@ -8,7 +8,7 @@ import { Injectable } from '@angular/core';
 })
 export class SerieService {
   apiName = 'Default';
-  
+
 
   create = (input: CreateUpdateSerieDto, config?: Partial<Rest.Config>) =>
     this.restService.request<any, SerieDto>({
@@ -16,24 +16,24 @@ export class SerieService {
       url: '/api/app/serie',
       body: input,
     },
-    { apiName: this.apiName,...config });
-  
+      { apiName: this.apiName, ...config });
+
 
   delete = (id: number, config?: Partial<Rest.Config>) =>
     this.restService.request<any, void>({
       method: 'DELETE',
       url: `/api/app/serie/${id}`,
     },
-    { apiName: this.apiName,...config });
-  
+      { apiName: this.apiName, ...config });
+
 
   get = (id: number, config?: Partial<Rest.Config>) =>
     this.restService.request<any, SerieDto>({
       method: 'GET',
       url: `/api/app/serie/${id}`,
     },
-    { apiName: this.apiName,...config });
-  
+      { apiName: this.apiName, ...config });
+
 
   getList = (input: PagedAndSortedResultRequestDto, config?: Partial<Rest.Config>) =>
     this.restService.request<any, PagedResultDto<SerieDto>>({
@@ -41,8 +41,15 @@ export class SerieService {
       url: '/api/app/serie',
       params: { sorting: input.sorting, skipCount: input.skipCount, maxResultCount: input.maxResultCount },
     },
-    { apiName: this.apiName,...config });
-  
+      { apiName: this.apiName, ...config });
+
+  getByImdbId = (imdbId: string, config?: Partial<Rest.Config>) =>
+    this.restService.request<any, SerieDto>({
+      method: 'GET',
+      url: `/api/app/serie/by-imdb-id/${imdbId}`,
+    },
+      { apiName: this.apiName, ...config });
+
 
   search = (title: string, genre: string, type?: string, config?: Partial<Rest.Config>) =>
     this.restService.request<any, SerieDto[]>({
@@ -50,8 +57,8 @@ export class SerieService {
       url: '/api/app/serie/search',
       params: { title, genre, type },
     },
-    { apiName: this.apiName,...config });
-  
+      { apiName: this.apiName, ...config });
+
 
   update = (id: number, input: CreateUpdateSerieDto, config?: Partial<Rest.Config>) =>
     this.restService.request<any, SerieDto>({
@@ -59,7 +66,7 @@ export class SerieService {
       url: `/api/app/serie/${id}`,
       body: input,
     },
-    { apiName: this.apiName,...config });
+      { apiName: this.apiName, ...config });
 
-  constructor(private restService: RestService) {}
+  constructor(private restService: RestService) { }
 }

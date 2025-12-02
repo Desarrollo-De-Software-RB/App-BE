@@ -22,5 +22,11 @@ namespace TvTracker.Series
             var series = await _seriesApiService.GetSeriesAsync(title, genre, type);
             return ObjectMapper.Map<ICollection<Serie>, ICollection<SerieDto>>(series);
         }
+
+        public async Task<SerieDto> GetByImdbIdAsync(string imdbId)
+        {
+            var serie = await Repository.FirstOrDefaultAsync(s => s.IMDBID == imdbId);
+            return ObjectMapper.Map<Serie, SerieDto>(serie);
+        }
     }
 }
