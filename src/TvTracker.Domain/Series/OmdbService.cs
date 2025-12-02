@@ -30,7 +30,7 @@ namespace TvTracker.Series
             List<Serie> series = new List<Serie>();
 
             // 1. Search by title
-            string searchUrl = $"{baseUrl}?s={title}&apikey={apiKey}&type=series";
+            string searchUrl = $"{baseUrl}?s={title}&apikey={apiKey}";
 
             try
             {
