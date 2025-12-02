@@ -1,0 +1,72 @@
+.detail-container {
+  position: relative;
+  min-height: 100vh;
+  overflow: hidden;
+  background-color: #141414;
+  color: #fff;
+  padding-top: 2rem;
+  padding-bottom: 2rem;
+}
+
+.backdrop {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-size: cover;
+  background-position: center;
+  filter: blur(20px) brightness(0.3);
+  z-index: 0;
+}
+
+.content-wrapper {
+  position: relative;
+  z-index: 1;
+}
+
+.detail-card {
+  background: rgba(0, 0, 0, 0.7);
+  backdrop-filter: blur(10px);
+  border: none;
+  border-radius: 15px;
+  overflow: hidden;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+  color: #fff;
+}
+
+.poster-col {
+  position: relative;
+  min-height: 400px;
+}
+
+.poster-img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.card-title {
+  background-image: linear-gradient(to right, #fff, #ccc);
+  background-clip: text;
+  color: transparent;
+}
+
+.text-muted {
+  color: #aaa !important;
+}
+
+.badge {
+  font-size: 0.9rem;
+  padding: 0.5em 0.8em;
+}
+
+.btn-outline-light {
+    border-color: rgba(255,255,255,0.5);
+    color: rgba(255,255,255,0.8);
+    &:hover {
+        background-color: rgba(255,255,255,0.1);
+        color: #fff;
+        border-color: #fff;
+    }
+}

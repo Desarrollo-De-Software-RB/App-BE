@@ -1,4 +1,5 @@
 import { Component } from '@angular/core';
+import { Router } from '@angular/router';
 import { SerieDto, SerieService } from '@proxy/series';
 import { ListService, PagedResultDto } from '@abp/ng.core';
 
@@ -15,7 +16,7 @@ export class SearchSeriesComponent {
     searchType: string = '';
     hasSearched: boolean = false;
 
-    constructor(private serieService: SerieService) { }
+    constructor(private serieService: SerieService, private router: Router) { }
 
     search() {
         if (!this.searchTitle && !this.searchGenre) {
@@ -30,5 +31,9 @@ export class SearchSeriesComponent {
 
     handleImageError(serie: SerieDto) {
         serie.poster = 'N/A';
+    }
+
+    viewDetails(imdbId: string) {
+        this.router.navigate(['/series/search', imdbId]);
     }
 }

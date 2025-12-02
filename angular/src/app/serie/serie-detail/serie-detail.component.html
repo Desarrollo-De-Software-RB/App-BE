@@ -1,0 +1,74 @@
+<div class="container-fluid detail-container" *ngIf="serie; else loadingTpl">
+  <div class="backdrop" [style.backgroundImage]="'url(' + serie.poster + ')'"></div>
+  <div class="content-wrapper">
+    <div class="row justify-content-center align-items-center h-100">
+      <div class="col-md-10 col-lg-8">
+        <div class="card detail-card">
+          <div class="row g-0">
+            <div class="col-md-5 poster-col">
+              <img [src]="serie.poster" class="img-fluid rounded-start poster-img" alt="{{ serie.title }}">
+            </div>
+            <div class="col-md-7">
+              <div class="card-body p-4 p-md-5">
+                <h1 class="card-title display-5 fw-bold mb-3">{{ serie.title }}</h1>
+                
+                <div class="badges mb-4">
+                  <span class="badge bg-primary me-2">{{ serie.type | titlecase }}</span>
+                  <span class="badge bg-secondary me-2">{{ serie.year }}</span>
+                  <span class="badge bg-warning text-dark me-2">IMDB: {{ serie.imdbRating }}</span>
+                  <span class="badge bg-info text-dark">{{ serie.runtime }}</span>
+                </div>
+
+                <div class="info-group mb-3">
+                  <h5 class="text-muted text-uppercase small fw-bold">Genre</h5>
+                  <p class="lead">{{ serie.genre }}</p>
+                </div>
+
+                <div class="info-group mb-3">
+                  <h5 class="text-muted text-uppercase small fw-bold">Plot</h5>
+                  <p>{{ serie.plot }}</p>
+                </div>
+
+                <div class="row">
+                  <div class="col-6">
+                    <div class="info-group mb-3">
+                      <h5 class="text-muted text-uppercase small fw-bold">Released</h5>
+                      <p>{{ serie.released }}</p>
+                    </div>
+                  </div>
+                  <div class="col-6">
+                    <div class="info-group mb-3">
+                      <h5 class="text-muted text-uppercase small fw-bold">Country</h5>
+                      <p>{{ serie.country }}</p>
+                    </div>
+                  </div>
+                </div>
+
+                <div class="info-group mb-3">
+                  <h5 class="text-muted text-uppercase small fw-bold">Team</h5>
+                  <p class="mb-1"><strong>Director:</strong> {{ serie.director }}</p>
+                  <p class="mb-1"><strong>Writer:</strong> {{ serie.writer }}</p>
+                  <p class="mb-0"><strong>Actors:</strong> {{ serie.actors }}</p>
+                </div>
+
+                <div class="mt-4">
+                    <button class="btn btn-outline-light" onclick="history.back()">
+                        <i class="fa fa-arrow-left me-2"></i> Back
+                    </button>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<ng-template #loadingTpl>
+  <div class="d-flex justify-content-center align-items-center vh-100">
+    <div class="spinner-border text-primary" role="status">
+      <span class="visually-hidden">Loading...</span>
+    </div>
+  </div>
+</ng-template>
