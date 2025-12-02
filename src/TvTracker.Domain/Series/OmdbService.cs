@@ -3,6 +3,7 @@ using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
 using System.Globalization;
+using System.Linq;
 using System.Net.Http;
 using System.Threading.Tasks;
 using Volo.Abp.DependencyInjection;
@@ -20,7 +21,7 @@ namespace TvTracker.Series
             _configuration = configuration;
         }
 
-        public async Task<ICollection<Serie>> GetSeriesAsync(string title, string? genre)
+        public async Task<ICollection<Serie>> GetSeriesAsync(string title, string? genre, string? type = null)
         {
             var apiKey = _configuration["Omdb:ApiKey"];
             var baseUrl = "http://www.omdbapi.com/";
@@ -28,24 +29,42 @@ namespace TvTracker.Series
             using var client = _httpClientFactory.CreateClient();
 
             List<Serie> series = new List<Serie>();
+            var searchResults = new List<SerieOmdb>();
 
-            // 1. Search by title
-            string searchUrl = $"{baseUrl}?s={title}&apikey={apiKey}";
+            // Helper function to fetch results
+            async Task FetchResults(string searchType)
+            {
+                string searchUrl = $"{baseUrl}?s={title}&type={searchType}&apikey={apiKey}";
+                var response = await client.GetAsync(searchUrl);
+                if (response.IsSuccessStatusCode)
+                {
+                    string jsonResponse = await response.Content.ReadAsStringAsync();
+                    var searchResponse = JsonConvert.DeserializeObject<SearchResponse>(jsonResponse);
+                    if (searchResponse?.Search != null)
+                    {
+                        searchResults.AddRange(searchResponse.Search);
+                    }
+                }
+            }
 
             try
             {
-                var response = await client.GetAsync(searchUrl);
-                response.EnsureSuccessStatusCode();
-
-                string jsonResponse = await response.Content.ReadAsStringAsync();
-                var searchResponse = JsonConvert.DeserializeObject<SearchResponse>(jsonResponse);
-
-                var searchResults = searchResponse?.Search ?? new List<SerieOmdb>();
+                if (!string.IsNullOrEmpty(type) && (type.ToLower() == "movie" || type.ToLower() == "series"))
+                {
+                    // Search only for specific type
+                    await FetchResults(type.ToLower());
+                }
+                else
+                {
+                    // Search for both
+                    await FetchResults("series");
+                    await FetchResults("movie");
+                }
 
                 // 2. For each result, fetch full details
                 foreach (var searchResult in searchResults)
                 {
-                    string detailUrl = $"{baseUrl}?i={searchResult.IMDBID}&apikey={apiKey}&plot=full";
+                    string detailUrl = $"{baseUrl}?i={searchResult.IMDBID}&apikey={apiKey}";
                     var detailResponse = await client.GetAsync(detailUrl);
                     
                     if (detailResponse.IsSuccessStatusCode)
@@ -84,7 +103,8 @@ namespace TvTracker.Series
                     }
                 }
 
-                return series;
+                // Sort by Title
+                return series.OrderBy(s => s.Title).ToList();
             }
             catch (HttpRequestException e)
             {

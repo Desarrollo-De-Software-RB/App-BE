@@ -8,6 +8,6 @@ namespace TvTracker.Series
 {
     public interface ISeriesApiService
     {
-        Task<ICollection<Serie>> GetSeriesAsync(string title, string? genre);
+        Task<ICollection<Serie>> GetSeriesAsync(string title, string? genre, string? type = null);
     }
 }
