@@ -76,7 +76,7 @@ public class TvTrackerDbContext :
             b.ToTable(TvTrackerConsts.DbTablePrefix + "Series",
                 TvTrackerConsts.DbSchema);
             b.ConfigureByConvention(); //auto configure for the base class props
-            b.Property(x => x.Title).IsRequired().HasMaxLength(50).HasDefaultValue("");
+            b.Property(x => x.Title).IsRequired().HasMaxLength(256).HasDefaultValue("");
             b.Property(x => x.Year).IsRequired().HasMaxLength(9);
             b.Property(x => x.Rated).IsRequired().HasMaxLength(15);
             b.Property(x => x.Released).IsRequired().HasMaxLength(15);
@@ -87,7 +87,7 @@ public class TvTrackerDbContext :
             b.Property(x => x.Actors).IsRequired().HasMaxLength(256).HasDefaultValue("N/A");
             b.Property(x => x.Plot).IsRequired().HasMaxLength(256);
             b.Property(x => x.Language).IsRequired().HasMaxLength(128);
-            b.Property(x => x.Country).IsRequired().HasMaxLength(50);
+            b.Property(x => x.Country).IsRequired().HasMaxLength(256);
             b.Property(x => x.Awards).IsRequired().HasMaxLength(128);
             b.Property(x => x.Poster).IsRequired().HasMaxLength(256);
             b.Property(x => x.Metascore).IsRequired().HasMaxLength(10).HasDefaultValue("N/A");
