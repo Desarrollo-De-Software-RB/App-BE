@@ -1,0 +1,57 @@
+<div class="card">
+    <div class="card-header">
+        <div class="row">
+            <div class="col col-md-6">
+                <h5 class="card-title">
+                    Busqueda de series
+                </h5>
+            </div>
+        </div>
+    </div>
+    <div class="card-body">
+        <div class="row mb-3">
+            <div class="col-md-4">
+                <input type="text" class="form-control" placeholder="Title" [(ngModel)]="searchTitle"
+                    (keyup.enter)="search()">
+            </div>
+            <div class="col-md-4">
+                <input type="text" class="form-control" placeholder="Genre" [(ngModel)]="searchGenre"
+                    (keyup.enter)="search()">
+            </div>
+            <div class="col-md-4">
+                <button class="btn btn-primary" (click)="search()">
+                    <i class="fa fa-search me-1"></i>
+                    Search
+                </button>
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="col-md-3 mb-3" *ngFor="let serie of series">
+                <div class="card h-100 series-card">
+                    <div class="image-container">
+                        <img [src]="serie.poster" class="card-img-top" alt="{{ serie.title }}"
+                            *ngIf="serie.poster && serie.poster !== 'N/A'">
+                        <div class="overlay">
+                            <p class="mb-1"><strong>Genre:</strong> {{ serie.genre }}</p>
+                            <p class="mb-1 small plot-text"><strong>Plot:</strong> {{ serie.plot }}</p>
+                            <p class="mb-1 small"><strong>Actors:</strong> {{ serie.actors }}</p>
+                            <p class="mb-0"><strong>Rating:</strong> {{ serie.imdbRating }}</p>
+                        </div>
+                    </div>
+                    <div class="card-body">
+                        <h5 class="card-title">{{ serie.title }}</h5>
+                        <p class="card-text">
+                            <span class="badge bg-secondary me-1">{{ serie.year }}</span>
+                            <span class="badge bg-info">{{ serie.type }}</span>
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div *ngIf="series.length === 0 && (searchTitle || searchGenre)" class="alert alert-info">
+            No se encontraron resultados
+        </div>
+    </div>
+</div>
