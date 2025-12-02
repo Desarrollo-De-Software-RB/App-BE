@@ -140,6 +140,9 @@ namespace TvTracker.Migrations
                         .HasMaxLength(6)
                         .HasColumnType("nvarchar(6)");
 
+                    b.Property<int?>("WatchlistId")
+                        .HasColumnType("int");
+
                     b.Property<string>("Writer")
                         .IsRequired()
                         .ValueGeneratedOnAdd()
@@ -154,7 +157,34 @@ namespace TvTracker.Migrations
 
                     b.HasKey("Id");
 
+                    b.HasIndex("WatchlistId");
+
                     b.ToTable("AppSeries", (string)null);
+                });
+
+            modelBuilder.Entity("TvTracker.WatchLists.Watchlist", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<string>("ConcurrencyStamp")
+                        .IsConcurrencyToken()
+                        .IsRequired()
+                        .HasMaxLength(40)
+                        .HasColumnType("nvarchar(40)")
+                        .HasColumnName("ConcurrencyStamp");
+
+                    b.Property<string>("ExtraProperties")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)")
+                        .HasColumnName("ExtraProperties");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("AppWhatchlist", (string)null);
                 });
 
             modelBuilder.Entity("Volo.Abp.AuditLogging.AuditLog", b =>
@@ -2030,6 +2060,13 @@ namespace TvTracker.Migrations
                     b.ToTable("AbpTenantConnectionStrings", (string)null);
                 });
 
+            modelBuilder.Entity("TvTracker.Series.Serie", b =>
+                {
+                    b.HasOne("TvTracker.WatchLists.Watchlist", null)
+                        .WithMany("Series")
+                        .HasForeignKey("WatchlistId");
+                });
+
             modelBuilder.Entity("Volo.Abp.AuditLogging.AuditLogAction", b =>
                 {
                     b.HasOne("Volo.Abp.AuditLogging.AuditLog", null)
@@ -2179,6 +2216,11 @@ namespace TvTracker.Migrations
                         .HasForeignKey("TenantId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
+                });
+
+            modelBuilder.Entity("TvTracker.WatchLists.Watchlist", b =>
+                {
+                    b.Navigation("Series");
                 });
 
             modelBuilder.Entity("Volo.Abp.AuditLogging.AuditLog", b =>
