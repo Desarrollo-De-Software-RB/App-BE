@@ -21,20 +21,18 @@ namespace TvTracker.Series
             _configuration = configuration;
         }
 
-        public async Task<ICollection<Serie>> GetSeriesAsync(string title, string? genre, string? type = null)
+        public async Task<ICollection<Serie>> SearchByTitleAsync(string title, string? type = null)
         {
             var apiKey = _configuration["Omdb:ApiKey"];
-            var baseUrl = "http://www.omdbapi.com/";
+            var baseUrl = "https://www.omdbapi.com/";
 
             using var client = _httpClientFactory.CreateClient();
-
-            List<Serie> series = new List<Serie>();
             var searchResults = new List<SerieOmdb>();
 
-            // Helper function to fetch results
             async Task FetchResults(string searchType)
             {
-                string searchUrl = $"{baseUrl}?s={title}&type={searchType}&apikey={apiKey}";
+                string encodedTitle = Uri.EscapeDataString(title);
+                string searchUrl = $"{baseUrl}?s={encodedTitle}&type={searchType}&apikey={apiKey}";
                 var response = await client.GetAsync(searchUrl);
                 if (response.IsSuccessStatusCode)
                 {
@@ -51,60 +49,22 @@ namespace TvTracker.Series
             {
                 if (!string.IsNullOrEmpty(type) && (type.ToLower() == "movie" || type.ToLower() == "series"))
                 {
-                    // Search only for specific type
                     await FetchResults(type.ToLower());
                 }
                 else
                 {
-                    // Search for both
                     await FetchResults("series");
                     await FetchResults("movie");
                 }
 
-                // 2. For each result, fetch full details
-                foreach (var searchResult in searchResults)
+                return searchResults.Select(s => new Serie
                 {
-                    string detailUrl = $"{baseUrl}?i={searchResult.IMDBID}&apikey={apiKey}";
-                    var detailResponse = await client.GetAsync(detailUrl);
-                    
-                    if (detailResponse.IsSuccessStatusCode)
-                    {
-                        string detailJson = await detailResponse.Content.ReadAsStringAsync();
-                        var fullDetail = JsonConvert.DeserializeObject<SerieOmdb>(detailJson);
-
-                        // 3. Filter by genre if provided
-                        if (!string.IsNullOrEmpty(genre))
-                        {
-                            Console.WriteLine($"Filtering by genre: '{genre}'. Found genre: '{fullDetail.Genre}'");
-                            if (string.IsNullOrEmpty(fullDetail.Genre) || 
-                                !fullDetail.Genre.Contains(genre, StringComparison.OrdinalIgnoreCase))
-                            {
-                                Console.WriteLine("Filtered out.");
-                                continue;
-                            }
-                            Console.WriteLine("Match found.");
-                        }
-
-                        // 4. Map to Serie entity
-                        float.TryParse(fullDetail.IMDBRating, NumberStyles.Any, CultureInfo.InvariantCulture, out float rating);
-
-                        series.Add(new Serie
-                        {
-                            Title = fullDetail.Title,
-                            Year = fullDetail.Year,
-                            IMDBID = fullDetail.IMDBID,
-                            Type = fullDetail.Type,
-                            Poster = fullDetail.Poster,
-                            Genre = fullDetail.Genre,
-                            Plot = fullDetail.Plot,
-                            Actors = fullDetail.Actors,
-                            IMDBRating = rating
-                        });
-                    }
-                }
-
-                // Sort by Title
-                return series.OrderBy(s => s.Title).ToList();
+                    Title = s.Title,
+                    Year = s.Year,
+                    IMDBID = s.IMDBID,
+                    Type = s.Type,
+                    Poster = s.Poster
+                }).ToList();
             }
             catch (HttpRequestException e)
             {
@@ -112,12 +72,57 @@ namespace TvTracker.Series
             }
         }
 
+        public async Task<Serie> GetSerieDetailsAsync(string imdbId)
+        {
+            var apiKey = _configuration["Omdb:ApiKey"];
+            var baseUrl = "https://www.omdbapi.com/";
+
+            using var client = _httpClientFactory.CreateClient();
+            string detailUrl = $"{baseUrl}?i={imdbId}&apikey={apiKey}";
+            var detailResponse = await client.GetAsync(detailUrl);
+
+            if (detailResponse.IsSuccessStatusCode)
+            {
+                string detailJson = await detailResponse.Content.ReadAsStringAsync();
+                var fullDetail = JsonConvert.DeserializeObject<SerieOmdb>(detailJson);
+
+                float.TryParse(fullDetail.IMDBRating, NumberStyles.Any, CultureInfo.InvariantCulture, out float rating);
+                int.TryParse(fullDetail.TotalSeasons, out int totalSeasons);
+
+                return new Serie
+                {
+                    Title = fullDetail.Title,
+                    Year = fullDetail.Year,
+                    IMDBID = fullDetail.IMDBID,
+                    Type = fullDetail.Type,
+                    Poster = fullDetail.Poster,
+                    Genre = fullDetail.Genre,
+                    Plot = fullDetail.Plot,
+                    Actors = fullDetail.Actors,
+                    Director = fullDetail.Director,
+                    Writer = fullDetail.Writer,
+                    Language = fullDetail.Language,
+                    Country = fullDetail.Country,
+                    Awards = fullDetail.Awards,
+                    Metascore = fullDetail.Metascore,
+                    IMDBRating = rating,
+                    IMDBVotes = fullDetail.IMDBVotes,
+                    Released = fullDetail.Released,
+                    Runtime = fullDetail.Runtime,
+                    Rated = fullDetail.Rated,
+                    TotalSeasons = totalSeasons
+                };
+            }
+
+            return null;
+        }
+
         private class SearchResponse
         {
             [JsonProperty("Search")]
             public List<SerieOmdb> Search { get; set; }
         }
-        
+
         private class SerieOmdb
         {
             public string Title { get; set; }
@@ -128,7 +133,18 @@ namespace TvTracker.Series
             public string Genre { get; set; }
             public string Plot { get; set; }
             public string Actors { get; set; }
+            public string Director { get; set; }
+            public string Writer { get; set; }
+            public string Language { get; set; }
+            public string Country { get; set; }
+            public string Awards { get; set; }
+            public string Metascore { get; set; }
             public string IMDBRating { get; set; }
+            public string IMDBVotes { get; set; }
+            public string Released { get; set; }
+            public string Runtime { get; set; }
+            public string Rated { get; set; }
+            public string TotalSeasons { get; set; }
         }
     }
 }
