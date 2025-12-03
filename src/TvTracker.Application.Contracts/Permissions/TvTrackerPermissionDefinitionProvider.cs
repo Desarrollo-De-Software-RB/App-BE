@@ -13,6 +13,8 @@ public class TvTrackerPermissionDefinitionProvider : PermissionDefinitionProvide
 
         //Define your own permissions here. Example:
         //myGroup.AddPermission(TvTrackerPermissions.MyPermission1, L("Permission:MyPermission1"));
+        myGroup.AddPermission(TvTrackerPermissions.AdminOptions, L("Permission:AdminOptions"));
+        myGroup.AddPermission(TvTrackerPermissions.User, L("Permission:User"));
     }
 
     private static LocalizableString L(string name)

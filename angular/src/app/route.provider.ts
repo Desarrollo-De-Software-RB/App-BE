@@ -1,11 +1,11 @@
-import { RoutesService, eLayoutType } from '@abp/ng.core';
+import { RoutesService, eLayoutType, AuthService } from '@abp/ng.core';
 import { APP_INITIALIZER } from '@angular/core';
 
 export const APP_ROUTE_PROVIDER = [
-  { provide: APP_INITIALIZER, useFactory: configureRoutes, deps: [RoutesService], multi: true },
+  { provide: APP_INITIALIZER, useFactory: configureRoutes, deps: [RoutesService, AuthService], multi: true },
 ];
 
-function configureRoutes(routes: RoutesService) {
+function configureRoutes(routes: RoutesService, authService: AuthService) {
   return () => {
     routes.add([
       {
@@ -20,6 +20,7 @@ function configureRoutes(routes: RoutesService) {
         iconClass: 'fas fa-film',
         order: 2,
         layout: eLayoutType.application,
+        invisible: true, // Will be managed dynamically in AppComponent
       },
     ]);
   };

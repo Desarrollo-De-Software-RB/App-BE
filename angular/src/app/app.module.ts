@@ -1,11 +1,9 @@
 import { CoreModule, provideAbpCore, withOptions } from '@abp/ng.core';
 import { provideAbpOAuth } from '@abp/ng.oauth';
-import { provideSettingManagementConfig } from '@abp/ng.setting-management/config';
 import { provideFeatureManagementConfig } from '@abp/ng.feature-management';
-import { ThemeSharedModule, provideAbpThemeShared,} from '@abp/ng.theme.shared';
+import { ThemeSharedModule, provideAbpThemeShared, } from '@abp/ng.theme.shared';
 import { provideIdentityConfig } from '@abp/ng.identity/config';
 import { provideAccountConfig } from '@abp/ng.account/config';
-import { provideTenantManagementConfig } from '@abp/ng.tenant-management/config';
 import { registerLocale } from '@abp/ng.core/locale';
 import { ThemeLeptonXModule } from '@abp/ng.theme.lepton-x';
 import { SideMenuLayoutModule } from '@abp/ng.theme.lepton-x/layouts';
@@ -16,6 +14,8 @@ import { environment } from '../environments/environment';
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 import { APP_ROUTE_PROVIDER } from './route.provider';
+import { PersonalSettingsModule } from './account/personal-settings/personal-settings.module';
+import { UserProfileModule } from './account/user-profile/user-profile.module';
 
 @NgModule({
   declarations: [AppComponent],
@@ -27,6 +27,8 @@ import { APP_ROUTE_PROVIDER } from './route.provider';
     CoreModule,
     ThemeLeptonXModule.forRoot(),
     SideMenuLayoutModule.forRoot(),
+    PersonalSettingsModule,
+    UserProfileModule,
   ],
   providers: [
     APP_ROUTE_PROVIDER,
@@ -38,12 +40,10 @@ import { APP_ROUTE_PROVIDER } from './route.provider';
     ),
     provideAbpOAuth(),
     provideIdentityConfig(),
-    provideSettingManagementConfig(),
     provideFeatureManagementConfig(),
     provideAccountConfig(),
-    provideTenantManagementConfig(),
     provideAbpThemeShared(),
   ],
   bootstrap: [AppComponent],
 })
-export class AppModule {}
+export class AppModule { }
