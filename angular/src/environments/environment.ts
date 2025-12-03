@@ -7,7 +7,7 @@ const oAuthConfig = {
   redirectUri: baseUrl,
   clientId: 'TvTracker_App',
   responseType: 'code',
-  scope: 'offline_access TvTracker',
+  scope: 'offline_access TvTracker picture',
   requireHttps: false,
 };
 

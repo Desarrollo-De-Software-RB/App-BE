@@ -17,17 +17,8 @@ const routes: Routes = [
     loadChildren: () => import('@abp/ng.identity').then(m => m.IdentityModule.forLazy()),
   },
   {
-    path: 'tenant-management',
-    loadChildren: () =>
-      import('@abp/ng.tenant-management').then(m => m.TenantManagementModule.forLazy()),
-  },
-  {
-    path: 'setting-management',
-    loadChildren: () =>
-      import('@abp/ng.setting-management').then(m => m.SettingManagementModule.forLazy()),
-  },
-  {
     path: 'series',
+    canActivate: [authGuard],
     loadChildren: () =>
       import('./serie/serie.module').then(m => m.SerieModule),
   },
@@ -37,4 +28,4 @@ const routes: Routes = [
   imports: [RouterModule.forRoot(routes, {})],
   exports: [RouterModule],
 })
-export class AppRoutingModule {}
+export class AppRoutingModule { }

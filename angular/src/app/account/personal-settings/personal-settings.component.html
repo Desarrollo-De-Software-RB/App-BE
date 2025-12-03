@@ -1,0 +1,41 @@
+<div class="card">
+    <div class="card-header">
+        <h5 class="card-title mb-0">Personal Settings</h5>
+    </div>
+    <div class="card-body">
+        <form [formGroup]="form" (ngSubmit)="save()">
+            <div class="mb-3">
+                <label class="form-label">Username</label>
+                <input type="text" class="form-control" formControlName="userName" readonly>
+            </div>
+            <div class="mb-3">
+                <label class="form-label">Email</label>
+                <input type="email" class="form-control" formControlName="email">
+            </div>
+            <div class="row">
+                <div class="col-md-6 mb-3">
+                    <label class="form-label">Name</label>
+                    <input type="text" class="form-control" formControlName="name">
+                </div>
+                <div class="col-md-6 mb-3">
+                    <label class="form-label">Surname</label>
+                    <input type="text" class="form-control" formControlName="surname">
+                </div>
+            </div>
+            <div class="mb-3">
+                <label class="form-label">Phone Number</label>
+                <input type="text" class="form-control" formControlName="phoneNumber">
+            </div>
+            <div class="mb-3">
+                <label class="form-label">Profile Picture URL</label>
+                <input type="text" class="form-control" formControlName="profilePicture">
+            </div>
+            <div *ngIf="form.get('profilePicture').value" class="mb-3">
+                <img [src]="form.get('profilePicture').value" alt="Profile Picture" class="img-thumbnail"
+                    style="max-height: 150px;">
+            </div>
+
+            <button type="submit" class="btn btn-primary" [disabled]="form.invalid || form.pristine">Save</button>
+        </form>
+    </div>
+</div>
