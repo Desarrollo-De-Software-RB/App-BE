@@ -64,6 +64,13 @@ public class OpenIddictDataSeedContributor : IDataSeedContributor, ITransientDep
                 Name = "TvTracker", DisplayName = "TvTracker API", Resources = { "TvTracker" }
             });
         }
+        
+        if (await _openIddictScopeRepository.FindByNameAsync("picture") == null)
+        {
+            await _scopeManager.CreateAsync(new OpenIddictScopeDescriptor {
+                Name = "picture", DisplayName = "Picture Scope", Resources = { "TvTracker" }
+            });
+        }
     }
 
     private async Task CreateApplicationsAsync()
@@ -74,7 +81,8 @@ public class OpenIddictDataSeedContributor : IDataSeedContributor, ITransientDep
             OpenIddictConstants.Permissions.Scopes.Phone,
             OpenIddictConstants.Permissions.Scopes.Profile,
             OpenIddictConstants.Permissions.Scopes.Roles,
-            "TvTracker"
+            "TvTracker",
+            "picture"
         };
 
         var configurationSection = _configuration.GetSection("OpenIddict:Applications");

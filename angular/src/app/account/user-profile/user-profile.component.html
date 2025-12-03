@@ -1,0 +1,8 @@
+<div class="lpx-avatar" *ngIf="userProfile$ | async as user">
+    <img *ngIf="user.extraProperties?.ProfilePicture || user.extraProperties?.picture; else defaultAvatar"
+        [src]="user.extraProperties?.ProfilePicture || user.extraProperties?.picture" alt="Profile Picture"
+        class="lpx-avatar-img" style="width: 32px; height: 32px; border-radius: 50%; object-fit: cover;" />
+    <ng-template #defaultAvatar>
+        <i class="bi bi-person-circle" style="font-size: 1.5rem;"></i>
+    </ng-template>
+</div>
