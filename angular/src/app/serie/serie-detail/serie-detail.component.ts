@@ -15,7 +15,7 @@ export class SerieDetailComponent implements OnInit {
     constructor(
         private route: ActivatedRoute,
         private serieService: SerieService
-  ) {}
+    ) { }
 
     ngOnInit(): void {
         const imdbId = this.route.snapshot.params['imdbId'];
@@ -31,5 +31,13 @@ export class SerieDetailComponent implements OnInit {
                 }
             });
         }
+    }
+
+    goBack(): void {
+        history.back();
+    }
+
+    handleImageError(serie: SerieDto): void {
+        serie.poster = 'N/A';
     }
 }

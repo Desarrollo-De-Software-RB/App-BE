@@ -6,12 +6,15 @@
   .abp-support {
     background-image: url('/assets/images/getting-started/abp-support-white.svg');
   }
+
   .abp-community {
     background-image: url('/assets/images/getting-started/abp-community-white.svg');
   }
+
   .abp-blog {
     background-image: url('/assets/images/getting-started/abp-blog-white.svg');
   }
+
   .logo-x {
     background-image: url('/assets/images/getting-started/x-white.svg');
   }
@@ -26,6 +29,16 @@
   --lpx-theme-light-bg: url('/assets/images/login/login-bg-img-light.svg');
   --lpx-theme-dim-bg: url('/assets/images/login/login-bg-img-dim.svg');
   --lpx-theme-dark-bg: url('/assets/images/login/login-bg-img-dark.svg');
+
+  @keyframes textbg {
+    0% {
+      background-position-x: 0%;
+    }
+
+    100% {
+      background-position-x: 200%;
+    }
+  }
 
   .abp-logo {
     background-repeat: no-repeat;
