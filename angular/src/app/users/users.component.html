@@ -1,0 +1,182 @@
+<div class="container users-container">
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <h2 class="section-title mb-0">Usuarios Registrados</h2>
+        <button *ngIf="isAdmin" class="btn btn-primary" (click)="openCreateModal(formModal)">
+            <i class="fa fa-plus me-2"></i> Nuevo Usuario
+        </button>
+    </div>
+
+    <div class="row g-4">
+        <div class="col-sm-6 col-md-4 col-lg-3" *ngFor="let user of users">
+            <div class="user-card" [class.clickable]="isAdmin" (click)="openDetails(user, detailsModal)">
+                <div class="avatar-wrapper">
+                    <img [src]="user.profilePicture || defaultProfilePicture" alt="Profile">
+                </div>
+                <h5 class="user-name">{{ user.userName }}</h5>
+
+                <div class="admin-actions mt-3" *ngIf="isAdmin">
+                    <button class="btn btn-sm btn-outline-info me-2" (click)="openEditModal(user, formModal, $event)"
+                        title="Editar">
+                        <i class="fa fa-pencil"></i>
+                    </button>
+                    <button class="btn btn-sm btn-outline-danger" (click)="deleteUser(user, $event)" title="Eliminar">
+                        <i class="fa fa-trash"></i>
+                    </button>
+                </div>
+
+                <p class="user-hint mt-2" *ngIf="isAdmin && !isEditMode">Click para ver detalles</p>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Details Modal -->
+<ng-template #detailsModal let-modal>
+    <div class="modal-header">
+        <h4 class="modal-title">Detalles del Usuario</h4>
+        <button type="button" class="btn-close" aria-label="Close" (click)="modal.dismiss('Cross click')"></button>
+    </div>
+    <div class="modal-body">
+        <div class="text-center mb-4">
+            <div class="modal-avatar mx-auto">
+                <img [src]="selectedUser?.profilePicture || defaultProfilePicture" alt="Profile">
+            </div>
+            <h3 class="mt-2">{{ selectedUser?.userName }}</h3>
+        </div>
+        <ul class="user-details-list">
+            <li class="list-item">
+                <strong>Nombre:</strong>
+                <span>{{ selectedUser?.name }} {{ selectedUser?.surname }}</span>
+            </li>
+            <li class="list-item">
+                <strong>Email:</strong>
+                <span>{{ selectedUser?.email }}</span>
+            </li>
+            <li class="list-item">
+                <strong>Teléfono:</strong>
+                <span>{{ selectedUser?.phoneNumber || 'N/A' }}</span>
+            </li>
+            <li class="list-item">
+                <strong>Activo:</strong>
+                <span>{{ selectedUser?.isActive ? 'Sí' : 'No' }}</span>
+            </li>
+            <li class="list-item">
+                <strong>Fecha de Creación:</strong>
+                <span>{{ selectedUser?.creationTime | date:'medium' }}</span>
+            </li>
+        </ul>
+    </div>
+    <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" (click)="modal.close('Close click')">Cerrar</button>
+    </div>
+</ng-template>
+
+<!-- Create/Edit Form Modal -->
+<ng-template #formModal let-modal>
+    <div class="modal-header">
+        <h4 class="modal-title">{{ isEditMode ? 'Editar Usuario' : 'Nuevo Usuario' }}</h4>
+        <button type="button" class="btn-close" aria-label="Close" (click)="modal.dismiss('Cross click')"></button>
+    </div>
+    <div class="modal-body">
+        <form [formGroup]="userForm">
+            <div class="mb-3">
+                <label for="userName" class="form-label">Usuario <span class="text-danger">*</span></label>
+                <input type="text" class="form-control" id="userName" formControlName="userName">
+                <div *ngIf="userForm.get('userName')?.invalid && (userForm.get('userName')?.dirty || userForm.get('userName')?.touched)"
+                    class="text-danger small mt-1">
+                    <div *ngIf="userForm.get('userName')?.errors?.['required']">El usuario es obligatorio.</div>
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="col-md-6 mb-3">
+                    <label for="name" class="form-label">Nombre <span class="text-danger">*</span></label>
+                    <input type="text" class="form-control" id="name" formControlName="name">
+                    <div *ngIf="userForm.get('name')?.invalid && (userForm.get('name')?.dirty || userForm.get('name')?.touched)"
+                        class="text-danger small mt-1">
+                        <div *ngIf="userForm.get('name')?.errors?.['required']">El nombre es obligatorio.</div>
+                    </div>
+                </div>
+                <div class="col-md-6 mb-3">
+                    <label for="surname" class="form-label">Apellido <span class="text-danger">*</span></label>
+                    <input type="text" class="form-control" id="surname" formControlName="surname">
+                    <div *ngIf="userForm.get('surname')?.invalid && (userForm.get('surname')?.dirty || userForm.get('surname')?.touched)"
+                        class="text-danger small mt-1">
+                        <div *ngIf="userForm.get('surname')?.errors?.['required']">El apellido es obligatorio.</div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="mb-3">
+                <label for="email" class="form-label">Email <span class="text-danger">*</span></label>
+                <input type="email" class="form-control" id="email" formControlName="email">
+                <div *ngIf="userForm.get('email')?.invalid && (userForm.get('email')?.dirty || userForm.get('email')?.touched)"
+                    class="text-danger small mt-1">
+                    <div *ngIf="userForm.get('email')?.errors?.['required']">El email es obligatorio.</div>
+                    <div *ngIf="userForm.get('email')?.errors?.['email']">El email no es válido.</div>
+                </div>
+            </div>
+
+            <div class="mb-3" *ngIf="!isEditMode">
+                <label for="password" class="form-label">Contraseña <span class="text-danger">*</span></label>
+                <div class="input-group">
+                    <input [type]="showPassword ? 'text' : 'password'" class="form-control" id="password"
+                        formControlName="password">
+                    <button class="btn btn-outline-secondary" type="button" (click)="togglePassword()" tabindex="-1">
+                        <i class="fa" [ngClass]="showPassword ? 'fa-eye-slash' : 'fa-eye'"></i>
+                    </button>
+                </div>
+                <div *ngIf="userForm.get('password')?.invalid && (userForm.get('password')?.dirty || userForm.get('password')?.touched)"
+                    class="text-danger small mt-1">
+                    <div *ngIf="userForm.get('password')?.errors?.['required']">La contraseña es obligatoria.</div>
+                    <div *ngIf="userForm.get('password')?.errors?.['minlength']">La contraseña debe tener al menos 6
+                        caracteres.</div>
+                    <div *ngIf="userForm.get('password')?.errors?.['pattern']">La contraseña debe contener al menos una
+                        mayúscula, una minúscula, un número y un carácter especial.</div>
+                </div>
+            </div>
+
+            <div class="mb-3" *ngIf="!isEditMode">
+                <label for="confirmPassword" class="form-label">Confirmar Contraseña <span
+                        class="text-danger">*</span></label>
+                <div class="input-group">
+                    <input [type]="showConfirmPassword ? 'text' : 'password'" class="form-control" id="confirmPassword"
+                        formControlName="confirmPassword">
+                    <button class="btn btn-outline-secondary" type="button" (click)="toggleConfirmPassword()"
+                        tabindex="-1">
+                        <i class="fa" [ngClass]="showConfirmPassword ? 'fa-eye-slash' : 'fa-eye'"></i>
+                    </button>
+                </div>
+                <div *ngIf="userForm.get('confirmPassword')?.invalid && (userForm.get('confirmPassword')?.dirty || userForm.get('confirmPassword')?.touched)"
+                    class="text-danger small mt-1">
+                    <div *ngIf="userForm.get('confirmPassword')?.errors?.['required']">Confirmar la contraseña es
+                        obligatorio.</div>
+                    <div *ngIf="userForm.get('confirmPassword')?.errors?.['mismatch']">Las contraseñas no coinciden.
+                    </div>
+                </div>
+            </div>
+
+            <div class="mb-3">
+                <label for="phoneNumber" class="form-label">Teléfono</label>
+                <input type="text" class="form-control" id="phoneNumber" formControlName="phoneNumber">
+            </div>
+
+            <div class="mb-3">
+                <label for="profilePicture" class="form-label">URL Foto de Perfil</label>
+                <input type="text" class="form-control" id="profilePicture" formControlName="profilePicture">
+            </div>
+
+            <div class="form-check mb-3">
+                <input class="form-check-input" type="checkbox" id="isActive" formControlName="isActive">
+                <label class="form-check-label" for="isActive">
+                    Activo
+                </label>
+            </div>
+        </form>
+    </div>
+    <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" (click)="modal.dismiss('Cancel')">Cancelar</button>
+        <button type="button" class="btn btn-primary" (click)="save(modal)"
+            [disabled]="userForm.invalid">Guardar</button>
+    </div>
+</ng-template>

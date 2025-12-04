@@ -1,6 +1,10 @@
-import { authGuard, permissionGuard } from '@abp/ng.core';
+import { authGuard, permissionGuard, eLayoutType } from '@abp/ng.core';
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
+
+import { PersonalSettingsComponent } from './account/personal-settings/personal-settings.component';
+import { RegisterComponent } from './account/register/register.component';
+
 
 const routes: Routes = [
   {
@@ -9,25 +13,29 @@ const routes: Routes = [
     loadChildren: () => import('./home/home.module').then(m => m.HomeModule),
   },
   {
+    path: 'account/personal-settings',
+    component: PersonalSettingsComponent,
+    canActivate: [authGuard]
+  },
+
+  {
+    path: 'register',
+    component: RegisterComponent,
+    data: {
+      layout: eLayoutType.empty
+    }
+  },
+  {
     path: 'account',
     loadChildren: () => import('@abp/ng.account').then(m => m.AccountModule.forLazy()),
   },
   {
-    path: 'identity',
-    loadChildren: () => import('@abp/ng.identity').then(m => m.IdentityModule.forLazy()),
-  },
-  {
-    path: 'tenant-management',
-    loadChildren: () =>
-      import('@abp/ng.tenant-management').then(m => m.TenantManagementModule.forLazy()),
-  },
-  {
-    path: 'setting-management',
-    loadChildren: () =>
-      import('@abp/ng.setting-management').then(m => m.SettingManagementModule.forLazy()),
+    path: 'users',
+    loadChildren: () => import('./users/users.module').then(m => m.UsersModule),
   },
   {
     path: 'series',
+    canActivate: [authGuard],
     loadChildren: () =>
       import('./serie/serie.module').then(m => m.SerieModule),
   },
@@ -37,4 +45,4 @@ const routes: Routes = [
   imports: [RouterModule.forRoot(routes, {})],
   exports: [RouterModule],
 })
-export class AppRoutingModule {}
+export class AppRoutingModule { }
