@@ -13,6 +13,21 @@ export class PersonalSettingsComponent implements OnInit {
     form: FormGroup;
     passwordForm: FormGroup;
     activeTab: 'profile' | 'password' = 'profile';
+    showCurrentPassword = false;
+    showNewPassword = false;
+    showRepeatNewPassword = false;
+
+    toggleCurrentPassword() {
+        this.showCurrentPassword = !this.showCurrentPassword;
+    }
+
+    toggleNewPassword() {
+        this.showNewPassword = !this.showNewPassword;
+    }
+
+    toggleRepeatNewPassword() {
+        this.showRepeatNewPassword = !this.showRepeatNewPassword;
+    }
 
     constructor(
         private fb: FormBuilder,
@@ -29,10 +44,10 @@ export class PersonalSettingsComponent implements OnInit {
 
     buildForm() {
         this.form = this.fb.group({
-            userName: [''],
+            userName: ['', [Validators.required]],
             email: ['', [Validators.required, Validators.email]],
-            name: [''],
-            surname: [''],
+            name: ['', [Validators.required]],
+            surname: ['', [Validators.required]],
             phoneNumber: [''],
             profilePicture: ['']
         });
@@ -41,14 +56,26 @@ export class PersonalSettingsComponent implements OnInit {
     buildPasswordForm() {
         this.passwordForm = this.fb.group({
             currentPassword: ['', [Validators.required]],
-            newPassword: ['', [Validators.required, Validators.minLength(6)]],
+            newPassword: ['', [Validators.required, Validators.minLength(6), Validators.pattern(/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*\W).{6,}$/)]],
             repeatNewPassword: ['', [Validators.required]]
         }, { validators: this.passwordMatchValidator });
     }
 
-    passwordMatchValidator(g: FormGroup) {
-        return g.get('newPassword').value === g.get('repeatNewPassword').value
-            ? null : { mismatch: true };
+    passwordMatchValidator(form: FormGroup) {
+        const newPassword = form.get('newPassword');
+        const repeatNewPassword = form.get('repeatNewPassword');
+
+        if (newPassword && repeatNewPassword && newPassword.value !== repeatNewPassword.value) {
+            repeatNewPassword.setErrors({ mismatch: true });
+        } else {
+            if (repeatNewPassword?.hasError('mismatch')) {
+                delete repeatNewPassword.errors?.['mismatch'];
+                if (!Object.keys(repeatNewPassword.errors || {}).length) {
+                    repeatNewPassword.setErrors(null);
+                }
+            }
+        }
+        return null;
     }
 
     getProfile() {

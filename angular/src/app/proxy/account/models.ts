@@ -5,6 +5,7 @@ export interface AppRegisterDto {
     password: string;
     name: string;
     surname: string;
+    phoneNumber?: string;
     profilePicture?: string;
 }
 

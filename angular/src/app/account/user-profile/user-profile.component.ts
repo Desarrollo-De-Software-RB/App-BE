@@ -1,7 +1,7 @@
 import { Component, OnInit, ElementRef, HostListener } from '@angular/core';
 import { AuthService, ConfigStateService, RestService } from '@abp/ng.core';
-import { Observable } from 'rxjs';
-import { map } from 'rxjs/operators';
+import { Observable, of } from 'rxjs';
+import { map, switchMap, catchError } from 'rxjs/operators';
 import { Router } from '@angular/router';
 
 @Component({
@@ -25,14 +25,29 @@ export class UserProfileComponent implements OnInit {
     }
 
     ngOnInit(): void {
-        // Fetch the full profile which contains extraProperties like ProfilePicture
-        this.userProfile$ = this.restService.request({
-            method: 'GET',
-            url: '/api/account/my-profile',
-        }).pipe(
-            map(profile => {
-                console.log('UserProfileComponent - Fetched Profile:', profile);
-                return profile;
+        this.userProfile$ = this.config.getOne$('currentUser').pipe(
+            map(currentUser => {
+                if (!currentUser?.isAuthenticated) {
+                    return null;
+                }
+                return currentUser;
+            }),
+            switchMap(currentUser => {
+                if (!currentUser) return of(null);
+
+                return this.restService.request({
+                    method: 'GET',
+                    url: '/api/account/my-profile',
+                }).pipe(
+                    map(profile => {
+                        console.log('UserProfileComponent - Fetched Profile:', profile);
+                        return profile;
+                    }),
+                    catchError(err => {
+                        console.error('UserProfileComponent - Error fetching profile:', err);
+                        return of(null);
+                    })
+                );
             })
         );
     }

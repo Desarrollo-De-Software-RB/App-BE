@@ -24,7 +24,7 @@ public class AppUpdateProfileDto
     public string Surname { get; set; }
 
     [DynamicStringLength(typeof(IdentityUserConsts), nameof(IdentityUserConsts.MaxPhoneNumberLength))]
-    public string PhoneNumber { get; set; }
+    public string? PhoneNumber { get; set; }
 
-    public string ProfilePicture { get; set; }
+    public string? ProfilePicture { get; set; }
 }

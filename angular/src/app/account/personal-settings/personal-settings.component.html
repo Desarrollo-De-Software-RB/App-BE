@@ -21,21 +21,38 @@
             <!-- Profile Form -->
             <form [formGroup]="form" (ngSubmit)="save()" *ngIf="activeTab === 'profile'">
                 <div class="mb-4">
-                    <label class="form-label">Usuario</label>
-                    <input type="text" class="form-control" formControlName="userName" readonly>
+                    <label class="form-label">Usuario <span class="text-danger">*</span></label>
+                    <input type="text" class="form-control" formControlName="userName">
+                    <div *ngIf="form.get('userName')?.invalid && (form.get('userName')?.dirty || form.get('userName')?.touched)"
+                        class="text-danger small mt-1">
+                        <div *ngIf="form.get('userName')?.errors?.['required']">El usuario es obligatorio.</div>
+                    </div>
                 </div>
                 <div class="mb-4">
-                    <label class="form-label">Email</label>
+                    <label class="form-label">Email <span class="text-danger">*</span></label>
                     <input type="email" class="form-control" formControlName="email">
+                    <div *ngIf="form.get('email')?.invalid && (form.get('email')?.dirty || form.get('email')?.touched)"
+                        class="text-danger small mt-1">
+                        <div *ngIf="form.get('email')?.errors?.['required']">El email es obligatorio.</div>
+                        <div *ngIf="form.get('email')?.errors?.['email']">El email no es válido.</div>
+                    </div>
                 </div>
                 <div class="row">
                     <div class="col-md-6 mb-4">
-                        <label class="form-label">Nombre</label>
+                        <label class="form-label">Nombre <span class="text-danger">*</span></label>
                         <input type="text" class="form-control" formControlName="name">
+                        <div *ngIf="form.get('name')?.invalid && (form.get('name')?.dirty || form.get('name')?.touched)"
+                            class="text-danger small mt-1">
+                            <div *ngIf="form.get('name')?.errors?.['required']">El nombre es obligatorio.</div>
+                        </div>
                     </div>
                     <div class="col-md-6 mb-4">
-                        <label class="form-label">Apellido</label>
+                        <label class="form-label">Apellido <span class="text-danger">*</span></label>
                         <input type="text" class="form-control" formControlName="surname">
+                        <div *ngIf="form.get('surname')?.invalid && (form.get('surname')?.dirty || form.get('surname')?.touched)"
+                            class="text-danger small mt-1">
+                            <div *ngIf="form.get('surname')?.errors?.['required']">El apellido es obligatorio.</div>
+                        </div>
                     </div>
                 </div>
                 <div class="mb-4">
@@ -61,21 +78,57 @@
             <!-- Password Form -->
             <form [formGroup]="passwordForm" (ngSubmit)="changePassword()" *ngIf="activeTab === 'password'">
                 <div class="mb-4">
-                    <label class="form-label">Contraseña Actual</label>
-                    <input type="password" class="form-control" formControlName="currentPassword">
-                </div>
-                <div class="mb-4">
-                    <label class="form-label">Nueva Contraseña</label>
-                    <input type="password" class="form-control" formControlName="newPassword">
-                    <div *ngIf="passwordForm.get('newPassword').hasError('minlength')" class="text-danger small">
-                        La contraseña debe tener al menos 6 caracteres.
+                    <label class="form-label">Contraseña Actual <span class="text-danger">*</span></label>
+                    <div class="input-group">
+                        <input [type]="showCurrentPassword ? 'text' : 'password'" class="form-control"
+                            formControlName="currentPassword">
+                        <button class="btn btn-outline-secondary" type="button" (click)="toggleCurrentPassword()"
+                            tabindex="-1">
+                            <i class="fa" [ngClass]="showCurrentPassword ? 'fa-eye-slash' : 'fa-eye'"></i>
+                        </button>
+                    </div>
+                    <div *ngIf="passwordForm.get('currentPassword')?.invalid && (passwordForm.get('currentPassword')?.dirty || passwordForm.get('currentPassword')?.touched)"
+                        class="text-danger small mt-1">
+                        <div *ngIf="passwordForm.get('currentPassword')?.errors?.['required']">La contraseña actual es
+                            obligatoria.</div>
                     </div>
                 </div>
                 <div class="mb-4">
-                    <label class="form-label">Repetir Nueva Contraseña</label>
-                    <input type="password" class="form-control" formControlName="repeatNewPassword">
-                    <div *ngIf="passwordForm.hasError('mismatch')" class="text-danger small">
-                        Las contraseñas no coinciden.
+                    <label class="form-label">Nueva Contraseña <span class="text-danger">*</span></label>
+                    <div class="input-group">
+                        <input [type]="showNewPassword ? 'text' : 'password'" class="form-control"
+                            formControlName="newPassword">
+                        <button class="btn btn-outline-secondary" type="button" (click)="toggleNewPassword()"
+                            tabindex="-1">
+                            <i class="fa" [ngClass]="showNewPassword ? 'fa-eye-slash' : 'fa-eye'"></i>
+                        </button>
+                    </div>
+                    <div *ngIf="passwordForm.get('newPassword')?.invalid && (passwordForm.get('newPassword')?.dirty || passwordForm.get('newPassword')?.touched)"
+                        class="text-danger small mt-1">
+                        <div *ngIf="passwordForm.get('newPassword')?.errors?.['required']">La nueva contraseña es
+                            obligatoria.</div>
+                        <div *ngIf="passwordForm.get('newPassword')?.errors?.['minlength']">La contraseña debe tener al
+                            menos 6 caracteres.</div>
+                        <div *ngIf="passwordForm.get('newPassword')?.errors?.['pattern']">La contraseña debe contener al
+                            menos una mayúscula, una minúscula, un número y un carácter especial.</div>
+                    </div>
+                </div>
+                <div class="mb-4">
+                    <label class="form-label">Repetir Nueva Contraseña <span class="text-danger">*</span></label>
+                    <div class="input-group">
+                        <input [type]="showRepeatNewPassword ? 'text' : 'password'" class="form-control"
+                            formControlName="repeatNewPassword">
+                        <button class="btn btn-outline-secondary" type="button" (click)="toggleRepeatNewPassword()"
+                            tabindex="-1">
+                            <i class="fa" [ngClass]="showRepeatNewPassword ? 'fa-eye-slash' : 'fa-eye'"></i>
+                        </button>
+                    </div>
+                    <div *ngIf="passwordForm.get('repeatNewPassword')?.invalid && (passwordForm.get('repeatNewPassword')?.dirty || passwordForm.get('repeatNewPassword')?.touched)"
+                        class="text-danger small mt-1">
+                        <div *ngIf="passwordForm.get('repeatNewPassword')?.errors?.['required']">Repetir la contraseña
+                            es obligatorio.</div>
+                        <div *ngIf="passwordForm.get('repeatNewPassword')?.errors?.['mismatch']">Las contraseñas no
+                            coinciden.</div>
                     </div>
                 </div>
 
