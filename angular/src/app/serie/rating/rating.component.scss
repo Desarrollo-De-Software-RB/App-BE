@@ -1,0 +1,149 @@
+.rating-container {
+  background-color: rgba(0, 0, 0, 0.7); // Transparent black background
+  backdrop-filter: blur(10px);
+  padding: 2rem;
+  border-radius: 15px;
+  color: #fff;
+  margin-top: 2rem;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+
+  .section-title {
+    color: #d63384; // Pinkish
+    margin-bottom: 1.5rem;
+    font-weight: bold;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    border-bottom: 2px solid #6f42c1; // Violet
+    display: inline-block;
+    padding-bottom: 0.5rem;
+  }
+
+  .rating-form {
+    background: rgba(255, 255, 255, 0.05);
+    padding: 1.5rem;
+    border-radius: 10px;
+    margin-bottom: 2rem;
+    border: 1px solid rgba(214, 51, 132, 0.3); // Pink border
+
+    .stars-input {
+      font-size: 2rem;
+      cursor: pointer;
+      margin-bottom: 1rem;
+      
+      span {
+        color: #444; // Inactive star color
+        transition: color 0.2s;
+        margin-right: 5px;
+
+        &.filled {
+          color: #d63384; // Pink stars
+          text-shadow: 0 0 10px rgba(214, 51, 132, 0.5);
+        }
+
+        &:hover {
+          color: #e85d9e;
+        }
+      }
+    }
+
+    textarea {
+      width: 100%;
+      background: rgba(0, 0, 0, 0.5);
+      border: 1px solid #6f42c1; // Violet border
+      color: #fff;
+      padding: 1rem;
+      border-radius: 8px;
+      margin-bottom: 1rem;
+      resize: vertical;
+
+      &:focus {
+        outline: none;
+        border-color: #d63384; // Pink on focus
+        box-shadow: 0 0 0 2px rgba(214, 51, 132, 0.2);
+      }
+    }
+
+    .btn-submit {
+      background: linear-gradient(45deg, #6f42c1, #d63384); // Violet to Pink
+      border: none;
+      color: white;
+      padding: 0.8rem 2rem;
+      border-radius: 25px;
+      font-weight: bold;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      cursor: pointer;
+      transition: transform 0.2s, box-shadow 0.2s;
+
+      &:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 5px 15px rgba(214, 51, 132, 0.4);
+      }
+    }
+  }
+
+  .ratings-list {
+    .rating-item {
+      background: rgba(255, 255, 255, 0.03);
+      padding: 1rem;
+      border-radius: 8px;
+      margin-bottom: 1rem;
+      border-left: 4px solid #6f42c1; // Violet accent
+
+      .rating-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 0.5rem;
+
+        .username {
+          font-weight: bold;
+          color: #fff;
+          font-size: 1.1rem;
+        }
+
+        .stars-display {
+          span {
+            color: #444;
+            font-size: 1.2rem;
+
+            &.filled {
+              color: #d63384; // Pink stars
+            }
+          }
+        }
+      }
+
+      .comment {
+        color: #ccc;
+        font-style: italic;
+        margin: 0;
+        line-height: 1.5;
+      }
+    }
+
+    .no-ratings {
+      text-align: center;
+      color: #888;
+      font-style: italic;
+      padding: 2rem;
+    }
+  }
+
+  .login-prompt {
+    text-align: center;
+    padding: 2rem;
+    background: rgba(255, 255, 255, 0.05);
+    border-radius: 10px;
+    
+    a {
+      color: #d63384;
+      text-decoration: none;
+      font-weight: bold;
+      
+      &:hover {
+        text-decoration: underline;
+      }
+    }
+  }
+}

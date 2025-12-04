@@ -1,0 +1,38 @@
+<div class="rating-container">
+  <h3 class="section-title">Reviews & Ratings</h3>
+
+  <!-- Rating Form -->
+  <div class="rating-form" *ngIf="isLoggedIn">
+    <div class="stars-input">
+      <span *ngFor="let star of [1, 2, 3, 4, 5]" 
+            (mouseenter)="hoverScore = star" 
+            (mouseleave)="hoverScore = 0"
+            (click)="setScore(star)"
+            [class.filled]="star <= (hoverScore || newRating.score)">
+        ★
+      </span>
+    </div>
+    <textarea [(ngModel)]="newRating.comment" placeholder="Write a comment (optional)..." rows="3"></textarea>
+    <button class="btn-submit" (click)="submitRating()">Submit Review</button>
+  </div>
+
+  <div class="login-prompt" *ngIf="!isLoggedIn">
+    <p>Please <a routerLink="/account/login">login</a> to leave a review.</p>
+  </div>
+
+  <!-- Ratings List -->
+  <div class="ratings-list">
+    <div class="rating-item" *ngFor="let rating of ratings">
+      <div class="rating-header">
+        <span class="username">{{ rating.userName || 'Anonymous' }}</span>
+        <div class="stars-display">
+          <span *ngFor="let star of [1, 2, 3, 4, 5]" [class.filled]="star <= rating.score">★</span>
+        </div>
+      </div>
+      <p class="comment" *ngIf="rating.comment">{{ rating.comment }}</p>
+    </div>
+    <div class="no-ratings" *ngIf="ratings.length === 0">
+      <p>No reviews yet. Be the first to rate!</p>
+    </div>
+  </div>
+</div>
