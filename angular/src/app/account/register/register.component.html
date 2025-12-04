@@ -1,0 +1,133 @@
+<div class="register-container">
+    <div class="container">
+        <div class="row justify-content-center">
+            <div class="col-md-10 col-lg-8">
+                <div class="card shadow-sm">
+                    <div class="card-body p-4 p-md-5 position-relative">
+
+                        <a routerLink="/" class="back-button-internal">
+                            <i class="fa fa-arrow-left"></i>
+                            <span>Volver</span>
+                        </a>
+
+                        <h2 class="section-title text-center mb-4"><i class="fa fa-user-plus mx-2"></i>Crear una Cuenta</h2>
+
+                        <form [formGroup]="form" (ngSubmit)="onSubmit()" novalidate>
+                            <div class="mb-3">
+                                <label class="form-label">Usuario <span class="text-danger">*</span></label>
+                                <input type="text" class="form-control" formControlName="userName"
+                                    placeholder="Ingresa tu usuario">
+                                <div *ngIf="form.get('userName')?.invalid && (form.get('userName')?.dirty || form.get('userName')?.touched)"
+                                    class="text-danger small mt-1">
+                                    <div *ngIf="form.get('userName')?.errors?.['required']">El usuario es obligatorio.
+                                    </div>
+                                    <div *ngIf="form.get('userName')?.errors?.['maxlength']">El usuario no puede exceder
+                                        los 256 caracteres.</div>
+                                </div>
+                            </div>
+
+                            <div class="mb-3">
+                                <label class="form-label">Email <span class="text-danger">*</span></label>
+                                <input type="email" class="form-control" formControlName="email"
+                                    placeholder="ejemplo@correo.com">
+                                <div *ngIf="form.get('email')?.invalid && (form.get('email')?.dirty || form.get('email')?.touched)"
+                                    class="text-danger small mt-1">
+                                    <div *ngIf="form.get('email')?.errors?.['required']">El email es obligatorio.</div>
+                                    <div *ngIf="form.get('email')?.errors?.['email']">El email no es válido.</div>
+                                </div>
+                            </div>
+
+                            <div class="row">
+                                <div class="col-md-6 mb-3">
+                                    <label class="form-label">Nombre <span class="text-danger">*</span></label>
+                                    <input type="text" class="form-control" formControlName="name"
+                                        placeholder="Tu nombre">
+                                    <div *ngIf="form.get('name')?.invalid && (form.get('name')?.dirty || form.get('name')?.touched)"
+                                        class="text-danger small mt-1">
+                                        <div *ngIf="form.get('name')?.errors?.['required']">El nombre es obligatorio.
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-md-6 mb-3">
+                                    <label class="form-label">Apellido <span class="text-danger">*</span></label>
+                                    <input type="text" class="form-control" formControlName="surname"
+                                        placeholder="Tu apellido">
+                                    <div *ngIf="form.get('surname')?.invalid && (form.get('surname')?.dirty || form.get('surname')?.touched)"
+                                        class="text-danger small mt-1">
+                                        <div *ngIf="form.get('surname')?.errors?.['required']">El apellido es
+                                            obligatorio.</div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="mb-3">
+                                <label class="form-label">Teléfono</label>
+                                <input type="text" class="form-control" formControlName="phoneNumber"
+                                    placeholder="+54 9 11...">
+                            </div>
+
+                            <div class="mb-3">
+                                <label class="form-label">URL Foto de Perfil</label>
+                                <input type="text" class="form-control" formControlName="profilePicture"
+                                    placeholder="https://...">
+                            </div>
+
+                            <div class="mb-3">
+                                <label class="form-label">Contraseña <span class="text-danger">*</span></label>
+                                <div class="input-group">
+                                    <input [type]="showPassword ? 'text' : 'password'" class="form-control"
+                                        formControlName="password" placeholder="••••••••">
+                                    <button class="btn btn-outline-secondary" type="button" (click)="togglePassword()">
+                                        <i class="fa" [ngClass]="showPassword ? 'fa-eye-slash' : 'fa-eye'"></i>
+                                    </button>
+                                </div>
+                                <!-- Custom validation messages only -->
+                                <div *ngIf="form.get('password')?.invalid && (form.get('password')?.dirty || form.get('password')?.touched)"
+                                    class="text-danger small mt-1">
+                                    <div *ngIf="form.get('password')?.errors?.['required']">La contraseña es
+                                        obligatoria.</div>
+                                    <div *ngIf="form.get('password')?.errors?.['minlength']">La contraseña debe tener al
+                                        menos 6 caracteres.</div>
+                                    <div *ngIf="form.get('password')?.errors?.['pattern']">La contraseña debe contener
+                                        al menos una mayúscula, una minúscula, un número y un carácter especial.</div>
+                                </div>
+                            </div>
+
+                            <div class="mb-4">
+                                <label class="form-label">Confirmar Contraseña <span
+                                        class="text-danger">*</span></label>
+                                <div class="input-group">
+                                    <input [type]="showConfirmPassword ? 'text' : 'password'" class="form-control"
+                                        formControlName="confirmPassword" placeholder="••••••••">
+                                    <button class="btn btn-outline-secondary" type="button"
+                                        (click)="toggleConfirmPassword()">
+                                        <i class="fa" [ngClass]="showConfirmPassword ? 'fa-eye-slash' : 'fa-eye'"></i>
+                                    </button>
+                                </div>
+                                <div *ngIf="form.get('confirmPassword')?.invalid && (form.get('confirmPassword')?.dirty || form.get('confirmPassword')?.touched)"
+                                    class="text-danger small mt-1">
+                                    <div *ngIf="form.get('confirmPassword')?.errors?.['required']">Confirmar la
+                                        contraseña es obligatorio.</div>
+                                    <div *ngIf="form.get('confirmPassword')?.errors?.['mismatch']">Las contraseñas no
+                                        coinciden.</div>
+                                </div>
+                            </div>
+
+                            <div class="d-grid gap-2">
+                                <button type="submit" class="btn btn-primary btn-lg"
+                                    [disabled]="form.invalid || isSubmitted">
+                                    Registrarse
+                                </button>
+                            </div>
+
+                            <div class="text-center mt-4">
+                                <span class="text-secondary">¿Ya tienes cuenta? </span>
+                                <a routerLink="/account/login" class="text-decoration-none fw-bold">Iniciar Sesión</a>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

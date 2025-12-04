@@ -15,12 +15,15 @@ import { AppComponent } from './app.component';
 import { APP_ROUTE_PROVIDER } from './route.provider';
 import { PersonalSettingsModule } from './account/personal-settings/personal-settings.module';
 import { UserProfileModule } from './account/user-profile/user-profile.module';
+import { RegisterComponent } from './account/register/register.component';
+import { ReactiveFormsModule } from '@angular/forms';
 
 @NgModule({
-  declarations: [AppComponent],
+  declarations: [AppComponent, RegisterComponent],
   imports: [
     BrowserModule,
     BrowserAnimationsModule,
+    ReactiveFormsModule,
     AppRoutingModule,
     ThemeSharedModule,
     CoreModule,

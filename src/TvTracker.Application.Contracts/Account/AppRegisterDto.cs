@@ -30,5 +30,8 @@ public class AppRegisterDto
     [DynamicStringLength(typeof(IdentityUserConsts), nameof(IdentityUserConsts.MaxSurnameLength))]
     public string Surname { get; set; }
 
-    public string ProfilePicture { get; set; }
+    [DynamicStringLength(typeof(IdentityUserConsts), nameof(IdentityUserConsts.MaxPhoneNumberLength))]
+    public string? PhoneNumber { get; set; }
+
+    public string? ProfilePicture { get; set; }
 }

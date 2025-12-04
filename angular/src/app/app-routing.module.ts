@@ -1,8 +1,10 @@
-import { authGuard, permissionGuard } from '@abp/ng.core';
+import { authGuard, permissionGuard, eLayoutType } from '@abp/ng.core';
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
 
 import { PersonalSettingsComponent } from './account/personal-settings/personal-settings.component';
+import { RegisterComponent } from './account/register/register.component';
+
 
 const routes: Routes = [
   {
@@ -14,6 +16,14 @@ const routes: Routes = [
     path: 'account/personal-settings',
     component: PersonalSettingsComponent,
     canActivate: [authGuard]
+  },
+
+  {
+    path: 'register',
+    component: RegisterComponent,
+    data: {
+      layout: eLayoutType.empty
+    }
   },
   {
     path: 'account',

@@ -2,6 +2,9 @@ import { Component, OnInit } from '@angular/core';
 import { RoutesService, ConfigStateService } from '@abp/ng.core';
 import { NavItemsService } from '@abp/ng.theme.shared';
 import { UserProfileComponent } from './account/user-profile/user-profile.component';
+import { ReplaceableComponentsService } from '@abp/ng.core';
+import { eAccountComponents } from '@abp/ng.account';
+import { RegisterComponent } from './account/register/register.component';
 
 @Component({
   selector: 'app-root',
@@ -14,8 +17,13 @@ export class AppComponent implements OnInit {
   constructor(
     private navItems: NavItemsService,
     private routes: RoutesService,
-    private config: ConfigStateService
+    private config: ConfigStateService,
+    private replaceableComponents: ReplaceableComponentsService
   ) {
+    this.replaceableComponents.add({
+      component: RegisterComponent,
+      key: eAccountComponents.Register,
+    });
 
     this.navItems.addItems([
       {
