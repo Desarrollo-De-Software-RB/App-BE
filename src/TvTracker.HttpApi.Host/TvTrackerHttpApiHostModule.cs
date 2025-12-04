@@ -159,6 +159,11 @@ public class TvTrackerHttpApiHostModule : AbpModule
                 options.FileSets.ReplaceEmbeddedByPhysical<TvTrackerApplicationModule>(Path.Combine(hostingEnvironment.ContentRootPath, $"..{Path.DirectorySeparatorChar}TvTracker.Application"));
             });
         }
+
+        Configure<AbpVirtualFileSystemOptions>(options =>
+        {
+            options.FileSets.AddEmbedded<TvTrackerHttpApiHostModule>();
+        });
     }
 
     private void ConfigureConventionalControllers()

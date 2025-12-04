@@ -1,0 +1,18 @@
+<div class="user-profile-wrapper" *ngIf="userProfile$ | async as user">
+    <div class="user-profile-header" (click)="toggleDropdown()">
+        <div class="lpx-avatar">
+            <img *ngIf="user.extraProperties?.ProfilePicture || user.extraProperties?.picture; else defaultAvatar"
+                [src]="user.extraProperties?.ProfilePicture || user.extraProperties?.picture" alt="Profile Picture"
+                class="lpx-avatar-img" style="width: 32px; height: 32px; border-radius: 50%; object-fit: cover;" />
+            <ng-template #defaultAvatar>
+                <i class="bi bi-person-circle" style="font-size: 1.5rem;"></i>
+            </ng-template>
+        </div>
+        <span class="user-name">{{ user.userName }}</span>
+    </div>
+
+    <div class="user-dropdown" *ngIf="isDropdownOpen">
+        <div class="dropdown-item" (click)="navigateToMyAccount()">Mi cuenta</div>
+        <div class="dropdown-item" (click)="logout()">Cerrar sesión</div>
+    </div>
+</div>

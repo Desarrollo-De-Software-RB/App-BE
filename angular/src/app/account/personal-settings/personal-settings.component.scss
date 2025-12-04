@@ -1,0 +1,309 @@
+// Variables for the theme
+$card-bg: #1e1e2e;
+$card-bg-hover: #252538;
+$text-primary: #ffffff;
+$text-secondary: #a0a0b0;
+$accent-color: #3b82f6;
+$border-color: rgba(255, 255, 255, 0.08);
+$card-radius: 16px;
+$transition-speed: 0.3s;
+$input-bg: #2a2a3c;
+
+.settings-container {
+    padding: 2rem 0;
+}
+
+.section-title {
+    font-size: 2rem;
+    font-weight: 700;
+    color: $text-primary;
+    margin-bottom: 2rem;
+    text-align: center;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    background: linear-gradient(to right, #3b82f6, #ec4899);
+    -webkit-background-clip: text;
+    background-clip: text;
+    -webkit-text-fill-color: transparent;
+}
+
+.settings-card {
+    background-color: $card-bg;
+    border: 1px solid $border-color;
+    border-radius: $card-radius;
+    padding: 2rem;
+    box-shadow: 0 25px 50px rgba(0, 0, 0, 0.3);
+    color: $text-primary;
+}
+
+// Tabs Styling
+.nav-tabs {
+    border-bottom: 1px solid $border-color;
+    margin-bottom: 2rem;
+
+    .nav-item {
+        margin-bottom: -1px;
+
+        .nav-link {
+            background: transparent;
+            border: none;
+            border-bottom: 2px solid transparent;
+            color: $text-secondary;
+            font-weight: 500;
+            padding: 1rem 1.5rem;
+            transition: all $transition-speed ease;
+
+            &:hover {
+                color: $accent-color;
+                border-color: rgba($accent-color, 0.5);
+            }
+
+            &.active {
+                background: transparent;
+                color: $accent-color;
+                border-bottom: 2px solid $accent-color;
+            }
+        }
+    }
+}
+
+// Form Styling
+.form-label {
+    color: $text-secondary;
+    font-weight: 500;
+    margin-bottom: 0.5rem;
+}
+
+.form-control {
+    background-color: $input-bg;
+    border: 1px solid $border-color;
+    color: $text-primary;
+    border-radius: 8px;
+    padding: 0.75rem 1rem;
+    transition: all $transition-speed ease;
+
+    &:focus {
+        background-color: lighten($input-bg, 5%);
+        border-color: $accent-color;
+        box-shadow: 0 0 0 4px rgba($accent-color, 0.1);
+    }
+
+    &::placeholder {
+        color: rgba($text-secondary, 0.5);
+    }
+
+    &:disabled,
+    &[readonly] {
+        background-color: darken($input-bg, 2%);
+        opacity: 0.7;
+    }
+}
+
+.btn-primary {
+    background: linear-gradient(to right, #3b82f6, #2563eb);
+    border: none;
+    border-radius: 8px;
+    padding: 0.75rem 2rem;
+    font-weight: 600;
+    letter-spacing: 0.5px;
+    transition: all $transition-speed ease;
+    margin-top: 1rem;
+
+    &:hover:not(:disabled) {
+        transform: translateY(-2px);
+        box-shadow: 0 4px 12px rgba($accent-color, 0.3);
+    }
+
+    &:disabled {
+        background: $text-secondary;
+        opacity: 0.5;
+        cursor: not-allowed;
+    }
+}
+
+.img-thumbnail {
+    background-color: $input-bg;
+    // Variables for the theme
+    $card-bg: #1e1e2e;
+    $card-bg-hover: #252538;
+    $text-primary: #ffffff;
+    $text-secondary: #a0a0b0;
+    $accent-color: #3b82f6;
+    $border-color: rgba(255, 255, 255, 0.08);
+    $card-radius: 16px;
+    $transition-speed: 0.3s;
+    $input-bg: #2a2a3c;
+
+    .settings-container {
+        padding: 2rem 0;
+    }
+
+    .section-title {
+        font-size: 2rem;
+        font-weight: 700;
+        color: $text-primary;
+        margin-bottom: 2rem;
+        text-align: center;
+        text-transform: uppercase;
+        letter-spacing: 1px;
+        background: linear-gradient(to right, #3b82f6, #ec4899);
+        -webkit-background-clip: text;
+        background-clip: text;
+        -webkit-text-fill-color: transparent;
+    }
+
+    .settings-card {
+        background-color: $card-bg;
+        border: 1px solid $border-color;
+        border-radius: $card-radius;
+        padding: 2rem;
+        box-shadow: 0 25px 50px rgba(0, 0, 0, 0.3);
+        color: $text-primary;
+    }
+
+    // Tabs Styling
+    .nav-tabs {
+        border-bottom: 1px solid $border-color;
+        margin-bottom: 2rem;
+
+        .nav-item {
+            margin-bottom: -1px;
+
+            .nav-link {
+                background: transparent;
+                border: none;
+                border-bottom: 2px solid transparent;
+                color: $text-secondary;
+                font-weight: 500;
+                padding: 1rem 1.5rem;
+                transition: all $transition-speed ease;
+
+                &:hover {
+                    color: $accent-color;
+                    border-color: rgba($accent-color, 0.5);
+                }
+
+                &.active {
+                    background: transparent;
+                    color: $accent-color;
+                    border-bottom: 2px solid $accent-color;
+                }
+            }
+        }
+    }
+
+    // Form Styling
+    .form-label {
+        color: $text-secondary;
+        font-weight: 500;
+        margin-bottom: 0.5rem;
+    }
+
+    .form-control {
+        background-color: $input-bg;
+        border: 1px solid $border-color;
+        color: $text-primary;
+        border-radius: 8px;
+        padding: 0.75rem 1rem;
+        transition: all $transition-speed ease;
+
+        &:focus {
+            background-color: lighten($input-bg, 5%);
+            border-color: $accent-color;
+            box-shadow: 0 0 0 4px rgba($accent-color, 0.1);
+        }
+
+        &::placeholder {
+            color: rgba($text-secondary, 0.5);
+        }
+
+        &:disabled,
+        &[readonly] {
+            background-color: darken($input-bg, 2%);
+            opacity: 0.7;
+        }
+    }
+
+    .btn-primary {
+        background: linear-gradient(to right, #3b82f6, #2563eb);
+        border: none;
+        border-radius: 8px;
+        padding: 0.75rem 2rem;
+        font-weight: 600;
+        letter-spacing: 0.5px;
+        transition: all $transition-speed ease;
+        margin-top: 1rem;
+
+        &:hover:not(:disabled) {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba($accent-color, 0.3);
+        }
+
+        &:disabled {
+            background: $text-secondary;
+            opacity: 0.5;
+            cursor: not-allowed;
+        }
+    }
+
+    .img-thumbnail {
+        background-color: $input-bg;
+        border-color: $border-color;
+        border-radius: 12px;
+        padding: 0.25rem;
+    }
+
+    .text-danger {
+        color: #ef4444 !important;
+        margin-top: 0.5rem;
+    }
+
+    // Input group styles for password toggle
+    .input-group {
+        display: flex;
+        flex-wrap: nowrap;
+        align-items: stretch;
+        width: 100%;
+        position: relative;
+
+        .form-control {
+            border-right: none;
+            border-top-right-radius: 0;
+            border-bottom-right-radius: 0;
+            flex: 1 1 auto;
+            width: 1%;
+            margin-bottom: 0;
+
+            &:focus {
+                z-index: 3;
+            }
+        }
+
+        .btn-outline-secondary {
+            background-color: $input-bg;
+            border: 1px solid $border-color;
+            border-left: none;
+            color: $text-secondary;
+            transition: all $transition-speed ease;
+            border-top-left-radius: 0;
+            border-bottom-left-radius: 0;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 0 1rem;
+            margin-left: -1px;
+            z-index: 2;
+            height: auto;
+
+            &:hover {
+                background-color: lighten($input-bg, 5%);
+                color: $accent-color;
+            }
+
+            &:focus {
+                box-shadow: none;
+                z-index: 3;
+            }
+        }
+    }
+}
