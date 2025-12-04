@@ -43,6 +43,19 @@ export class AppComponent implements OnInit {
           invisible: !isAuthenticated
         });
       }
+      const watchlistRoute = this.routes.find(r => r.name === 'Mi Lista');
+      if (watchlistRoute) {
+        this.routes.patch('Mi Lista', {
+          invisible: !isAuthenticated
+        });
+      }
+
+      const usersRoute = this.routes.find(r => r.name === 'Usuarios');
+      if (usersRoute) {
+        this.routes.patch('Usuarios', {
+          invisible: !isAuthenticated
+        });
+      }
     });
 
     // Force hide default avatar (temporary fix to identify the element)

@@ -1,0 +1,27 @@
+<div class="modal-header">
+    <h4 class="modal-title">{{ currentStatus ? 'Modificar Estado' : 'Agregar a Mi Lista' }}</h4>
+    <button type="button" class="btn-close btn-close-white" aria-label="Close" (click)="activeModal.dismiss()"></button>
+</div>
+<div class="modal-body">
+    <p class="text-secondary mb-3">Selecciona el estado para <strong>{{ title }}</strong>:</p>
+
+    <div class="d-grid gap-2">
+        <button *ngFor="let status of statuses" type="button" class="btn" [ngClass]="{
+                    'btn-outline-success': selectedStatus !== status.value && status.key === 'Completed',
+                    'btn-outline-primary': selectedStatus !== status.value && status.key === 'Watching',
+                    'btn-outline-warning': selectedStatus !== status.value && status.key === 'Pending',
+                    'btn-outline-danger': selectedStatus !== status.value && status.key === 'Dropped',
+                    'btn-success': selectedStatus === status.value && status.key === 'Completed',
+                    'btn-primary': selectedStatus === status.value && status.key === 'Watching',
+                    'btn-warning': selectedStatus === status.value && status.key === 'Pending',
+                    'btn-danger': selectedStatus === status.value && status.key === 'Dropped'
+                }" (click)="selectedStatus = status.value">
+            {{ status.key }}
+        </button>
+    </div>
+</div>
+<div class="modal-footer">
+    <button type="button" class="btn btn-outline-light" (click)="activeModal.dismiss()">Cancelar</button>
+    <button type="button" class="btn btn-primary" (click)="save()">{{ currentStatus ? 'Guardar Cambios' : 'Agregar'
+        }}</button>
+</div>

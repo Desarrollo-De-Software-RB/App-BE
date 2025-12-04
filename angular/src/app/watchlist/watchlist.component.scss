@@ -1,0 +1,135 @@
+// Variables for the theme (matching users.component.scss)
+$card-bg: #1e1e2e;
+$card-bg-hover: #252538;
+$text-primary: #ffffff;
+$text-secondary: #a0a0b0;
+$accent-color: #3b82f6;
+$border-color: rgba(255, 255, 255, 0.08);
+$card-radius: 16px;
+$transition-speed: 0.3s;
+$input-bg: #2a2a3c;
+
+.watchlist-container {
+    padding: 2rem 0;
+}
+
+.section-title {
+    font-size: 2rem;
+    font-weight: 700;
+    color: $text-primary;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    background: linear-gradient(to right, #3b82f6, #ec4899);
+    -webkit-background-clip: text;
+    background-clip: text;
+    -webkit-text-fill-color: transparent;
+}
+
+.watchlist-card {
+    background-color: $card-bg;
+    border: 1px solid $border-color;
+    border-radius: $card-radius;
+    padding: 1.5rem;
+    text-align: center;
+    transition: all $transition-speed ease;
+    position: relative;
+    overflow: hidden;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    cursor: pointer;
+
+    &:hover {
+        transform: translateY(-8px);
+        box-shadow: 0 15px 30px rgba(0, 0, 0, 0.4);
+        background-color: $card-bg-hover;
+        border-color: rgba($accent-color, 0.3);
+
+        .poster-wrapper {
+            transform: scale(1.05);
+            border-color: $accent-color;
+            box-shadow: 0 0 15px rgba($accent-color, 0.3);
+        }
+    }
+
+    .poster-wrapper {
+        width: 150px;
+        height: 225px;
+        /* Aspect ratio for posters */
+        border-radius: 8px;
+        margin: 0 auto 1rem;
+        padding: 3px;
+        border: 2px solid $border-color;
+        transition: all $transition-speed ease;
+        background-clip: content-box;
+        overflow: hidden;
+
+        img {
+            width: 100%;
+            height: 100%;
+            border-radius: 6px;
+            object-fit: cover;
+        }
+
+        .no-poster {
+            width: 100%;
+            height: 100%;
+            background-color: #333;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #777;
+            font-size: 1rem;
+            text-align: center;
+            padding: 0.5rem;
+        }
+    }
+
+    .serie-title {
+        font-size: 1.1rem;
+        font-weight: 600;
+        color: $text-primary;
+        margin-bottom: 0.5rem;
+        width: 100%;
+    }
+
+    .status-badge {
+        margin-bottom: 1rem;
+    }
+
+    .card-actions {
+        width: 100%;
+        margin-top: auto;
+
+        .form-select {
+            background-color: rgba(255, 255, 255, 0.05);
+            border: 1px solid $border-color;
+            color: $text-primary;
+
+            &:focus {
+                background-color: rgba(255, 255, 255, 0.1);
+                border-color: $accent-color;
+                box-shadow: 0 0 0 0.25rem rgba($accent-color, 0.25);
+            }
+
+            option {
+                background-color: $card-bg;
+                color: $text-primary;
+            }
+        }
+    }
+
+
+    .btn-group .btn {
+        border-color: $border-color;
+        color: $text-secondary;
+
+        &:hover,
+        &.active {
+            background-color: $accent-color;
+            color: white;
+            border-color: $accent-color;
+        }
+    }
+}
