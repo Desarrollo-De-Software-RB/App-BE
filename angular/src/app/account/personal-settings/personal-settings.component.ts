@@ -10,6 +10,8 @@ import { RestService } from '@abp/ng.core';
 })
 export class PersonalSettingsComponent implements OnInit {
     form: FormGroup;
+    passwordForm: FormGroup;
+    activeTab: 'profile' | 'password' = 'profile';
 
     constructor(
         private fb: FormBuilder,
@@ -20,6 +22,7 @@ export class PersonalSettingsComponent implements OnInit {
 
     ngOnInit(): void {
         this.buildForm();
+        this.buildPasswordForm();
         this.getProfile();
     }
 
@@ -32,6 +35,19 @@ export class PersonalSettingsComponent implements OnInit {
             phoneNumber: [''],
             profilePicture: ['']
         });
+    }
+
+    buildPasswordForm() {
+        this.passwordForm = this.fb.group({
+            currentPassword: ['', [Validators.required]],
+            newPassword: ['', [Validators.required, Validators.minLength(6)]],
+            repeatNewPassword: ['', [Validators.required]]
+        }, { validators: this.passwordMatchValidator });
+    }
+
+    passwordMatchValidator(g: FormGroup) {
+        return g.get('newPassword').value === g.get('repeatNewPassword').value
+            ? null : { mismatch: true };
     }
 
     getProfile() {
@@ -59,5 +75,29 @@ export class PersonalSettingsComponent implements OnInit {
                 this.toaster.error(err.error?.error?.message || 'Update failed');
             }
         });
+    }
+
+    changePassword() {
+        if (this.passwordForm.invalid) return;
+
+        const { currentPassword, newPassword } = this.passwordForm.value;
+
+        this.restService.request<any, void>({
+            method: 'POST',
+            url: '/api/account/my-profile/change-password',
+            body: { currentPassword, newPassword }
+        }).subscribe({
+            next: () => {
+                this.toaster.success('Password changed successfully.');
+                this.passwordForm.reset();
+            },
+            error: (err) => {
+                this.toaster.error(err.error?.error?.message || 'Password change failed');
+            }
+        });
+    }
+
+    setActiveTab(tab: 'profile' | 'password') {
+        this.activeTab = tab;
     }
 }

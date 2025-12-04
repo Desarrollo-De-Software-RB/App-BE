@@ -1,9 +1,23 @@
 <div class="card">
     <div class="card-header">
-        <h5 class="card-title mb-0">Personal Settings</h5>
+        <ul class="nav nav-tabs card-header-tabs">
+            <li class="nav-item">
+                <a class="nav-link" [class.active]="activeTab === 'profile'" (click)="setActiveTab('profile')"
+                    style="cursor: pointer;">
+                    Información personal
+                </a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" [class.active]="activeTab === 'password'" (click)="setActiveTab('password')"
+                    style="cursor: pointer;">
+                    Cambiar contraseña
+                </a>
+            </li>
+        </ul>
     </div>
     <div class="card-body">
-        <form [formGroup]="form" (ngSubmit)="save()">
+        <!-- Profile Form -->
+        <form [formGroup]="form" (ngSubmit)="save()" *ngIf="activeTab === 'profile'">
             <div class="mb-3">
                 <label class="form-label">Username</label>
                 <input type="text" class="form-control" formControlName="userName" readonly>
@@ -36,6 +50,30 @@
             </div>
 
             <button type="submit" class="btn btn-primary" [disabled]="form.invalid || form.pristine">Save</button>
+        </form>
+
+        <!-- Password Form -->
+        <form [formGroup]="passwordForm" (ngSubmit)="changePassword()" *ngIf="activeTab === 'password'">
+            <div class="mb-3">
+                <label class="form-label">Current Password</label>
+                <input type="password" class="form-control" formControlName="currentPassword">
+            </div>
+            <div class="mb-3">
+                <label class="form-label">New Password</label>
+                <input type="password" class="form-control" formControlName="newPassword">
+                <div *ngIf="passwordForm.get('newPassword').hasError('minlength')" class="text-danger small">
+                    Password must be at least 6 characters.
+                </div>
+            </div>
+            <div class="mb-3">
+                <label class="form-label">Repeat New Password</label>
+                <input type="password" class="form-control" formControlName="repeatNewPassword">
+                <div *ngIf="passwordForm.hasError('mismatch')" class="text-danger small">
+                    Passwords do not match.
+                </div>
+            </div>
+
+            <button type="submit" class="btn btn-primary" [disabled]="passwordForm.invalid">Change Password</button>
         </form>
     </div>
 </div>

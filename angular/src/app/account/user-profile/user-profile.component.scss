@@ -1,7 +1,20 @@
-.lpx-menu-item-link {
-    cursor: pointer;
+.user-profile-wrapper {
+    position: relative;
     display: flex;
     align-items: center;
+}
+
+.user-profile-header {
+    display: flex;
+    align-items: center;
+    cursor: pointer;
+    padding: 4px 8px;
+    border-radius: 4px;
+    transition: background-color 0.2s;
+
+    &:hover {
+        background-color: rgba(0, 0, 0, 0.05);
+    }
 }
 
 .lpx-avatar {
@@ -9,7 +22,35 @@
     align-items: center;
 }
 
-.user-full-name {
-    margin-left: 8px;
+.user-name {
+    margin-left: 10px;
     font-weight: 500;
+    color: #333;
+    font-size: 14px;
+}
+
+.user-dropdown {
+    position: absolute;
+    top: 100%;
+    right: 0;
+    margin-top: 8px;
+    background-color: white;
+    border-radius: 8px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+    padding: 8px 0;
+    min-width: 180px;
+    z-index: 1000;
+    border: 1px solid #eee;
+
+    .dropdown-item {
+        padding: 10px 20px;
+        cursor: pointer;
+        font-size: 14px;
+        color: #333;
+        transition: background-color 0.2s;
+
+        &:hover {
+            background-color: #f5f5f5;
+        }
+    }
 }

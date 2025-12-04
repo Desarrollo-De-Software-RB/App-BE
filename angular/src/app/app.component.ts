@@ -43,7 +43,11 @@ export class AppComponent implements OnInit {
       avatars.forEach((avatar: any) => {
         // Hide if it's NOT inside our custom component
         if (!avatar.closest('app-user-profile')) {
-          avatar.style.display = 'none';
+          // Hide the entire container of the default user menu
+          const container = avatar.closest('.lpx-menu-item') || avatar.closest('.dropdown') || avatar.parentElement;
+          if (container) {
+            container.style.display = 'none';
+          }
         }
       });
 
@@ -51,7 +55,10 @@ export class AppComponent implements OnInit {
       const userIcons = document.querySelectorAll('.bi-person-circle, .fa-user');
       userIcons.forEach((icon: any) => {
         if (!icon.closest('app-user-profile') && icon.closest('.lpx-header-right')) {
-          icon.style.display = 'none';
+          const container = icon.closest('.lpx-menu-item') || icon.closest('.dropdown') || icon.parentElement;
+          if (container) {
+            container.style.display = 'none';
+          }
         }
       });
     }, 50);
