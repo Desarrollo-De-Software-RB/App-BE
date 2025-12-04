@@ -7,6 +7,7 @@ import { RestService } from '@abp/ng.core';
 @Component({
     selector: 'app-personal-settings',
     templateUrl: './personal-settings.component.html',
+    styleUrls: ['./personal-settings.component.scss']
 })
 export class PersonalSettingsComponent implements OnInit {
     form: FormGroup;

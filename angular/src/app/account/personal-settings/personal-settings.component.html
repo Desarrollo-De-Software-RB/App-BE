@@ -1,6 +1,8 @@
-<div class="card">
-    <div class="card-header">
-        <ul class="nav nav-tabs card-header-tabs">
+<div class="container settings-container">
+    <h2 class="section-title">Mi Cuenta</h2>
+
+    <div class="settings-card">
+        <ul class="nav nav-tabs">
             <li class="nav-item">
                 <a class="nav-link" [class.active]="activeTab === 'profile'" (click)="setActiveTab('profile')"
                     style="cursor: pointer;">
@@ -14,66 +16,75 @@
                 </a>
             </li>
         </ul>
-    </div>
-    <div class="card-body">
-        <!-- Profile Form -->
-        <form [formGroup]="form" (ngSubmit)="save()" *ngIf="activeTab === 'profile'">
-            <div class="mb-3">
-                <label class="form-label">Username</label>
-                <input type="text" class="form-control" formControlName="userName" readonly>
-            </div>
-            <div class="mb-3">
-                <label class="form-label">Email</label>
-                <input type="email" class="form-control" formControlName="email">
-            </div>
-            <div class="row">
-                <div class="col-md-6 mb-3">
-                    <label class="form-label">Name</label>
-                    <input type="text" class="form-control" formControlName="name">
-                </div>
-                <div class="col-md-6 mb-3">
-                    <label class="form-label">Surname</label>
-                    <input type="text" class="form-control" formControlName="surname">
-                </div>
-            </div>
-            <div class="mb-3">
-                <label class="form-label">Phone Number</label>
-                <input type="text" class="form-control" formControlName="phoneNumber">
-            </div>
-            <div class="mb-3">
-                <label class="form-label">Profile Picture URL</label>
-                <input type="text" class="form-control" formControlName="profilePicture">
-            </div>
-            <div *ngIf="form.get('profilePicture').value" class="mb-3">
-                <img [src]="form.get('profilePicture').value" alt="Profile Picture" class="img-thumbnail"
-                    style="max-height: 150px;">
-            </div>
 
-            <button type="submit" class="btn btn-primary" [disabled]="form.invalid || form.pristine">Save</button>
-        </form>
-
-        <!-- Password Form -->
-        <form [formGroup]="passwordForm" (ngSubmit)="changePassword()" *ngIf="activeTab === 'password'">
-            <div class="mb-3">
-                <label class="form-label">Current Password</label>
-                <input type="password" class="form-control" formControlName="currentPassword">
-            </div>
-            <div class="mb-3">
-                <label class="form-label">New Password</label>
-                <input type="password" class="form-control" formControlName="newPassword">
-                <div *ngIf="passwordForm.get('newPassword').hasError('minlength')" class="text-danger small">
-                    Password must be at least 6 characters.
+        <div class="card-body p-0">
+            <!-- Profile Form -->
+            <form [formGroup]="form" (ngSubmit)="save()" *ngIf="activeTab === 'profile'">
+                <div class="mb-4">
+                    <label class="form-label">Usuario</label>
+                    <input type="text" class="form-control" formControlName="userName" readonly>
                 </div>
-            </div>
-            <div class="mb-3">
-                <label class="form-label">Repeat New Password</label>
-                <input type="password" class="form-control" formControlName="repeatNewPassword">
-                <div *ngIf="passwordForm.hasError('mismatch')" class="text-danger small">
-                    Passwords do not match.
+                <div class="mb-4">
+                    <label class="form-label">Email</label>
+                    <input type="email" class="form-control" formControlName="email">
                 </div>
-            </div>
+                <div class="row">
+                    <div class="col-md-6 mb-4">
+                        <label class="form-label">Nombre</label>
+                        <input type="text" class="form-control" formControlName="name">
+                    </div>
+                    <div class="col-md-6 mb-4">
+                        <label class="form-label">Apellido</label>
+                        <input type="text" class="form-control" formControlName="surname">
+                    </div>
+                </div>
+                <div class="mb-4">
+                    <label class="form-label">Teléfono</label>
+                    <input type="text" class="form-control" formControlName="phoneNumber">
+                </div>
+                <div class="mb-4">
+                    <label class="form-label">URL Foto de Perfil</label>
+                    <input type="text" class="form-control" formControlName="profilePicture">
+                </div>
+                <div *ngIf="form.get('profilePicture').value" class="mb-4 text-center">
+                    <img [src]="form.get('profilePicture').value" alt="Profile Picture" class="img-thumbnail"
+                        style="max-height: 150px; width: 150px; object-fit: cover; border-radius: 50%;">
+                </div>
 
-            <button type="submit" class="btn btn-primary" [disabled]="passwordForm.invalid">Change Password</button>
-        </form>
+                <div class="text-end">
+                    <button type="submit" class="btn btn-primary" [disabled]="form.invalid || form.pristine">
+                        Guardar Cambios
+                    </button>
+                </div>
+            </form>
+
+            <!-- Password Form -->
+            <form [formGroup]="passwordForm" (ngSubmit)="changePassword()" *ngIf="activeTab === 'password'">
+                <div class="mb-4">
+                    <label class="form-label">Contraseña Actual</label>
+                    <input type="password" class="form-control" formControlName="currentPassword">
+                </div>
+                <div class="mb-4">
+                    <label class="form-label">Nueva Contraseña</label>
+                    <input type="password" class="form-control" formControlName="newPassword">
+                    <div *ngIf="passwordForm.get('newPassword').hasError('minlength')" class="text-danger small">
+                        La contraseña debe tener al menos 6 caracteres.
+                    </div>
+                </div>
+                <div class="mb-4">
+                    <label class="form-label">Repetir Nueva Contraseña</label>
+                    <input type="password" class="form-control" formControlName="repeatNewPassword">
+                    <div *ngIf="passwordForm.hasError('mismatch')" class="text-danger small">
+                        Las contraseñas no coinciden.
+                    </div>
+                </div>
+
+                <div class="text-end">
+                    <button type="submit" class="btn btn-primary" [disabled]="passwordForm.invalid">
+                        Cambiar Contraseña
+                    </button>
+                </div>
+            </form>
+        </div>
     </div>
 </div>
