@@ -2,18 +2,13 @@ using System.ComponentModel.DataAnnotations;
 using Volo.Abp.Identity;
 using Volo.Abp.Validation;
 
-namespace TvTracker.Account;
+namespace TvTracker.Users;
 
-public class AppUpdateProfileDto
+public class UpdateUserDto
 {
     [Required]
     [DynamicStringLength(typeof(IdentityUserConsts), nameof(IdentityUserConsts.MaxUserNameLength))]
     public string UserName { get; set; }
-
-    [Required]
-    [EmailAddress]
-    [DynamicStringLength(typeof(IdentityUserConsts), nameof(IdentityUserConsts.MaxEmailLength))]
-    public string Email { get; set; }
 
     [Required]
     [DynamicStringLength(typeof(IdentityUserConsts), nameof(IdentityUserConsts.MaxNameLength))]
@@ -23,8 +18,14 @@ public class AppUpdateProfileDto
     [DynamicStringLength(typeof(IdentityUserConsts), nameof(IdentityUserConsts.MaxSurnameLength))]
     public string Surname { get; set; }
 
-    [DynamicStringLength(typeof(IdentityUserConsts), nameof(IdentityUserConsts.MaxPhoneNumberLength))]
-    public string PhoneNumber { get; set; }
+    [Required]
+    [EmailAddress]
+    [DynamicStringLength(typeof(IdentityUserConsts), nameof(IdentityUserConsts.MaxEmailLength))]
+    public string Email { get; set; }
 
-    public string ProfilePicture { get; set; }
+    public string? PhoneNumber { get; set; }
+    
+    public bool IsActive { get; set; }
+
+    public string? ProfilePicture { get; set; }
 }

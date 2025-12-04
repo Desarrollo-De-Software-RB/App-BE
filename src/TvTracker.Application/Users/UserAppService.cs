@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Identity;
 using Volo.Abp.Data;
 using Volo.Abp.Domain.Repositories;
 using Volo.Abp.Identity;
@@ -51,5 +52,74 @@ public class UserAppService : TvTrackerAppService, IUserAppService
             IsActive = user.IsActive,
             CreationTime = user.CreationTime
         };
+    }
+
+    [Authorize(TvTrackerPermissions.AdminOptions)]
+    public async Task<UserDto> CreateAsync(CreateUserDto input)
+    {
+        var user = new IdentityUser(
+            GuidGenerator.Create(),
+            input.UserName,
+            input.Email,
+            CurrentTenant.Id
+        );
+
+        user.Name = input.Name;
+        user.Surname = input.Surname;
+        user.SetPhoneNumber(input.PhoneNumber, false);
+        user.SetIsActive(input.IsActive);
+        
+        if (!string.IsNullOrEmpty(input.ProfilePicture))
+        {
+            user.SetProperty("ProfilePicture", input.ProfilePicture);
+        }
+
+        CheckErrors(await _userManager.CreateAsync(user, input.Password));
+
+        return new UserDto
+        {
+            Id = user.Id,
+            UserName = user.UserName,
+            ProfilePicture = user.GetProperty<string>("ProfilePicture")
+        };
+    }
+
+    [Authorize(TvTrackerPermissions.AdminOptions)]
+    public async Task<UserDto> UpdateAsync(Guid id, UpdateUserDto input)
+    {
+        var user = await _userManager.GetByIdAsync(id);
+
+        CheckErrors(await _userManager.SetUserNameAsync(user, input.UserName));
+        CheckErrors(await _userManager.SetEmailAsync(user, input.Email));
+        user.Name = input.Name;
+        user.Surname = input.Surname;
+        CheckErrors(await _userManager.SetPhoneNumberAsync(user, input.PhoneNumber));
+        user.SetIsActive(input.IsActive);
+
+        user.SetProperty("ProfilePicture", input.ProfilePicture);
+
+        CheckErrors(await _userManager.UpdateAsync(user));
+
+        return new UserDto
+        {
+            Id = user.Id,
+            UserName = user.UserName,
+            ProfilePicture = user.GetProperty<string>("ProfilePicture")
+        };
+    }
+
+    [Authorize(TvTrackerPermissions.AdminOptions)]
+    public async Task DeleteAsync(Guid id)
+    {
+        var user = await _userManager.GetByIdAsync(id);
+        CheckErrors(await _userManager.DeleteAsync(user));
+    }
+
+    private static void CheckErrors(IdentityResult result)
+    {
+        if (!result.Succeeded)
+        {
+            throw new Volo.Abp.UserFriendlyException(result.Errors.First().Description);
+        }
     }
 }

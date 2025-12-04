@@ -9,4 +9,7 @@ public interface IUserAppService : IApplicationService
 {
     Task<List<UserDto>> GetListAsync();
     Task<UserFullDto> GetAsync(Guid id);
+    Task<UserDto> CreateAsync(CreateUserDto input);
+    Task<UserDto> UpdateAsync(Guid id, UpdateUserDto input);
+    Task DeleteAsync(Guid id);
 }
