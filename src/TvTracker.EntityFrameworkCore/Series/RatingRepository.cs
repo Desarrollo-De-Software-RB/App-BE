@@ -27,5 +27,10 @@ namespace TvTracker.Series
         {
             return await DbSet.FirstOrDefaultAsync(r => r.UserId == userId && r.SerieId == serieId);
         }
+
+        public async Task<List<Rating>> GetRatingsBySerieAsync(int serieId)
+        {
+            return await DbSet.Where(r => r.SerieId == serieId).ToListAsync();
+        }
     }
 }

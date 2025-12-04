@@ -11,6 +11,7 @@ namespace TvTracker.Series
     {
         Task<List<Rating>> GetRatingsByUserAsync(Guid userId);
         Task<Rating?> GetRatingByUserAndSerieAsync(Guid userId, int serieId);
+        Task<List<Rating>> GetRatingsBySerieAsync(int serieId);
     }
 
 }

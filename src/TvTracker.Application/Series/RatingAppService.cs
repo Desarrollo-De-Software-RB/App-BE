@@ -1,59 +1,79 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
 using Volo.Abp.Application.Services;
 using Volo.Abp.Domain.Repositories;
+using Volo.Abp.Identity;
 
 namespace TvTracker.Series
 {
-    public class RatingAppService : ApplicationService
+    public class RatingAppService : ApplicationService, IRatingAppService
     {
         private readonly IRatingRepository _ratingRepository;
         private readonly IRepository<Serie, int> _serieRepository;
+        private readonly IRepository<IdentityUser, Guid> _userRepository;
 
-        public RatingAppService(IRatingRepository ratingRepository, IRepository<Serie, int> serieRepository)
+        public RatingAppService(
+            IRatingRepository ratingRepository, 
+            IRepository<Serie, int> serieRepository,
+            IRepository<IdentityUser, Guid> userRepository)
         {
             _ratingRepository = ratingRepository;
             _serieRepository = serieRepository;
+            _userRepository = userRepository;
         }
 
-        public async Task CreateOrUpdateRatingAsync(Guid userId, int serieId, int score, string? comment = null)
+        public async Task<List<RatingDto>> GetSeriesRatingsAsync(int serieId)
         {
-            var serie = await _serieRepository.GetAsync(serieId);
-            if (serie.CreatorId != userId)
+            var ratings = await _ratingRepository.GetRatingsBySerieAsync(serieId);
+            var userIds = ratings.Select(r => r.UserId).Distinct().ToList();
+            var users = await _userRepository.GetListAsync(u => userIds.Contains(u.Id));
+            var userDictionary = users.ToDictionary(u => u.Id, u => u.UserName);
+
+            return ratings.Select(r => new RatingDto
             {
-                throw new UnauthorizedAccessException("No puedes calificar series de otros usuarios.");
+                Id = r.Id,
+                SerieId = r.SerieId,
+                UserId = r.UserId,
+                UserName = userDictionary.ContainsKey(r.UserId) ? userDictionary[r.UserId] : "Unknown",
+                Score = r.Score,
+                Comment = r.Comment
+            }).ToList();
+        }
+
+        public async Task RateSeriesAsync(CreateUpdateRatingDto input)
+        {
+            var userId = CurrentUser.Id;
+            if (userId == null)
+            {
+                throw new UnauthorizedAccessException("You must be logged in to rate.");
             }
 
-            var existingRating = await _ratingRepository.GetRatingByUserAndSerieAsync(userId, serieId);
+            var serie = await _serieRepository.GetAsync(input.SerieId);
+            if (serie == null)
+            {
+                throw new ArgumentException("Serie not found.");
+            }
+
+            var existingRating = await _ratingRepository.GetRatingByUserAndSerieAsync(userId.Value, input.SerieId);
             if (existingRating != null)
             {
-                if (score < 1 || score > 5)
-                {
-                    throw new ArgumentException("Score must be between 1 and 5.");
-                }
-                existingRating.Score = score;
-                existingRating.Comment = comment;
+                existingRating.Score = input.Score;
+                existingRating.Comment = input.Comment;
                 await _ratingRepository.UpdateAsync(existingRating);
             }
             else
             {
-                if (score < 1 || score > 5)
-                {
-                    throw new ArgumentException("Score must be between 1 and 5.");
-                }
                 var newRating = new Rating
                 {
-                    SerieId = serieId,
-                    UserId = userId,
-                    Score = score,
-                    Comment = comment
+                    SerieId = input.SerieId,
+                    UserId = userId.Value,
+                    Score = input.Score,
+                    Comment = input.Comment
                 };
                 await _ratingRepository.InsertAsync(newRating);
             }
         }
     }
-
 }

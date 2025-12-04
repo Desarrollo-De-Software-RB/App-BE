@@ -4,18 +4,15 @@
   left: 0;
   width: 100vw;
   height: 100vh;
-  overflow: hidden;
-  /* Prevent page scroll */
+  overflow-y: auto;
   background-color: #141414;
   color: #fff;
   z-index: 1000;
-  display: flex;
-  align-items: center;
-  justify-content: center;
+  display: block;
 }
 
 .backdrop {
-  position: absolute;
+  position: fixed;
   top: 0;
   left: 0;
   width: 100%;
@@ -31,12 +28,13 @@
   position: relative;
   z-index: 1;
   width: 100%;
-  height: 100%;
+  min-height: 100%;
   display: flex;
+  flex-direction: column;
   align-items: center;
-  justify-content: center;
+  justify-content: flex-start;
   padding: 2rem;
-  cursor: pointer;
+  cursor: default;
 }
 
 .detail-card {
@@ -47,27 +45,18 @@
   overflow: hidden;
   box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
   color: #fff;
-  max-height: 90vh;
-  /* Limit card height */
   width: 100%;
   max-width: 1200px;
   cursor: default;
 }
 
-.row.g-0 {
-  height: 100%;
-}
-
 .poster-col {
   position: relative;
-  min-height: 60dvh;
-  max-height: 100dvh;
-  /* Ensure image has height */
   display: flex;
 
   .no-poster {
     width: 100%;
-    height: 100%;
+    min-height: 400px;
     background-color: #e0e0e0;
     display: flex;
     justify-content: center;
@@ -85,41 +74,26 @@
 
 .poster-img {
   width: 100%;
-  height: 100%;
+  height: auto;
   object-fit: cover;
   display: block;
 }
 
-.col-md-7 {
-  max-height: 90vh;
-  overflow-y: auto;
-  /* Scroll only text content */
-}
-
-.card-body {
-  height: 100%;
-  overflow-y: auto;
-}
-
-/* Custom scrollbar for webkit */
-.col-md-7::-webkit-scrollbar,
-.card-body::-webkit-scrollbar {
+/* Scrollbar styles */
+::-webkit-scrollbar {
   width: 8px;
 }
 
-.col-md-7::-webkit-scrollbar-track,
-.card-body::-webkit-scrollbar-track {
+::-webkit-scrollbar-track {
   background: rgba(255, 255, 255, 0.1);
 }
 
-.col-md-7::-webkit-scrollbar-thumb,
-.card-body::-webkit-scrollbar-thumb {
+::-webkit-scrollbar-thumb {
   background: rgba(255, 255, 255, 0.3);
   border-radius: 4px;
 }
 
-.col-md-7::-webkit-scrollbar-thumb:hover,
-.card-body::-webkit-scrollbar-thumb:hover {
+::-webkit-scrollbar-thumb:hover {
   background: rgba(255, 255, 255, 0.5);
 }
 
@@ -147,4 +121,8 @@
     color: #fff;
     border-color: #fff;
   }
+}
+
+.cursor-pointer {
+  cursor: pointer;
 }
