@@ -39,6 +39,7 @@ const routes: Routes = [
     loadChildren: () =>
       import('./serie/serie.module').then(m => m.SerieModule),
   },
+  { path: 'watchlist', loadChildren: () => import('./watchlist/watchlist.module').then(m => m.WatchlistModule) },
 ];
 
 @NgModule({

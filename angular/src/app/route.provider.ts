@@ -23,6 +23,13 @@ function configureRoutes(routes: RoutesService, authService: AuthService) {
         invisible: true, // Will be managed dynamically in AppComponent
       },
       {
+        path: '/watchlist',
+        name: 'Mi Lista',
+        iconClass: 'fas fa-list',
+        order: 4,
+        layout: eLayoutType.application,
+      },
+      {
         path: '/users',
         name: 'Usuarios',
         iconClass: 'fas fa-users',

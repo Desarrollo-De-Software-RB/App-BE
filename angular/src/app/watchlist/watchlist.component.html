@@ -1,0 +1,56 @@
+<div class="container watchlist-container">
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <h2 class="section-title mb-0">Mi Lista de Seguimiento</h2>
+        <div class="btn-group">
+            <button type="button" class="btn" [ngClass]="{
+                'btn-dark': selectedStatus === 'All',
+                'btn-outline-dark': selectedStatus !== 'All'
+            }" (click)="onStatusChange('All')">Todos</button>
+            <button type="button" class="btn" *ngFor="let status of statuses" [ngClass]="{
+                'btn-outline-success': selectedStatus !== status && status === 'Completed',
+                'btn-outline-primary': selectedStatus !== status && status === 'Watching',
+                'btn-outline-warning': selectedStatus !== status && status === 'Pending',
+                'btn-outline-danger': selectedStatus !== status && status === 'Dropped',
+                'btn-success': selectedStatus === status && status === 'Completed',
+                'btn-primary': selectedStatus === status && status === 'Watching',
+                'btn-warning': selectedStatus === status && status === 'Pending',
+                'btn-danger': selectedStatus === status && status === 'Dropped'
+            }" (click)="onStatusChange(status)">{{ status }}</button>
+        </div>
+    </div>
+
+    <div class="row g-4">
+        <div class="col-sm-6 col-md-4 col-lg-3" *ngFor="let item of filteredItems">
+            <div class="watchlist-card" (click)="navigateToDetail(item.serie)">
+                <div class="poster-wrapper">
+                    <img [src]="item.serie.poster" alt="{{ item.serie.title }}" (error)="handleImageError(item)"
+                        *ngIf="item.serie.poster && item.serie.poster !== 'N/A'; else noPoster">
+                    <ng-template #noPoster>
+                        <div class="no-poster">
+                            <span>{{ item.serie.title }}</span>
+                        </div>
+                    </ng-template>
+                </div>
+                <h5 class="serie-title text-truncate" title="{{ item.serie.title }}">{{ item.serie.title }}</h5>
+
+                <div class="card-actions" (click)="$event.stopPropagation()">
+                    <button class="btn w-100 mb-2" [ngClass]="{
+                        'btn-success': item.status === WatchlistStatus.Completed,
+                        'btn-primary': item.status === WatchlistStatus.Watching,
+                        'btn-warning': item.status === WatchlistStatus.Pending,
+                        'btn-danger': item.status === WatchlistStatus.Dropped
+                    }" (click)="openAddToWatchlistModal(item, $event)">
+                        <i class="fa fa-check me-2"></i> {{ getStatusLabel(item.status) }}
+                    </button>
+                    <button class="btn btn-sm btn-outline-danger w-100" (click)="removeItem(item)">
+                        <i class="fa fa-trash me-1"></i> Eliminar
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div *ngIf="filteredItems.length === 0" class="alert alert-info mt-4">
+        No hay elementos en esta lista.
+    </div>
+</div>
