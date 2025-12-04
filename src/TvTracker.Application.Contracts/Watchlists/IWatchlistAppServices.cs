@@ -7,7 +7,7 @@ using Volo.Abp.Application.Services;
 
 namespace TvTracker.Watchlists
 {
-    public interface IWatchlistAppServices : IApplicationService
+    public interface IWatchlistAppService : IApplicationService
     {
         Task AddSerieAsync(int serieId);
     }

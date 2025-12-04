@@ -17,6 +17,10 @@ using Volo.Abp.Emailing;
 using Volo.Abp.FeatureManagement;
 using Volo.Abp.Identity;
 using Volo.Abp.TenantManagement;
+using Volo.Abp.BackgroundWorkers;
+using TvTracker.Notificationes;
+using System.Threading.Tasks;
+using Volo.Abp;
 
 namespace TvTracker;
 
@@ -33,10 +37,18 @@ namespace TvTracker;
     typeof(AbpIdentityDomainModule),
     typeof(AbpOpenIddictDomainModule),
     typeof(AbpTenantManagementDomainModule),
-    typeof(BlobStoringDatabaseDomainModule)
+    typeof(BlobStoringDatabaseDomainModule),
+    typeof(AbpBackgroundWorkersModule)
     )]
 public class TvTrackerDomainModule : AbpModule
 {
+    public override async Task OnApplicationInitializationAsync(ApplicationInitializationContext context)
+    {
+        var notificationWorker = context.ServiceProvider.GetRequiredService<NotificationWorker>();
+
+        await notificationWorker.SendNotificationsOnSeriesChange();
+
+    }
     public override void ConfigureServices(ServiceConfigurationContext context)
     {
         Configure<AbpMultiTenancyOptions>(options =>
@@ -64,7 +76,8 @@ public class TvTrackerDomainModule : AbpModule
             options.Languages.Add(new LanguageInfo("de-DE", "de-DE", "Deutsch"));
             options.Languages.Add(new LanguageInfo("es", "es", "Español"));
         });
-        
+        context.Services.AddTransient<INotificationService, NotificationService>();
+
 
 #if DEBUG
         context.Services.Replace(ServiceDescriptor.Singleton<IEmailSender, NullEmailSender>());
@@ -72,3 +85,5 @@ public class TvTrackerDomainModule : AbpModule
         context.Services.AddHttpClient();
     }
 }
+
+
