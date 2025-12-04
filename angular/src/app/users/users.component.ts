@@ -21,6 +21,9 @@ export class UsersComponent implements OnInit {
     isEditMode = false;
     currentUserId: string | null = null;
 
+    showPassword = false;
+    showConfirmPassword = false;
+
     constructor(
         private userService: UserService,
         private permissionService: PermissionService,
@@ -50,10 +53,40 @@ export class UsersComponent implements OnInit {
             surname: ['', [Validators.required, Validators.maxLength(64)]],
             email: ['', [Validators.required, Validators.email, Validators.maxLength(256)]],
             password: ['', [Validators.required, Validators.minLength(6), Validators.pattern(/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*\W).{6,}$/)]],
+            confirmPassword: [''],
             phoneNumber: ['', [Validators.maxLength(16)]],
             isActive: [true],
             profilePicture: ['']
-        });
+        }, { validators: this.passwordMatchValidator });
+    }
+
+    passwordMatchValidator(form: FormGroup) {
+        const password = form.get('password');
+        const confirmPassword = form.get('confirmPassword');
+
+        if (!password || !confirmPassword) {
+            return null;
+        }
+
+        if (confirmPassword.errors && !confirmPassword.errors['mismatch']) {
+            return null;
+        }
+
+        if (password.value !== confirmPassword.value) {
+            confirmPassword.setErrors({ mismatch: true });
+        } else {
+            confirmPassword.setErrors(null);
+        }
+
+        return null;
+    }
+
+    togglePassword() {
+        this.showPassword = !this.showPassword;
+    }
+
+    toggleConfirmPassword() {
+        this.showConfirmPassword = !this.showConfirmPassword;
     }
 
     openDetails(user: UserDto, content: any) {
@@ -61,7 +94,7 @@ export class UsersComponent implements OnInit {
 
         this.userService.get(user.id).subscribe(details => {
             this.selectedUser = details;
-            this.modalService.open(content, { size: 'lg' });
+            this.modalService.open(content, { size: 'lg', windowClass: 'users-modal' });
         });
     }
 
@@ -69,9 +102,11 @@ export class UsersComponent implements OnInit {
         this.isEditMode = false;
         this.currentUserId = null;
         this.userForm.reset({ isActive: true });
-        this.userForm.get('password')?.setValidators([Validators.required, Validators.minLength(6)]);
+        this.userForm.get('password')?.setValidators([Validators.required, Validators.minLength(6), Validators.pattern(/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*\W).{6,}$/)]);
         this.userForm.get('password')?.updateValueAndValidity();
-        this.modalService.open(content, { size: 'lg' });
+        this.userForm.get('confirmPassword')?.setValidators([Validators.required]);
+        this.userForm.get('confirmPassword')?.updateValueAndValidity();
+        this.modalService.open(content, { size: 'lg', windowClass: 'users-modal' });
     }
 
     openEditModal(user: UserDto, content: any, event: Event) {
@@ -93,8 +128,10 @@ export class UsersComponent implements OnInit {
             // Password is not editable directly here, or make it optional
             this.userForm.get('password')?.clearValidators();
             this.userForm.get('password')?.updateValueAndValidity();
+            this.userForm.get('confirmPassword')?.clearValidators();
+            this.userForm.get('confirmPassword')?.updateValueAndValidity();
 
-            this.modalService.open(content, { size: 'lg' });
+            this.modalService.open(content, { size: 'lg', windowClass: 'users-modal' });
         });
     }
 

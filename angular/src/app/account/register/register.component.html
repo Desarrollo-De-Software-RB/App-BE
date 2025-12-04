@@ -10,7 +10,8 @@
                             <span>Volver</span>
                         </a>
 
-                        <h2 class="section-title text-center mb-4"><i class="fa fa-user-plus mx-2"></i>Crear una Cuenta</h2>
+                        <h2 class="section-title text-center mb-4"><i class="fa fa-user-plus mx-2"></i>Crear una Cuenta
+                        </h2>
 
                         <form [formGroup]="form" (ngSubmit)="onSubmit()" novalidate>
                             <div class="mb-3">
@@ -77,7 +78,8 @@
                                 <div class="input-group">
                                     <input [type]="showPassword ? 'text' : 'password'" class="form-control"
                                         formControlName="password" placeholder="••••••••">
-                                    <button class="btn btn-outline-secondary" type="button" (click)="togglePassword()">
+                                    <button class="btn btn-outline-secondary" type="button" (click)="togglePassword()"
+                                        tabindex="-1">
                                         <i class="fa" [ngClass]="showPassword ? 'fa-eye-slash' : 'fa-eye'"></i>
                                     </button>
                                 </div>
@@ -100,7 +102,7 @@
                                     <input [type]="showConfirmPassword ? 'text' : 'password'" class="form-control"
                                         formControlName="confirmPassword" placeholder="••••••••">
                                     <button class="btn btn-outline-secondary" type="button"
-                                        (click)="toggleConfirmPassword()">
+                                        (click)="toggleConfirmPassword()" tabindex="-1">
                                         <i class="fa" [ngClass]="showConfirmPassword ? 'fa-eye-slash' : 'fa-eye'"></i>
                                     </button>
                                 </div>

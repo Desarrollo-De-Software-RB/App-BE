@@ -119,7 +119,13 @@
 
             <div class="mb-3" *ngIf="!isEditMode">
                 <label for="password" class="form-label">Contraseña <span class="text-danger">*</span></label>
-                <input type="password" class="form-control" id="password" formControlName="password">
+                <div class="input-group">
+                    <input [type]="showPassword ? 'text' : 'password'" class="form-control" id="password"
+                        formControlName="password">
+                    <button class="btn btn-outline-secondary" type="button" (click)="togglePassword()" tabindex="-1">
+                        <i class="fa" [ngClass]="showPassword ? 'fa-eye-slash' : 'fa-eye'"></i>
+                    </button>
+                </div>
                 <div *ngIf="userForm.get('password')?.invalid && (userForm.get('password')?.dirty || userForm.get('password')?.touched)"
                     class="text-danger small mt-1">
                     <div *ngIf="userForm.get('password')?.errors?.['required']">La contraseña es obligatoria.</div>
@@ -127,6 +133,26 @@
                         caracteres.</div>
                     <div *ngIf="userForm.get('password')?.errors?.['pattern']">La contraseña debe contener al menos una
                         mayúscula, una minúscula, un número y un carácter especial.</div>
+                </div>
+            </div>
+
+            <div class="mb-3" *ngIf="!isEditMode">
+                <label for="confirmPassword" class="form-label">Confirmar Contraseña <span
+                        class="text-danger">*</span></label>
+                <div class="input-group">
+                    <input [type]="showConfirmPassword ? 'text' : 'password'" class="form-control" id="confirmPassword"
+                        formControlName="confirmPassword">
+                    <button class="btn btn-outline-secondary" type="button" (click)="toggleConfirmPassword()"
+                        tabindex="-1">
+                        <i class="fa" [ngClass]="showConfirmPassword ? 'fa-eye-slash' : 'fa-eye'"></i>
+                    </button>
+                </div>
+                <div *ngIf="userForm.get('confirmPassword')?.invalid && (userForm.get('confirmPassword')?.dirty || userForm.get('confirmPassword')?.touched)"
+                    class="text-danger small mt-1">
+                    <div *ngIf="userForm.get('confirmPassword')?.errors?.['required']">Confirmar la contraseña es
+                        obligatorio.</div>
+                    <div *ngIf="userForm.get('confirmPassword')?.errors?.['mismatch']">Las contraseñas no coinciden.
+                    </div>
                 </div>
             </div>
 
