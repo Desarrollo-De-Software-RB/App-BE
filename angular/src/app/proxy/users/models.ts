@@ -13,3 +13,24 @@ export interface UserFullDto extends UserDto {
   isActive: boolean;
   creationTime: string;
 }
+
+export interface CreateUserDto {
+  userName: string;
+  name?: string;
+  surname?: string;
+  email: string;
+  password: string;
+  phoneNumber?: string;
+  isActive: boolean;
+  profilePicture?: string;
+}
+
+export interface UpdateUserDto {
+  userName: string;
+  name?: string;
+  surname?: string;
+  email: string;
+  phoneNumber?: string;
+  isActive: boolean;
+  profilePicture?: string;
+}

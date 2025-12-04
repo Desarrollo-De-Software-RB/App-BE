@@ -3,7 +3,7 @@ $card-bg: #1e1e2e;
 $card-bg-hover: #252538;
 $text-primary: #ffffff;
 $text-secondary: #a0a0b0;
-$accent-color: #3b82f6; // A nice blue for accents
+$accent-color: #3b82f6;
 $border-color: rgba(255, 255, 255, 0.08);
 $card-radius: 16px;
 $transition-speed: 0.3s;
@@ -16,8 +16,6 @@ $transition-speed: 0.3s;
     font-size: 2rem;
     font-weight: 700;
     color: $text-primary;
-    margin-bottom: 2rem;
-    text-align: center;
     text-transform: uppercase;
     letter-spacing: 1px;
     background: linear-gradient(to right, #3b82f6, #ec4899);
@@ -88,6 +86,19 @@ $transition-speed: 0.3s;
         color: $text-secondary;
         opacity: 0.8;
     }
+
+    .admin-actions {
+        display: flex;
+        justify-content: center;
+        opacity: 0;
+        transform: translateY(10px);
+        transition: all $transition-speed ease;
+    }
+
+    &:hover .admin-actions {
+        opacity: 1;
+        transform: translateY(0);
+    }
 }
 
 // Modal Styles
@@ -96,6 +107,7 @@ $transition-speed: 0.3s;
     border: 1px solid $border-color;
     border-radius: $card-radius;
     box-shadow: 0 25px 50px rgba(0, 0, 0, 0.5);
+    color: $text-primary;
 }
 
 ::ng-deep .modal-header {
@@ -111,12 +123,41 @@ $transition-speed: 0.3s;
 }
 
 ::ng-deep .modal-body {
-    color: $text-primary;
     padding: 2rem;
 }
 
 ::ng-deep .modal-footer {
     border-top: 1px solid $border-color;
+}
+
+// Form Styles
+::ng-deep .form-control {
+    background-color: rgba(255, 255, 255, 0.05);
+    border: 1px solid $border-color;
+    color: $text-primary;
+
+    &:hover {
+        background-color: rgba(255, 255, 255, 0.08);
+        border-color: $accent-color;
+        color: $text-primary;
+    }
+
+    &:focus {
+        background-color: rgba(255, 255, 255, 0.1);
+        border-color: $accent-color;
+        color: $text-primary;
+        box-shadow: 0 0 0 0.25rem rgba($accent-color, 0.25);
+    }
+}
+
+::ng-deep .form-check-input {
+    background-color: rgba(255, 255, 255, 0.05);
+    border: 1px solid $border-color;
+
+    &:checked {
+        background-color: $accent-color;
+        border-color: $accent-color;
+    }
 }
 
 .modal-avatar {

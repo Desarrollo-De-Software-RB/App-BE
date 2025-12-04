@@ -15,55 +15,15 @@
           </div>
 
           <ng-template #loginTemplate>
-            <div *ngIf="!showRegister">
+            <div>
               <p class="lead">Please login or register to continue.</p>
               <button class="btn btn-primary btn-lg me-2" (click)="login()">
                 <i class="fa fa-sign-in"></i> Login
               </button>
-              <button class="btn btn-secondary btn-lg" (click)="toggleRegister()">
+              <a class="btn btn-secondary btn-lg" routerLink="/register">
                 <i class="fa fa-user-plus"></i> Register
-              </button>
-            </div>
-
-            <div *ngIf="showRegister" class="text-start">
-              <h3 class="mb-3">Create an Account</h3>
-              <form [formGroup]="registerForm" (ngSubmit)="register()">
-                <div class="mb-3">
-                  <label class="form-label">Username</label>
-                  <input type="text" class="form-control" formControlName="userName">
-                </div>
-                <div class="mb-3">
-                  <label class="form-label">Email Address</label>
-                  <input type="email" class="form-control" formControlName="emailAddress">
-                </div>
-                <div class="mb-3">
-                  <label class="form-label">Password</label>
-                  <input type="password" class="form-control" formControlName="password">
-                </div>
-                <div class="row">
-                  <div class="col-md-6 mb-3">
-                    <label class="form-label">Name</label>
-                    <input type="text" class="form-control" formControlName="name">
-                  </div>
-                  <div class="col-md-6 mb-3">
-                    <label class="form-label">Surname</label>
-                    <input type="text" class="form-control" formControlName="surname">
-                  </div>
-                </div>
-                <div class="mb-3">
-                  <label class="form-label">Profile Picture URL</label>
-                  <input type="text" class="form-control" formControlName="profilePicture">
-                </div>
-
-                <div class="d-flex justify-content-between">
-                  <button type="button" class="btn btn-link" (click)="toggleRegister()">Back to Login</button>
-                  <button type="submit" class="btn btn-success" [disabled]="registerForm.invalid">Register</button>
-                </div>
-              </form>
+              </a>
             </div>
           </ng-template>
         </div>
       </div>
-    </div>
-  </div>
-</div>
