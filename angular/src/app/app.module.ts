@@ -2,7 +2,6 @@ import { CoreModule, provideAbpCore, withOptions } from '@abp/ng.core';
 import { provideAbpOAuth } from '@abp/ng.oauth';
 import { provideFeatureManagementConfig } from '@abp/ng.feature-management';
 import { ThemeSharedModule, provideAbpThemeShared, } from '@abp/ng.theme.shared';
-import { provideIdentityConfig } from '@abp/ng.identity/config';
 import { provideAccountConfig } from '@abp/ng.account/config';
 import { registerLocale } from '@abp/ng.core/locale';
 import { ThemeLeptonXModule } from '@abp/ng.theme.lepton-x';
@@ -39,7 +38,6 @@ import { UserProfileModule } from './account/user-profile/user-profile.module';
       }),
     ),
     provideAbpOAuth(),
-    provideIdentityConfig(),
     provideFeatureManagementConfig(),
     provideAccountConfig(),
     provideAbpThemeShared(),

@@ -20,10 +20,6 @@ const routes: Routes = [
     loadChildren: () => import('@abp/ng.account').then(m => m.AccountModule.forLazy()),
   },
   {
-    path: 'identity',
-    loadChildren: () => import('@abp/ng.identity').then(m => m.IdentityModule.forLazy()),
-  },
-  {
     path: 'users',
     loadChildren: () => import('./users/users.module').then(m => m.UsersModule),
   },
