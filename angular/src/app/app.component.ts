@@ -16,6 +16,7 @@ export class AppComponent implements OnInit {
     private routes: RoutesService,
     private config: ConfigStateService
   ) {
+
     this.navItems.addItems([
       {
         id: 'MyProfilePicture',
@@ -35,5 +36,24 @@ export class AppComponent implements OnInit {
         });
       }
     });
+
+    // Force hide default avatar (temporary fix to identify the element)
+    setInterval(() => {
+      const avatars = document.querySelectorAll('.lpx-avatar');
+      avatars.forEach((avatar: any) => {
+        // Hide if it's NOT inside our custom component
+        if (!avatar.closest('app-user-profile')) {
+          avatar.style.display = 'none';
+        }
+      });
+
+      // Also try to find by icon class if lpx-avatar is not used
+      const userIcons = document.querySelectorAll('.bi-person-circle, .fa-user');
+      userIcons.forEach((icon: any) => {
+        if (!icon.closest('app-user-profile') && icon.closest('.lpx-header-right')) {
+          icon.style.display = 'none';
+        }
+      });
+    }, 50);
   }
 }

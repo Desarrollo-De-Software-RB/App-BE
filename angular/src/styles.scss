@@ -68,3 +68,26 @@
     background-image: url('/assets/images/getting-started/x.svg');
   }
 }
+
+/* Force hide default ABP avatar instantly to prevent flickering */
+.lpx-header-right .lpx-avatar:not(app-user-profile .lpx-avatar),
+.lpx-user-menu .lpx-avatar,
+abp-current-user .lpx-avatar,
+.lpx-login-area .lpx-avatar {
+  display: none !important;
+  visibility: hidden !important;
+  opacity: 0 !important;
+  width: 0 !important;
+  height: 0 !important;
+  pointer-events: none !important;
+}
+
+/* Ensure our custom avatar is visible */
+app-user-profile .lpx-avatar {
+  display: block !important;
+  visibility: visible !important;
+  opacity: 1 !important;
+  width: 32px !important;
+  height: 32px !important;
+  margin-right: 8px;
+}
