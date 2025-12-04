@@ -22,6 +22,13 @@ function configureRoutes(routes: RoutesService, authService: AuthService) {
         layout: eLayoutType.application,
         invisible: true, // Will be managed dynamically in AppComponent
       },
+      {
+        path: '/users',
+        name: 'Usuarios',
+        iconClass: 'fas fa-users',
+        order: 3,
+        layout: eLayoutType.application,
+      },
     ]);
   };
 }

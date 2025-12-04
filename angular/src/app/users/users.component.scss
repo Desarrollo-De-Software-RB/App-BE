@@ -1,0 +1,164 @@
+// Variables for the theme
+$card-bg: #1e1e2e;
+$card-bg-hover: #252538;
+$text-primary: #ffffff;
+$text-secondary: #a0a0b0;
+$accent-color: #3b82f6; // A nice blue for accents
+$border-color: rgba(255, 255, 255, 0.08);
+$card-radius: 16px;
+$transition-speed: 0.3s;
+
+.users-container {
+    padding: 2rem 0;
+}
+
+.section-title {
+    font-size: 2rem;
+    font-weight: 700;
+    color: $text-primary;
+    margin-bottom: 2rem;
+    text-align: center;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    background: linear-gradient(to right, #3b82f6, #ec4899);
+    -webkit-background-clip: text;
+    background-clip: text;
+    -webkit-text-fill-color: transparent;
+}
+
+.user-card {
+    background-color: $card-bg;
+    border: 1px solid $border-color;
+    border-radius: $card-radius;
+    padding: 1.5rem;
+    text-align: center;
+    transition: all $transition-speed ease;
+    position: relative;
+    overflow: hidden;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+
+    &.clickable {
+        cursor: pointer;
+    }
+
+    &:hover {
+        transform: translateY(-8px);
+        box-shadow: 0 15px 30px rgba(0, 0, 0, 0.4);
+        background-color: $card-bg-hover;
+        border-color: rgba($accent-color, 0.3);
+
+        .avatar-wrapper {
+            transform: scale(1.05);
+            border-color: $accent-color;
+            box-shadow: 0 0 15px rgba($accent-color, 0.3);
+        }
+    }
+
+    .avatar-wrapper {
+        width: 100px;
+        height: 100px;
+        border-radius: 50%;
+        margin: 0 auto 1rem;
+        padding: 3px;
+        border: 2px solid $border-color;
+        transition: all $transition-speed ease;
+        background-clip: content-box;
+
+        img {
+            width: 100%;
+            height: 100%;
+            border-radius: 50%;
+            object-fit: cover;
+        }
+    }
+
+    .user-name {
+        font-size: 1.25rem;
+        font-weight: 600;
+        color: $text-primary;
+        margin-bottom: 0.5rem;
+    }
+
+    .user-hint {
+        font-size: 0.85rem;
+        color: $text-secondary;
+        opacity: 0.8;
+    }
+}
+
+// Modal Styles
+::ng-deep .modal-content {
+    background-color: $card-bg;
+    border: 1px solid $border-color;
+    border-radius: $card-radius;
+    box-shadow: 0 25px 50px rgba(0, 0, 0, 0.5);
+}
+
+::ng-deep .modal-header {
+    border-bottom: 1px solid $border-color;
+
+    .modal-title {
+        color: $text-primary;
+    }
+
+    .btn-close {
+        filter: invert(1) grayscale(100%) brightness(200%);
+    }
+}
+
+::ng-deep .modal-body {
+    color: $text-primary;
+    padding: 2rem;
+}
+
+::ng-deep .modal-footer {
+    border-top: 1px solid $border-color;
+}
+
+.modal-avatar {
+    width: 120px;
+    height: 120px;
+    border-radius: 50%;
+    border: 3px solid $accent-color;
+    padding: 3px;
+    margin-bottom: 1rem;
+
+    img {
+        width: 100%;
+        height: 100%;
+        border-radius: 50%;
+        object-fit: cover;
+    }
+}
+
+.user-details-list {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+
+    .list-item {
+        padding: 1rem;
+        border-bottom: 1px solid $border-color;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+
+        &:last-child {
+            border-bottom: none;
+        }
+
+        strong {
+            color: $text-secondary;
+            font-weight: 500;
+        }
+
+        span {
+            color: $text-primary;
+            font-weight: 600;
+        }
+    }
+}

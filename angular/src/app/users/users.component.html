@@ -1,0 +1,54 @@
+<div class="container users-container">
+    <h2 class="section-title">Usuarios Registrados</h2>
+    <div class="row g-4">
+        <div class="col-sm-6 col-md-4 col-lg-3" *ngFor="let user of users">
+            <div class="user-card" [class.clickable]="isAdmin" (click)="openDetails(user, detailsModal)">
+                <div class="avatar-wrapper">
+                    <img [src]="user.profilePicture || defaultProfilePicture" alt="Profile">
+                </div>
+                <h5 class="user-name">{{ user.userName }}</h5>
+                <p class="user-hint" *ngIf="isAdmin">Click para ver detalles</p>
+            </div>
+        </div>
+    </div>
+</div>
+
+<ng-template #detailsModal let-modal>
+    <div class="modal-header">
+        <h4 class="modal-title">Detalles del Usuario</h4>
+        <button type="button" class="btn-close" aria-label="Close" (click)="modal.dismiss('Cross click')"></button>
+    </div>
+    <div class="modal-body">
+        <div class="text-center mb-4">
+            <div class="modal-avatar mx-auto">
+                <img [src]="selectedUser?.profilePicture || defaultProfilePicture" alt="Profile">
+            </div>
+            <h3 class="mt-2">{{ selectedUser?.userName }}</h3>
+        </div>
+        <ul class="user-details-list">
+            <li class="list-item">
+                <strong>Nombre:</strong>
+                <span>{{ selectedUser?.name }} {{ selectedUser?.surname }}</span>
+            </li>
+            <li class="list-item">
+                <strong>Email:</strong>
+                <span>{{ selectedUser?.email }}</span>
+            </li>
+            <li class="list-item">
+                <strong>Teléfono:</strong>
+                <span>{{ selectedUser?.phoneNumber || 'N/A' }}</span>
+            </li>
+            <li class="list-item">
+                <strong>Activo:</strong>
+                <span>{{ selectedUser?.isActive ? 'Sí' : 'No' }}</span>
+            </li>
+            <li class="list-item">
+                <strong>Fecha de Creación:</strong>
+                <span>{{ selectedUser?.creationTime | date:'medium' }}</span>
+            </li>
+        </ul>
+    </div>
+    <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" (click)="modal.close('Close click')">Cerrar</button>
+    </div>
+</ng-template>

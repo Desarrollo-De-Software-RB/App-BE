@@ -24,6 +24,10 @@ const routes: Routes = [
     loadChildren: () => import('@abp/ng.identity').then(m => m.IdentityModule.forLazy()),
   },
   {
+    path: 'users',
+    loadChildren: () => import('./users/users.module').then(m => m.UsersModule),
+  },
+  {
     path: 'series',
     canActivate: [authGuard],
     loadChildren: () =>
