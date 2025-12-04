@@ -28,6 +28,7 @@ function configureRoutes(routes: RoutesService, authService: AuthService) {
         iconClass: 'fas fa-list',
         order: 4,
         layout: eLayoutType.application,
+        invisible: true,
       },
       {
         path: '/users',
@@ -35,6 +36,7 @@ function configureRoutes(routes: RoutesService, authService: AuthService) {
         iconClass: 'fas fa-users',
         order: 3,
         layout: eLayoutType.application,
+        invisible: true,
       },
     ]);
   };
