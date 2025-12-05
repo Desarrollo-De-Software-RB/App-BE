@@ -11,8 +11,7 @@ export class RatingService {
     getSeriesRatings = (serieId: number, config?: Partial<Rest.Config>) =>
         this.restService.request<any, RatingDto[]>({
             method: 'GET',
-            url: `/api/app/rating/series-ratings`,
-            params: { serieId },
+            url: `/api/app/rating/series-ratings/${serieId}`,
         },
             { apiName: this.apiName, ...config });
 

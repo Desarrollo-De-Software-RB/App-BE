@@ -21,7 +21,7 @@ export class RatingComponent implements OnInit {
     private ratingService: RatingService,
     private toaster: ToasterService,
     private authService: AuthService
-  ) {}
+  ) { }
 
   ngOnInit(): void {
     this.isLoggedIn = this.authService.isAuthenticated;
@@ -31,8 +31,8 @@ export class RatingComponent implements OnInit {
   }
 
   loadRatings() {
-    this.ratingService.getList({ serieId: this.serieId }).subscribe(result => {
-      this.ratings = result.items;
+    this.ratingService.getSeriesRatings(this.serieId).subscribe(result => {
+      this.ratings = result;
       this.checkUserRating();
     });
   }
@@ -57,7 +57,7 @@ export class RatingComponent implements OnInit {
 
     this.newRating.serieId = this.serieId;
 
-    this.ratingService.create(this.newRating).subscribe(() => {
+    this.ratingService.rateSeries(this.newRating).subscribe(() => {
       this.toaster.success('Rating submitted successfully');
       this.newRating = { serieId: 0, score: 0, comment: '' };
       this.loadRatings();
