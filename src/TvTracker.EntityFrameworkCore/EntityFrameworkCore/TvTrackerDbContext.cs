@@ -20,6 +20,7 @@ using TvTracker.WatchLists;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using TvTracker.User;
+using Volo.Abp.Users;
 
 namespace TvTracker.EntityFrameworkCore;
 
@@ -36,7 +37,7 @@ public class TvTrackerDbContext :
     public DbSet<Notification> Notifications { get; set; }
     public DbSet<TrackedSeries> TrackedSeries { get; set; }
     public DbSet<Watchlist> Whatchlists { get; set; }
-    private readonly CurrentUserService _currentUserService;
+    public DbSet<Rating> Ratings { get; set; }
 
     #region Entities from the modules
 
@@ -70,14 +71,15 @@ public class TvTrackerDbContext :
     public TvTrackerDbContext(DbContextOptions<TvTrackerDbContext> options)
         : base(options)
     {
-        _currentUserService = this.GetService<CurrentUserService>();
     }
+
+    public ICurrentUser? CurrentUser => LazyServiceProvider?.LazyGetRequiredService<ICurrentUser>();
 
     protected override void OnModelCreating(ModelBuilder builder)
     {
         base.OnModelCreating(builder);
 
-        builder.Entity<Serie>().HasQueryFilter(serie => serie.CreatorId == _currentUserService.GetCurrentUserId());
+        builder.Entity<Serie>().HasQueryFilter(serie => serie.CreatorId == CurrentUser.Id);
 
         /* Include modules to your migration db context */
         builder.Entity<Serie>(b =>
@@ -112,6 +114,15 @@ public class TvTrackerDbContext :
             b.ToTable(TvTrackerConsts.DbTablePrefix + "Whatchlist",
                 TvTrackerConsts.DbSchema);
             b.ConfigureByConvention(); //auto configure for the base class props
+        });
+
+        builder.Entity<Rating>(b =>
+        {
+            b.ToTable(TvTrackerConsts.DbTablePrefix + "Ratings",
+                TvTrackerConsts.DbSchema);
+            b.ConfigureByConvention(); 
+            b.HasOne<IdentityUser>().WithMany().HasForeignKey(x => x.UserId).IsRequired();
+            b.HasOne(x => x.Serie).WithMany().HasForeignKey(x => x.SerieId).IsRequired();
         });
 
         builder.ConfigurePermissionManagement();

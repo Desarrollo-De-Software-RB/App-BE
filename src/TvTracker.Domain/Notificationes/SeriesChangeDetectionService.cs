@@ -2,10 +2,11 @@
 using System.Threading.Tasks;
 using System;
 using Volo.Abp.Domain.Repositories;
+using Volo.Abp.DependencyInjection;
 
 namespace TvTracker.Notificationes
 { 
-public class SeriesChangeDetectionService : ISeriesChangeDetectionService
+public class SeriesChangeDetectionService : ISeriesChangeDetectionService, ITransientDependency
 {
     private readonly IRepository<TrackedSeries, Guid> _trackedSeriesRepository;
 

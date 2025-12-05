@@ -20,17 +20,20 @@ namespace TvTracker.Series
 
         public async Task<List<Rating>> GetRatingsByUserAsync(Guid userId)
         {
-            return await DbSet.Where(r => r.UserId == userId).ToListAsync();
+            var dbSet = await GetDbSetAsync();
+            return await dbSet.Where(r => r.UserId == userId).ToListAsync();
         }
 
         public async Task<Rating?> GetRatingByUserAndSerieAsync(Guid userId, int serieId)
         {
-            return await DbSet.FirstOrDefaultAsync(r => r.UserId == userId && r.SerieId == serieId);
+            var dbSet = await GetDbSetAsync();
+            return await dbSet.FirstOrDefaultAsync(r => r.UserId == userId && r.SerieId == serieId);
         }
 
         public async Task<List<Rating>> GetRatingsBySerieAsync(int serieId)
         {
-            return await DbSet.Where(r => r.SerieId == serieId).ToListAsync();
+            var dbSet = await GetDbSetAsync();
+            return await dbSet.Where(r => r.SerieId == serieId).ToListAsync();
         }
     }
 }
