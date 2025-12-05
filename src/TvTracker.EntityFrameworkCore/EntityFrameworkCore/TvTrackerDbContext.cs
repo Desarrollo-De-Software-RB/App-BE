@@ -15,8 +15,8 @@ using Volo.Abp.OpenIddict.EntityFrameworkCore;
 using Volo.Abp.TenantManagement;
 using Volo.Abp.TenantManagement.EntityFrameworkCore;
 using TvTracker.Series;
+using TvTracker.Watchlists;
 using TvTracker.Notificationes;
-using TvTracker.WatchLists;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using TvTracker.User;
@@ -34,9 +34,9 @@ public class TvTrackerDbContext :
 {
     /* Add DbSet properties for your Aggregate Roots / Entities here. */
     public DbSet<Serie> Series { get; set; }
+    public DbSet<WatchlistItem> WatchlistItems { get; set; }
     public DbSet<Notification> Notifications { get; set; }
     public DbSet<TrackedSeries> TrackedSeries { get; set; }
-    public DbSet<Watchlist> Whatchlists { get; set; }
     public DbSet<Rating> Ratings { get; set; }
 
     #region Entities from the modules
@@ -109,9 +109,9 @@ public class TvTrackerDbContext :
             b.Property(x => x.TotalSeasons).IsRequired().HasMaxLength(2);
         });
 
-        builder.Entity<Watchlist>(b =>
+        builder.Entity<WatchlistItem>(b =>
         {
-            b.ToTable(TvTrackerConsts.DbTablePrefix + "Whatchlist",
+            b.ToTable(TvTrackerConsts.DbTablePrefix + "WatchlistItems",
                 TvTrackerConsts.DbSchema);
             b.ConfigureByConvention(); //auto configure for the base class props
         });

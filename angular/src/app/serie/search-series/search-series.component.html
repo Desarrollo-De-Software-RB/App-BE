@@ -62,6 +62,21 @@
                                 'bg-warning': serie.type === 'episode'
                             }">{{ serie.type | titlecase }}</span>
                         </p>
+                        <div class="card-actions mt-auto text-center">
+                            <button *ngIf="!isInWatchlist(serie.imdbid)" class="btn btn-outline-primary w-100"
+                                (click)="openAddToWatchlistModal(serie, $event)">
+                                + Add to Watchlist
+                            </button>
+                            <button *ngIf="isInWatchlist(serie.imdbid)" class="btn w-100" [ngClass]="{
+                                'btn-success': getWatchlistItem(serie.imdbid)?.status === WatchlistStatus.Completed,
+                                'btn-primary': getWatchlistItem(serie.imdbid)?.status === WatchlistStatus.Watching,
+                                'btn-warning': getWatchlistItem(serie.imdbid)?.status === WatchlistStatus.Pending,
+                                'btn-danger': getWatchlistItem(serie.imdbid)?.status === WatchlistStatus.Dropped
+                            }" (click)="openAddToWatchlistModal(serie, $event)">
+                                <i class="fa fa-check me-2"></i> {{
+                                getStatusLabel(getWatchlistItem(serie.imdbid)?.status!) }}
+                            </button>
+                        </div>
                     </div>
                 </div>
             </div>

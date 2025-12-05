@@ -3,12 +3,17 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Volo.Abp;
 using Volo.Abp.Application.Services;
 
 namespace TvTracker.Watchlists
 {
-    public interface IWatchlistAppService : IApplicationService
+    [RemoteService(Name = "Watchlist")]
+    public interface IWatchlistAppServices : IApplicationService
     {
-        Task AddSerieAsync(int serieId);
+        Task<List<WatchlistItemDto>> GetListAsync();
+        Task<WatchlistItemDto> CreateAsync(CreateUpdateWatchlistItemDto input);
+        Task RemoveItemAsync(string imdbId);
+        Task UpdateAsync(CreateUpdateWatchlistItemDto input);
     }
 }

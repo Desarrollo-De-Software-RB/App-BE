@@ -59,10 +59,23 @@
                   <p class="mb-0"><strong>Actors:</strong> {{ serie.actors }}</p>
                 </div>
 
-                <app-rating [serieId]="serie.id"></app-rating>
-
-                <div class="mt-3">
-                  <button class="btn btn-outline-light" (click)="goBack()">Back</button>
+                <div class="action-button gap-3 d-flex">
+                  <button class="btn btn-outline-light flex-1" (click)="goBack()">
+                    <i class="fa fa-arrow-left me-2"></i> Back
+                  </button>
+                  <button *ngIf="!watchlistItem" class="btn btn-outline-primary btn-lg flex-1"
+                    (click)="openAddToWatchlistModal()">
+                    + Add to Watchlist
+                  </button>
+                  <button *ngIf="watchlistItem" class="btn btn-lg flex-1" [ngClass]="{
+                                'btn-success': watchlistItem.status === WatchlistStatus.Completed,
+                                'btn-primary': watchlistItem.status === WatchlistStatus.Watching,
+                                'btn-warning': watchlistItem.status === WatchlistStatus.Pending,
+                                'btn-danger': watchlistItem.status === WatchlistStatus.Dropped
+                            }" (click)="openAddToWatchlistModal()">
+                    <i class="fa fa-check me-2"></i> {{ getStatusLabel(watchlistItem.status) }}
+                  </button>
+                  <app-rating [serieId]="serie.id"></app-rating>
                 </div>
               </div>
             </div>
