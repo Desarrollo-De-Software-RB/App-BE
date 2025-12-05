@@ -37,7 +37,8 @@ namespace TvTracker.Watchlists
                 return new List<WatchlistItemDto>();
             }
 
-            var items = await _watchlistItemRepository.GetListAsync(x => x.UserId == userId);
+            var query = await _watchlistItemRepository.GetQueryableAsync();
+            var items = query.Where(x => x.UserId == userId).ToList();
             var dtos = new List<WatchlistItemDto>();
 
             foreach (var item in items)
@@ -65,7 +66,8 @@ namespace TvTracker.Watchlists
             }
 
             // 1. Find Serie by ImdbId (It should exist as per user workflow)
-            var serie = await _serieRepository.FirstOrDefaultAsync(s => s.IMDBID == input.ImdbId);
+            var serieQuery = await _serieRepository.GetQueryableAsync();
+            var serie = serieQuery.FirstOrDefault(s => s.IMDBID == input.ImdbId);
 
             // 2. Fallback: If not found locally, fetch from OMDB and save (Safety net)
             if (serie == null)
@@ -79,7 +81,8 @@ namespace TvTracker.Watchlists
             }
 
             // 3. Check if already in watchlist using the internal ID and UserID
-            var existingItem = await _watchlistItemRepository.FirstOrDefaultAsync(x => x.UserId == userId && x.SerieId == serie.Id);
+            var watchlistQuery = await _watchlistItemRepository.GetQueryableAsync();
+            var existingItem = watchlistQuery.FirstOrDefault(x => x.UserId == userId && x.SerieId == serie.Id);
             if (existingItem != null)
             {
                 throw new Volo.Abp.UserFriendlyException("Serie already in watchlist");
@@ -112,10 +115,12 @@ namespace TvTracker.Watchlists
                 return;
             }
 
-            var serie = await _serieRepository.FirstOrDefaultAsync(s => s.IMDBID == imdbId);
+            var serieQuery = await _serieRepository.GetQueryableAsync();
+            var serie = serieQuery.FirstOrDefault(s => s.IMDBID == imdbId);
             if (serie == null) return;
 
-            var item = await _watchlistItemRepository.FirstOrDefaultAsync(x => x.UserId == userId && x.SerieId == serie.Id);
+            var watchlistQuery = await _watchlistItemRepository.GetQueryableAsync();
+            var item = watchlistQuery.FirstOrDefault(x => x.UserId == userId && x.SerieId == serie.Id);
             if (item != null)
             {
                 await _watchlistItemRepository.DeleteAsync(item);
@@ -130,10 +135,12 @@ namespace TvTracker.Watchlists
                 return;
             }
 
-            var serie = await _serieRepository.FirstOrDefaultAsync(s => s.IMDBID == input.ImdbId);
+            var serieQuery = await _serieRepository.GetQueryableAsync();
+            var serie = serieQuery.FirstOrDefault(s => s.IMDBID == input.ImdbId);
             if (serie == null) return;
 
-            var item = await _watchlistItemRepository.FirstOrDefaultAsync(x => x.UserId == userId && x.SerieId == serie.Id);
+            var watchlistQuery = await _watchlistItemRepository.GetQueryableAsync();
+            var item = watchlistQuery.FirstOrDefault(x => x.UserId == userId && x.SerieId == serie.Id);
             if (item != null)
             {
                 item.Status = input.Status;
