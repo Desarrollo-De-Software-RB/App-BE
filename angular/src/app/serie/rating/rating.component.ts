@@ -1,4 +1,4 @@
-import { Component, Input, OnInit } from '@angular/core';
+import { Component, Input, OnInit, Output, EventEmitter } from '@angular/core';
 import { RatingService } from '../../proxy/series/rating.service';
 import { RatingDto, CreateUpdateRatingDto } from '../../proxy/series/models';
 import { ToasterService } from '@abp/ng.theme.shared';
@@ -11,6 +11,7 @@ import { AuthService } from '@abp/ng.core';
 })
 export class RatingComponent implements OnInit {
   @Input() serieId!: number;
+  @Output() ratingUpdated = new EventEmitter<void>();
   ratings: RatingDto[] = [];
   newRating: CreateUpdateRatingDto = { serieId: 0, score: 0, comment: '' };
   hoverScore = 0;
@@ -61,6 +62,7 @@ export class RatingComponent implements OnInit {
       this.toaster.success('Rating submitted successfully');
       this.newRating = { serieId: 0, score: 0, comment: '' };
       this.loadRatings();
+      this.ratingUpdated.emit();
     });
   }
 }

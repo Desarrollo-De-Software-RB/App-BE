@@ -62,6 +62,7 @@ export class SerieDetailComponent implements OnInit {
         this.ratingService.getSeriesRatings(serieId).subscribe({
             next: (res) => {
                 this.ratings = res;
+                this.calculateAverageRating();
                 const currentUser = this.configState.getOne('currentUser');
                 if (currentUser && currentUser.id) {
                     // Note: 'currentUser.id' might vary depending on ABP config. usually 'currentUser.id' is correct but sometimes it is 'sub'.
@@ -74,6 +75,17 @@ export class SerieDetailComponent implements OnInit {
                 }
             }
         });
+    }
+
+    averageRating: number = 0;
+
+    calculateAverageRating(): void {
+        if (this.ratings.length === 0) {
+            this.averageRating = 0;
+            return;
+        }
+        const total = this.ratings.reduce((sum, rating) => sum + rating.score, 0);
+        this.averageRating = total / this.ratings.length;
     }
 
     submitRating(): void {

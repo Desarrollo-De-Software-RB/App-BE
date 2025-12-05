@@ -1,13 +1,13 @@
 <div class="container-fluid detail-container" *ngIf="serie; else loadingTpl">
   <div class="backdrop" [style.backgroundImage]="'url(' + serie.poster + ')'"></div>
   <div class="content-wrapper" (click)="goBack()">
-    <div class="row justify-content-center align-items-center h-100">
+    <div class="row justify-content-center align-items-center h-100 w-100">
       <div class="col-md-10 col-lg-15">
         <div class="card detail-card" (click)="$event.stopPropagation()">
           <div class="d-flex h-100 card-content">
             <div class="poster-col">
-              <img [src]="serie.poster" class="img-fluid rounded-start poster-img" alt="{{ serie.title }}"
-                (error)="handleImageError(serie)" *ngIf="serie.poster && serie.poster !== 'N/A'; else noPoster">
+              <img [src]="serie.poster" class="rounded-start poster-img" alt="{{ serie.title }}"
+                (error)="handleImageError(serie)" *ngIf="serie.poster && serie.poster !== 'N/A'; else noPoster" />
               <ng-template #noPoster>
                 <div class="no-poster">
                   <span>{{ serie.title }}</span>
@@ -19,10 +19,26 @@
                 <h1 class="card-title display-5 fw-bold mb-3">{{ serie.title }}</h1>
 
                 <div class="badges mb-2">
-                  <span class="badge bg-primary me-2">{{ serie.type | titlecase }}</span>
-                  <span class="badge bg-secondary me-2">{{ serie.year }}</span>
-                  <span class="badge bg-warning text-dark me-2">IMDB: {{ serie.imdbRating }}</span>
-                  <span class="badge bg-info text-dark">{{ serie.runtime }}</span>
+                  <span class="badge bg-primary me-2">
+                    {{ serie.type ? (serie.type | titlecase) : 'Tipo: N/A' }}
+                  </span>
+                  <span class="badge bg-secondary me-2">
+                    {{ serie.year && serie.year !== 'N/A' ? serie.year : 'Año: N/A' }}
+                  </span>
+                  <span class="badge bg-info text-dark me-2">
+                    {{ serie.runtime && serie.runtime !== 'N/A' ? serie.runtime : 'Duración: N/A' }}
+                  </span>
+                  <span class="badge badge-animated badge-imdb text-white me-2">
+                    IMDB: {{ serie.imdbRating ? serie.imdbRating : 'N/A' }} <i class="fa fa-star"></i>
+                  </span>
+                  <span class="badge badge-animated badge-users text-white">
+                    <ng-container *ngIf="averageRating > 0; else noRating">
+                      Users: {{ averageRating | number:'1.1-1' }} <i class="fa fa-star"></i>
+                    </ng-container>
+                    <ng-template #noRating>
+                      Users: N/A <i class="fa fa-star"></i>
+                    </ng-template>
+                  </span>
                 </div>
 
                 <div>
@@ -85,7 +101,7 @@
           </div>
         </div>
         <app-rating [serieId]="serie.id" id="ratings-section" (click)="$event.stopPropagation()"
-          style="cursor: default;z-index: 0;"></app-rating>
+          style="cursor: default;z-index: 0;" (ratingUpdated)="loadRatings(serie.id)"></app-rating>
       </div>
     </div>
   </div>
