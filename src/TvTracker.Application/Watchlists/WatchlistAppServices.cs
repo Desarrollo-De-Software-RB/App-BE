@@ -4,10 +4,9 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using TvTracker.Series;
-using TvTracker.WatchLists;
+using TvTracker.Watchlists;
 using Volo.Abp.Application.Services;
 using Volo.Abp.Domain.Repositories;
-using TvTracker.Series;
 using Volo.Abp;
 
 namespace TvTracker.Watchlists
