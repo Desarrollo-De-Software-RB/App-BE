@@ -79,8 +79,6 @@ public class TvTrackerDbContext :
     {
         base.OnModelCreating(builder);
 
-        builder.Entity<Serie>().HasQueryFilter(serie => serie.CreatorId == CurrentUser.Id);
-
         /* Include modules to your migration db context */
         builder.Entity<Serie>(b =>
         {
