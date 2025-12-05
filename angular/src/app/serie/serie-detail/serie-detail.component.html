@@ -6,7 +6,8 @@
         <div class="card detail-card" (click)="$event.stopPropagation()">
           <div class="row g-0">
             <div class="col-md-5 poster-col">
-              <img [src]="serie.poster" class="img-fluid rounded-start poster-img" style="height: 100%; object-fit: cover; object-position: center;" alt="{{ serie.title }}"
+              <img [src]="serie.poster" class="img-fluid rounded-start poster-img"
+                style="height: 100%; object-fit: cover; object-position: center;" alt="{{ serie.title }}"
                 (error)="handleImageError(serie)" *ngIf="serie.poster && serie.poster !== 'N/A'; else noPoster">
               <ng-template #noPoster>
                 <div class="no-poster">
@@ -74,6 +75,7 @@
                             }" (click)="openAddToWatchlistModal()">
                     <i class="fa fa-check me-2"></i> {{ getStatusLabel(watchlistItem.status) }}
                   </button>
+                  <app-rating [serieId]="serie.id"></app-rating>
                 </div>
               </div>
             </div>
@@ -85,8 +87,8 @@
 </div>
 
 <ng-template #loadingTpl>
-  <div class="d-flex justify-content-center align-items-center vh-100">
-    <div class="spinner-border text-primary" role="status">
+  <div class="text-center mt-5">
+    <div class="spinner-border text-light" role="status">
       <span class="visually-hidden">Loading...</span>
     </div>
   </div>

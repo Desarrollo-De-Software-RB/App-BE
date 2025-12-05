@@ -45,3 +45,17 @@ export interface SerieDto extends EntityDto<number> {
   type?: string;
   totalSeasons: number;
 }
+
+export interface RatingDto extends EntityDto<number> {
+  serieId: number;
+  userId: string;
+  userName?: string;
+  score: number;
+  comment?: string;
+}
+
+export interface CreateUpdateRatingDto {
+  serieId: number;
+  score: number;
+  comment?: string;
+}
