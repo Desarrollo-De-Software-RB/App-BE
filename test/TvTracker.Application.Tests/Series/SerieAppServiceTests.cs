@@ -38,46 +38,46 @@ public class SerieAppServiceTests
         private readonly IObjectMapper _objectMapper;
         public FakeLazyServiceProvider(IObjectMapper objectMapper) { _objectMapper = objectMapper; }
         
-        public T LazyGetRequiredService<T>(Func<IServiceProvider, object> factory = null)
+        public T LazyGetRequiredService<T>(Func<IServiceProvider, object>? factory = null)
         {
             if (typeof(T) == typeof(IObjectMapper)) return (T)_objectMapper;
-            return default;
+            return default!;
         }
 
-        public object LazyGetRequiredService(Type serviceType, Func<IServiceProvider, object> factory = null)
+        public object LazyGetRequiredService(Type serviceType, Func<IServiceProvider, object>? factory = null)
         {
             if (serviceType == typeof(IObjectMapper)) return _objectMapper;
-            return null;
+            return null!;
         }
 
         public T LazyGetRequiredService<T>()
         {
             if (typeof(T) == typeof(IObjectMapper)) return (T)_objectMapper;
-            return default;
+            return default!;
         }
 
         public object LazyGetRequiredService(Type serviceType)
         {
             if (serviceType == typeof(IObjectMapper)) return _objectMapper;
-            return null;
+            return null!;
         }
         
-        public T LazyGetService<T>(T defaultValue = default, Func<IServiceProvider, object> factory = null) => defaultValue;
-        public object LazyGetService(Type serviceType, object defaultValue = null, Func<IServiceProvider, object> factory = null) => defaultValue;
+        public T LazyGetService<T>(T defaultValue = default!, Func<IServiceProvider, object>? factory = null) => defaultValue;
+        public object LazyGetService(Type serviceType, object defaultValue = null!, Func<IServiceProvider, object>? factory = null) => defaultValue;
         
         public object GetService(Type serviceType)
         {
              if (serviceType == typeof(IObjectMapper)) return _objectMapper;
-             return null;
+             return null!;
         }
 
-        public object GetKeyedService(Type serviceType, object? serviceKey) => null;
-        public object GetRequiredKeyedService(Type serviceType, object? serviceKey) => null;
+        public object GetKeyedService(Type serviceType, object? serviceKey) => null!;
+        public object GetRequiredKeyedService(Type serviceType, object? serviceKey) => null!;
 
-        public object GetService(Type serviceType, Func<IServiceProvider, object> factory)
+        public object GetService(Type serviceType, Func<IServiceProvider, object>? factory)
         {
              if (serviceType == typeof(IObjectMapper)) return _objectMapper;
-             return null;
+             return null!;
         }
 
         public object GetService(Type serviceType, object defaultValue)
@@ -92,16 +92,16 @@ public class SerieAppServiceTests
             return defaultValue;
         }
 
-        public T GetService<T>(Func<IServiceProvider, object> factory)
+        public T GetService<T>(Func<IServiceProvider, object>? factory)
         {
             if (typeof(T) == typeof(IObjectMapper)) return (T)_objectMapper;
-            return default;
+            return default!;
         }
 
-        public object LazyGetService(Type serviceType, Func<IServiceProvider, object> factory = null)
+        public object LazyGetService(Type serviceType, Func<IServiceProvider, object>? factory = null)
         {
             if (serviceType == typeof(IObjectMapper)) return _objectMapper;
-            return null;
+            return null!;
         }
 
         public object LazyGetService(Type serviceType, object defaultValue)
@@ -119,19 +119,19 @@ public class SerieAppServiceTests
         public object LazyGetService(Type serviceType)
         {
             if (serviceType == typeof(IObjectMapper)) return _objectMapper;
-            return null;
+            return null!;
         }
 
         public T LazyGetService<T>()
         {
             if (typeof(T) == typeof(IObjectMapper)) return (T)_objectMapper;
-            return default;
+            return default!;
         }
 
-        public T LazyGetService<T>(Func<IServiceProvider, object> factory)
+        public T LazyGetService<T>(Func<IServiceProvider, object>? factory)
         {
             if (typeof(T) == typeof(IObjectMapper)) return (T)_objectMapper;
-            return default;
+            return default!;
         }
     }
 

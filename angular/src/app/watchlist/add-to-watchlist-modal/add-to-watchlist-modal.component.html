@@ -5,7 +5,7 @@
 <div class="modal-body">
     <p class="text-secondary mb-3">Selecciona el estado para <strong>{{ title }}</strong>:</p>
 
-    <div class="d-grid gap-2">
+    <div class="d-grid gap-2 mb-2">
         <button *ngFor="let status of statuses" type="button" class="btn" [ngClass]="{
                     'btn-outline-success': selectedStatus !== status.value && status.key === 'Completed',
                     'btn-outline-primary': selectedStatus !== status.value && status.key === 'Watching',

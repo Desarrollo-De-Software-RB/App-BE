@@ -20,7 +20,11 @@ namespace TvTracker.Series
         public async Task<ICollection<SerieDto>> SearchAsync(string? title, string? genre, string? type = null)
         {
             // 1. Search in API by title (lightweight)
-            var apiResults = await _seriesApiService.SearchByTitleAsync(title, type);
+            ICollection<Serie> apiResults = new List<Serie>();
+            if (!string.IsNullOrEmpty(title))
+            {
+                apiResults = await _seriesApiService.SearchByTitleAsync(title, type);
+            }
 
             // 2. Load existing series from DB once (to avoid async queries in loop)
             var queryable = await Repository.GetQueryableAsync();
@@ -49,7 +53,7 @@ namespace TvTracker.Series
             // We filter in memory since we have the relevant subset (or we could query DB again if needed, but this is efficient for search results)
             var localResults = existingSeries
                 .Where(s => (title == null || s.Title.Contains(title, StringComparison.OrdinalIgnoreCase)))
-                .WhereIf(!string.IsNullOrEmpty(genre), s => s.Genre.Contains(genre, StringComparison.OrdinalIgnoreCase))
+                .WhereIf(!string.IsNullOrEmpty(genre), s => s.Genre.Contains(genre!, StringComparison.OrdinalIgnoreCase))
                 .WhereIf(!string.IsNullOrEmpty(type), s => s.Type == type)
                 .ToList();
             
@@ -70,6 +74,11 @@ namespace TvTracker.Series
                 {
                     serie = await Repository.InsertAsync(fullSerie, true);
                 }
+            }
+
+            if (serie == null)
+            {
+               throw new Volo.Abp.UserFriendlyException("Serie not found");
             }
 
             return ObjectMapper.Map<Serie, SerieDto>(serie);

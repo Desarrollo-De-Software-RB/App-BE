@@ -1,29 +1,44 @@
 <div class="container-fluid detail-container" *ngIf="serie; else loadingTpl">
   <div class="backdrop" [style.backgroundImage]="'url(' + serie.poster + ')'"></div>
   <div class="content-wrapper" (click)="goBack()">
-    <div class="row justify-content-center align-items-center h-100">
+    <div class="row justify-content-center align-items-center h-100 w-100">
       <div class="col-md-10 col-lg-15">
         <div class="card detail-card" (click)="$event.stopPropagation()">
-          <div class="row g-0">
-            <div class="col-md-5 poster-col">
-              <img [src]="serie.poster" class="img-fluid rounded-start poster-img"
-                style="height: 100%; object-fit: cover; object-position: center;" alt="{{ serie.title }}"
-                (error)="handleImageError(serie)" *ngIf="serie.poster && serie.poster !== 'N/A'; else noPoster">
+          <div class="d-flex h-100 card-content">
+            <div class="poster-col">
+              <img [src]="serie.poster" class="rounded-start poster-img" alt="{{ serie.title }}"
+                (error)="handleImageError(serie)" *ngIf="serie.poster && serie.poster !== 'N/A'; else noPoster" />
               <ng-template #noPoster>
                 <div class="no-poster">
                   <span>{{ serie.title }}</span>
                 </div>
               </ng-template>
             </div>
-            <div class="col-md-7">
+            <div class="info-col d-flex flex-column">
               <div class="card-body p-2 p-md-3">
                 <h1 class="card-title display-5 fw-bold mb-3">{{ serie.title }}</h1>
 
                 <div class="badges mb-2">
-                  <span class="badge bg-primary me-2">{{ serie.type | titlecase }}</span>
-                  <span class="badge bg-secondary me-2">{{ serie.year }}</span>
-                  <span class="badge bg-warning text-dark me-2">IMDB: {{ serie.imdbRating }}</span>
-                  <span class="badge bg-info text-dark">{{ serie.runtime }}</span>
+                  <span class="badge bg-primary me-2">
+                    {{ serie.type ? (serie.type | titlecase) : 'Tipo: N/A' }}
+                  </span>
+                  <span class="badge bg-secondary me-2">
+                    {{ serie.year && serie.year !== 'N/A' ? serie.year : 'Año: N/A' }}
+                  </span>
+                  <span class="badge bg-info text-dark me-2">
+                    {{ serie.runtime && serie.runtime !== 'N/A' ? serie.runtime : 'Duración: N/A' }}
+                  </span>
+                  <span class="badge badge-animated badge-imdb text-white me-2">
+                    IMDB: {{ serie.imdbRating ? serie.imdbRating : 'N/A' }} <i class="fa fa-star"></i>
+                  </span>
+                  <span class="badge badge-animated badge-users text-white">
+                    <ng-container *ngIf="averageRating > 0; else noRating">
+                      Users: {{ averageRating | number:'1.1-1' }} <i class="fa fa-star"></i>
+                    </ng-container>
+                    <ng-template #noRating>
+                      Users: N/A <i class="fa fa-star"></i>
+                    </ng-template>
+                  </span>
                 </div>
 
                 <div>
@@ -59,28 +74,34 @@
                   <p class="mb-0"><strong>Actors:</strong> {{ serie.actors }}</p>
                 </div>
 
-                <div class="action-button gap-3 d-flex">
-                  <button class="btn btn-outline-light flex-1" (click)="goBack()">
+                <div class="action-button gap-3 d-flex flex-wrap">
+                  <button class="btn btn-outline-light action-btn" (click)="goBack()">
                     <i class="fa fa-arrow-left me-2"></i> Back
                   </button>
-                  <button *ngIf="!watchlistItem" class="btn btn-outline-primary btn-lg flex-1"
+                  <button *ngIf="!watchlistItem" class="btn btn-outline-primary action-btn"
                     (click)="openAddToWatchlistModal()">
                     + Add to Watchlist
                   </button>
-                  <button *ngIf="watchlistItem" class="btn btn-lg flex-1" [ngClass]="{
-                                'btn-success': watchlistItem.status === WatchlistStatus.Completed,
-                                'btn-primary': watchlistItem.status === WatchlistStatus.Watching,
-                                'btn-warning': watchlistItem.status === WatchlistStatus.Pending,
-                                'btn-danger': watchlistItem.status === WatchlistStatus.Dropped
-                            }" (click)="openAddToWatchlistModal()">
+                  <button *ngIf="watchlistItem" class="btn action-btn text-white" [ngClass]="{
+                                  'btn-success': watchlistItem.status === WatchlistStatus.Completed,
+                                  'btn-primary': watchlistItem.status === WatchlistStatus.Watching,
+                                  'btn-warning': watchlistItem.status === WatchlistStatus.Pending,
+                                  'btn-danger': watchlistItem.status === WatchlistStatus.Dropped
+                              }" (click)="openAddToWatchlistModal()">
                     <i class="fa fa-check me-2"></i> {{ getStatusLabel(watchlistItem.status) }}
                   </button>
-                  <app-rating [serieId]="serie.id"></app-rating>
+                  <button class="btn btn-link see-ratings-btn text-decoration-none gap-1 d-flex"
+                    (click)="scrollToRatings()">
+                    <span>See Ratings</span>
+                    <i class="fa fa-chevron-down bounce"></i>
+                  </button>
                 </div>
               </div>
             </div>
           </div>
         </div>
+        <app-rating [serieId]="serie.id" id="ratings-section" (click)="$event.stopPropagation()"
+          style="cursor: default;z-index: 0;" (ratingUpdated)="loadRatings(serie.id)"></app-rating>
       </div>
     </div>
   </div>

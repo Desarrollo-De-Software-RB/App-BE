@@ -1,4 +1,4 @@
-import { Component, Input, OnInit } from '@angular/core';
+import { Component, Input, OnInit, Output, EventEmitter } from '@angular/core';
 import { RatingService } from '../../proxy/series/rating.service';
 import { RatingDto, CreateUpdateRatingDto } from '../../proxy/series/models';
 import { ToasterService } from '@abp/ng.theme.shared';
@@ -11,6 +11,7 @@ import { AuthService } from '@abp/ng.core';
 })
 export class RatingComponent implements OnInit {
   @Input() serieId!: number;
+  @Output() ratingUpdated = new EventEmitter<void>();
   ratings: RatingDto[] = [];
   newRating: CreateUpdateRatingDto = { serieId: 0, score: 0, comment: '' };
   hoverScore = 0;
@@ -21,7 +22,7 @@ export class RatingComponent implements OnInit {
     private ratingService: RatingService,
     private toaster: ToasterService,
     private authService: AuthService
-  ) {}
+  ) { }
 
   ngOnInit(): void {
     this.isLoggedIn = this.authService.isAuthenticated;
@@ -31,8 +32,8 @@ export class RatingComponent implements OnInit {
   }
 
   loadRatings() {
-    this.ratingService.getList({ serieId: this.serieId }).subscribe(result => {
-      this.ratings = result.items;
+    this.ratingService.getSeriesRatings(this.serieId).subscribe(result => {
+      this.ratings = result;
       this.checkUserRating();
     });
   }
@@ -57,10 +58,11 @@ export class RatingComponent implements OnInit {
 
     this.newRating.serieId = this.serieId;
 
-    this.ratingService.create(this.newRating).subscribe(() => {
+    this.ratingService.rateSeries(this.newRating).subscribe(() => {
       this.toaster.success('Rating submitted successfully');
       this.newRating = { serieId: 0, score: 0, comment: '' };
       this.loadRatings();
+      this.ratingUpdated.emit();
     });
   }
 }

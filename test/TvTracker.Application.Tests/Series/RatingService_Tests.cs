@@ -27,7 +27,7 @@ namespace TvTracker.Series
             currentUser.Id.Returns(userId);
             weakServiceProvider.LazyGetRequiredService<ICurrentUser>().Returns(currentUser);
 
-            var serie = new Serie { CreatorId = userId };
+            var serie = new Serie();
             serieRepository.GetAsync(serieId).Returns(serie);
 
             var appService = new RatingAppService(ratingRepository, serieRepository, userRepository);
@@ -68,7 +68,7 @@ namespace TvTracker.Series
             ratingRepository.GetRatingByUserAndSerieAsync(userId, serieId).Returns(existingRating);
 
             var serieRepository = Substitute.For<IRepository<Serie, int>>();
-            var serie = new Serie { CreatorId = userId };
+            var serie = new Serie();
             serieRepository.GetAsync(serieId).Returns(serie);
             
             var userRepository = Substitute.For<IRepository<IdentityUser, Guid>>();
@@ -129,7 +129,7 @@ namespace TvTracker.Series
             ratingRepository.GetRatingByUserAndSerieAsync(user2Id, serieId).Returns((Rating?)null); 
 
             var serieRepository = Substitute.For<IRepository<Serie, int>>();
-            var serie = new Serie { CreatorId = user1Id };
+            var serie = new Serie();
             serieRepository.GetAsync(serieId).Returns(serie);
 
             var userRepository = Substitute.For<IRepository<IdentityUser, Guid>>();
