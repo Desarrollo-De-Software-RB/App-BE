@@ -3,29 +3,29 @@
         <div class="row text-center" style="justify-content: center;">
             <div class="col col-md-6" style="flex:1">
                 <h5 class="card-title search-title">
-                    Busqueda de series o peliculas
+                    Search series or movies
                 </h5>
             </div>
         </div>
     </div>
     <div class="card-body">
         <div class="row mb-3">
-            <div class="col-md-3">
+            <div class="col-md-3" style="padding-left:5px; padding-right:5px;">
                 <input type="text" class="form-control" placeholder="Title" [(ngModel)]="searchTitle"
                     (keyup.enter)="search()">
             </div>
-            <div class="col-md-3">
+            <div class="col-md-3" style="padding-left:5px; padding-right:5px;">
                 <input type="text" class="form-control" placeholder="Genre" [(ngModel)]="searchGenre"
                     (keyup.enter)="search()">
             </div>
-            <div class="col-md-3">
+            <div class="col-md-3" style="padding-left:5px; padding-right:5px;">
                 <select class="form-select" [(ngModel)]="searchType" (change)="search()">
                     <option value="">All</option>
                     <option value="movie">Movie</option>
                     <option value="series">Series</option>
                 </select>
             </div>
-            <div class="col-md-3">
+            <div class="col-md-3" style="padding-left:5px; padding-right:5px;">
                 <button class="btn w-100 search-button" (click)="search()">
                     <i class="fa fa-search me-1"></i>
                     Search

@@ -84,8 +84,8 @@ export class WatchlistComponent implements OnInit {
   removeItem(item: WatchlistItemDto, event: Event) {
     event.stopPropagation();
     this.confirmation.warn(
-      `¿Estás seguro de que deseas eliminar "${item.serie.title}" de tu lista?`,
-      'Confirmar eliminación'
+      `Are you sure you want to remove "${item.serie.title}" from your list?`,
+      'Confirm deletion'
     ).subscribe((status) => {
       if (status === Confirmation.Status.confirm) {
         this.watchlistService.removeItem(item.serie.imdbid).subscribe(() => {

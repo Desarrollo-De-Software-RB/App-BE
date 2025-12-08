@@ -1,6 +1,4 @@
 // Variables
-$netflix-red: #e50914;
-$netlfix-dark: #141414;
 $color-blue: #3b82f6;
 $color-pink: #da0464;
 
@@ -108,7 +106,7 @@ $color-pink: #da0464;
   transition: opacity 0.8s ease, transform 0.8s ease;
   width: 100%;
   max-width: 600px;
-  padding: 5rem 0;
+  padding: 5rem 0 10px;
   text-align: center;
   z-index: 5;
   margin-top: 100px;
@@ -132,7 +130,7 @@ $color-pink: #da0464;
 }
 
 .btn-netflix {
-  background-color: $netflix-red;
+  background-color: $color-pink;
   border: none;
   color: white;
   padding: 0.8rem 2rem;
@@ -144,14 +142,14 @@ $color-pink: #da0464;
   transition: background-color 0.2s;
 
   &:hover {
-    background-color: darken($netflix-red, 10%);
+    background-color: darken($color-pink, 10%);
   }
 }
 
 .btn-netflix-outline {
   background-color: transparent;
-  border: 1px solid white;
-  color: white;
+  border: 1px solid $color-blue;
+  color: $color-blue;
   padding: 0.8rem 2rem;
   font-size: 1rem;
   font-weight: 600;
