@@ -19,19 +19,19 @@
                 <h1 class="card-title display-5 fw-bold mb-3">{{ serie.title }}</h1>
 
                 <div class="badges mb-2">
-                  <span class="badge bg-primary me-2">
+                  <span class="badge bg-primary me-2" style="margin-bottom: 8px;">
                     {{ serie.type ? (serie.type | titlecase) : 'Tipo: N/A' }}
                   </span>
-                  <span class="badge bg-secondary me-2">
+                  <span class="badge bg-secondary me-2" style="margin-bottom: 8px;">
                     {{ serie.year && serie.year !== 'N/A' ? serie.year : 'Año: N/A' }}
                   </span>
-                  <span class="badge bg-info text-dark me-2">
+                  <span class="badge bg-info text-dark me-2" style="margin-bottom: 8px;">
                     {{ serie.runtime && serie.runtime !== 'N/A' ? serie.runtime : 'Duración: N/A' }}
                   </span>
-                  <span class="badge badge-animated badge-imdb text-white me-2">
+                  <span class="badge badge-animated badge-imdb text-white me-2" style="margin-bottom: 8px;">
                     IMDB: {{ serie.imdbRating ? serie.imdbRating : 'N/A' }} <i class="fa fa-star"></i>
                   </span>
-                  <span class="badge badge-animated badge-users text-white">
+                  <span class="badge badge-animated badge-users text-white me-2" style="margin-bottom: 8px;">
                     <ng-container *ngIf="averageRating > 0; else noRating">
                       Users: {{ averageRating | number:'1.1-1' }} <i class="fa fa-star"></i>
                     </ng-container>

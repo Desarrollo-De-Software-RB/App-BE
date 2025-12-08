@@ -1,6 +1,6 @@
 /* You can add global styles to this file, and also import other style files */
 :root .lpx-theme-dark {
-  --lpx-logo: url('/assets/images/logo/logo-light.svg');
+  --lpx-logo: url('/assets/images/logo/icon.svg');
   --lpx-logo-icon: url('/assets/images/logo/icon.svg');
 
   .abp-support {
@@ -21,7 +21,7 @@
 }
 
 :root .lpx-theme-light {
-  --lpx-logo: url('/assets/images/logo/logo-dark.svg');
+  --lpx-logo: url('/assets/images/logo/icon.svg');
   --lpx-logo-icon: url('/assets/images/logo/icon.svg');
 }
 
@@ -185,4 +185,18 @@ app-user-profile .lpx-avatar {
   .invalid-feedback {
     display: none !important;
   }
+}
+
+.lpx-brand-logo {
+    background-image: url('/assets/images/logo/TvtrackerLogo.png');
+}
+.hover-trigger .lpx-sidebar-container:not(:hover) .lpx-brand-logo {
+    background-image: url('/assets/images/logo/icon.svg');
+}
+
+.lpx-content-container {
+    background-color: #28282f;
+}
+.lpx-topbar-container .lpx-topbar {
+    background-color: #f5f5ff;
 }

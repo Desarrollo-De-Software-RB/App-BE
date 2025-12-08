@@ -42,7 +42,7 @@
                     }" (click)="openAddToWatchlistModal(item, $event)">
                         <i class="fa fa-check me-2"></i> {{ getStatusLabel(item.status) }}
                     </button>
-                    <button class="btn btn-sm btn-outline-danger w-100" (click)="removeItem(item)">
+                    <button class="btn btn-sm btn-outline-danger w-100" (click)="removeItem(item, $event)">
                         <i class="fa fa-trash me-1"></i> Eliminar
                     </button>
                 </div>
