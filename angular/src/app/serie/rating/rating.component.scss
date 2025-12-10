@@ -84,20 +84,26 @@
   }
 
   .ratings-list {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 1rem;
+
     .rating-item {
       background: rgba(255, 255, 255, 0.03);
       padding: 1.5rem;
       border-radius: 12px;
-      margin-bottom: 1rem;
+      margin-bottom: 0;
       border-left: 4px solid #6f42c1; // Violet accent
+      border-right: 4px solid #6f42c1; // Violet accent right
       transition: background 0.2s, transform 0.2s;
+      height: 100%;
 
       &.editable {
         cursor: pointer;
 
         &:hover {
           background: rgba(255, 255, 255, 0.08);
-          transform: translateX(5px);
+          transform: translateY(-5px);
         }
       }
 
@@ -167,6 +173,7 @@
     }
 
     .no-ratings {
+      grid-column: 1 / -1;
       text-align: center;
       color: #888;
       font-style: italic;
