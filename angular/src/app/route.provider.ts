@@ -10,13 +10,13 @@ function configureRoutes(routes: RoutesService, authService: AuthService) {
     routes.add([
       {
         path: '/',
-        name: '::Menu:Home',
+        name: 'Home',
         iconClass: 'fas fa-home',
         order: 1,
         layout: eLayoutType.application,
       }, {
         path: '/series/search',
-        name: 'Busqueda de contenido',
+        name: 'Search content',
         iconClass: 'fas fa-film',
         order: 2,
         layout: eLayoutType.application,
@@ -24,7 +24,7 @@ function configureRoutes(routes: RoutesService, authService: AuthService) {
       },
       {
         path: '/watchlist',
-        name: 'Mi Lista',
+        name: 'Watchlist',
         iconClass: 'fas fa-list',
         order: 4,
         layout: eLayoutType.application,
@@ -32,7 +32,7 @@ function configureRoutes(routes: RoutesService, authService: AuthService) {
       },
       {
         path: '/users',
-        name: 'Usuarios',
+        name: 'Users',
         iconClass: 'fas fa-users',
         order: 3,
         layout: eLayoutType.application,

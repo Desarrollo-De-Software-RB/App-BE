@@ -1,29 +1,57 @@
-<div class="container mt-5">
-  <div class="row justify-content-center">
-    <div class="col-md-8">
-      <div class="card shadow-sm">
-        <div class="card-body text-center">
-          <h1 class="mb-4">Welcome to TvTracker</h1>
+<div class="home-container">
 
-          <div *ngIf="hasLoggedIn; else loginTemplate">
-            <div class="alert alert-success">
-              You are logged in!
-            </div>
-            <button class="btn btn-primary btn-lg mt-3" (click)="goToSearch()">
-              <i class="fa fa-search"></i> Search Series
-            </button>
-          </div>
+  <!-- Splash / Brand Section -->
+  <div class="splash-layer" [class.move-up]="logoMoved">
+    <div class="logo-container">
+      <div style="display: flex;width:5rem;margin-right: 15px;">
+        <img src="../../assets/images/logo/icon.svg" alt="Logo Icon" class="logo-char" 
+          style="width: 5rem;height: 5rem;filter: blur(2px);position: relative;right: 0;z-index: 0;" />
+        <img src="../../assets/images/logo/icon.svg" alt="Logo Icon" class="logo-char"
+          style="width: 5rem;height: 5rem;position: relative;right: 5rem;z-index: 1;" />
+      </div>
+      <span *ngFor="let char of titleChars; let i = index" class="logo-char" [style.animation-delay]="(i * 0.15) + 's'">
+        {{char}}
+      </span>
 
-          <ng-template #loginTemplate>
-            <div>
-              <p class="lead">Please login or register to continue.</p>
-              <button class="btn btn-primary btn-lg me-2" (click)="login()">
-                <i class="fa fa-sign-in"></i> Login
-              </button>
-              <a class="btn btn-secondary btn-lg" routerLink="/register">
-                <i class="fa fa-user-plus"></i> Register
-              </a>
-            </div>
-          </ng-template>
+    </div>
+  </div>
+
+  <!-- Main Content (Fades in)-->
+  <div class="content-layer" [class.visible]="showContent">
+
+    <!-- Guest View: Login / Register -->
+    <ng-container *ngIf="!hasLoggedIn">
+      <div class="auth-container">
+        <h2 class="welcome-text">Track TV shows you've watched.</h2>
+        <p class="subtitle">Save those you want to see. Tell your friends what's good.</p>
+
+        <div class="action-buttons">
+          <button class="btn btn-primary btn-netflix" (click)="login()">Sign In</button>
+          <button class="btn btn-secondary btn-netflix-outline" routerLink="/register">Register</button>
         </div>
       </div>
+    </ng-container>
+
+    <!-- User View: Dashboard Options -->
+    <ng-container *ngIf="hasLoggedIn">
+      <div class="dashboard-container">
+        <h2 class="welcome-user">Welcome back!</h2>
+        <div class="grid-actions">
+          <div class="action-card" (click)="goToSearch()">
+            <i class="fa fa-search"></i>
+            <span>Search Content</span>
+          </div>
+          <div class="action-card" routerLink="/watchlist">
+            <i class="fa fa-list"></i>
+            <span>My Watchlist</span>
+          </div>
+          <div class="action-card" routerLink="/users">
+            <i class="fa fa-users"></i>
+            <span>Community</span>
+          </div>
+        </div>
+      </div>
+    </ng-container>
+
+  </div>
+</div>

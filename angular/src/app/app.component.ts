@@ -37,22 +37,22 @@ export class AppComponent implements OnInit {
   ngOnInit() {
     this.config.getOne$('currentUser').subscribe(currentUser => {
       const isAuthenticated = currentUser?.isAuthenticated;
-      const searchRoute = this.routes.find(r => r.name === 'Busqueda de contenido');
+      const searchRoute = this.routes.find(r => r.name === 'Search content');
       if (searchRoute) {
-        this.routes.patch('Busqueda de contenido', {
+        this.routes.patch('Search content', {
           invisible: !isAuthenticated
         });
       }
-      const watchlistRoute = this.routes.find(r => r.name === 'Mi Lista');
+      const watchlistRoute = this.routes.find(r => r.name === 'Watchlist');
       if (watchlistRoute) {
-        this.routes.patch('Mi Lista', {
+        this.routes.patch('Watchlist', {
           invisible: !isAuthenticated
         });
       }
 
-      const usersRoute = this.routes.find(r => r.name === 'Usuarios');
+      const usersRoute = this.routes.find(r => r.name === 'Users');
       if (usersRoute) {
-        this.routes.patch('Usuarios', {
+        this.routes.patch('Users', {
           invisible: !isAuthenticated
         });
       }

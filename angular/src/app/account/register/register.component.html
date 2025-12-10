@@ -7,74 +7,73 @@
 
                         <a routerLink="/" class="back-button-internal">
                             <i class="fa fa-arrow-left"></i>
-                            <span>Volver</span>
+                            <span>Back</span>
                         </a>
 
-                        <h2 class="section-title text-center mb-4"><i class="fa fa-user-plus mx-2"></i>Crear una Cuenta
+                        <h2 class="section-title text-center mb-4"><i class="fa fa-user-plus mx-2"></i>Create an Account
                         </h2>
 
                         <form [formGroup]="form" (ngSubmit)="onSubmit()" novalidate>
                             <div class="mb-3">
-                                <label class="form-label">Usuario <span class="text-danger">*</span></label>
+                                <label class="form-label">Username <span class="text-danger">*</span></label>
                                 <input type="text" class="form-control" formControlName="userName"
-                                    placeholder="Ingresa tu usuario">
+                                    placeholder="Enter your username">
                                 <div *ngIf="form.get('userName')?.invalid && (form.get('userName')?.dirty || form.get('userName')?.touched)"
                                     class="text-danger small mt-1">
-                                    <div *ngIf="form.get('userName')?.errors?.['required']">El usuario es obligatorio.
+                                    <div *ngIf="form.get('userName')?.errors?.['required']">Username is required.
                                     </div>
-                                    <div *ngIf="form.get('userName')?.errors?.['maxlength']">El usuario no puede exceder
-                                        los 256 caracteres.</div>
+                                    <div *ngIf="form.get('userName')?.errors?.['maxlength']">Username cannot exceed
+                                        256 characters.</div>
                                 </div>
                             </div>
 
                             <div class="mb-3">
                                 <label class="form-label">Email <span class="text-danger">*</span></label>
                                 <input type="email" class="form-control" formControlName="email"
-                                    placeholder="ejemplo@correo.com">
+                                    placeholder="example@correo.com">
                                 <div *ngIf="form.get('email')?.invalid && (form.get('email')?.dirty || form.get('email')?.touched)"
                                     class="text-danger small mt-1">
-                                    <div *ngIf="form.get('email')?.errors?.['required']">El email es obligatorio.</div>
-                                    <div *ngIf="form.get('email')?.errors?.['email']">El email no es válido.</div>
+                                    <div *ngIf="form.get('email')?.errors?.['required']">Email is required.</div>
+                                    <div *ngIf="form.get('email')?.errors?.['email']">Email is invalid.</div>
                                 </div>
                             </div>
 
                             <div class="row">
                                 <div class="col-md-6 mb-3">
-                                    <label class="form-label">Nombre <span class="text-danger">*</span></label>
+                                    <label class="form-label">Name <span class="text-danger">*</span></label>
                                     <input type="text" class="form-control" formControlName="name"
-                                        placeholder="Tu nombre">
+                                        placeholder="Your name">
                                     <div *ngIf="form.get('name')?.invalid && (form.get('name')?.dirty || form.get('name')?.touched)"
                                         class="text-danger small mt-1">
-                                        <div *ngIf="form.get('name')?.errors?.['required']">El nombre es obligatorio.
+                                        <div *ngIf="form.get('name')?.errors?.['required']">Name is required.
                                         </div>
                                     </div>
                                 </div>
                                 <div class="col-md-6 mb-3">
-                                    <label class="form-label">Apellido <span class="text-danger">*</span></label>
+                                    <label class="form-label">Surname <span class="text-danger">*</span></label>
                                     <input type="text" class="form-control" formControlName="surname"
-                                        placeholder="Tu apellido">
+                                        placeholder="Your surname">
                                     <div *ngIf="form.get('surname')?.invalid && (form.get('surname')?.dirty || form.get('surname')?.touched)"
                                         class="text-danger small mt-1">
-                                        <div *ngIf="form.get('surname')?.errors?.['required']">El apellido es
-                                            obligatorio.</div>
+                                        <div *ngIf="form.get('surname')?.errors?.['required']">Surname is required.</div>
                                     </div>
                                 </div>
                             </div>
 
                             <div class="mb-3">
-                                <label class="form-label">Teléfono</label>
+                                <label class="form-label">Phone number</label>
                                 <input type="text" class="form-control" formControlName="phoneNumber"
                                     placeholder="+54 9 11...">
                             </div>
 
                             <div class="mb-3">
-                                <label class="form-label">URL Foto de Perfil</label>
+                                <label class="form-label">Profile picture URL</label>
                                 <input type="text" class="form-control" formControlName="profilePicture"
                                     placeholder="https://...">
                             </div>
 
                             <div class="mb-3">
-                                <label class="form-label">Contraseña <span class="text-danger">*</span></label>
+                                <label class="form-label">Password <span class="text-danger">*</span></label>
                                 <div class="input-group">
                                     <input [type]="showPassword ? 'text' : 'password'" class="form-control"
                                         formControlName="password" placeholder="••••••••">
@@ -86,17 +85,16 @@
                                 <!-- Custom validation messages only -->
                                 <div *ngIf="form.get('password')?.invalid && (form.get('password')?.dirty || form.get('password')?.touched)"
                                     class="text-danger small mt-1">
-                                    <div *ngIf="form.get('password')?.errors?.['required']">La contraseña es
-                                        obligatoria.</div>
-                                    <div *ngIf="form.get('password')?.errors?.['minlength']">La contraseña debe tener al
-                                        menos 6 caracteres.</div>
-                                    <div *ngIf="form.get('password')?.errors?.['pattern']">La contraseña debe contener
-                                        al menos una mayúscula, una minúscula, un número y un carácter especial.</div>
+                                    <div *ngIf="form.get('password')?.errors?.['required']">Password is required.</div>
+                                    <div *ngIf="form.get('password')?.errors?.['minlength']">Password must be at least 6
+                                        characters long.</div>
+                                    <div *ngIf="form.get('password')?.errors?.['pattern']">Password must contain at least
+                                        one uppercase letter, one lowercase letter, one number, and one special character.</div>
                                 </div>
                             </div>
 
                             <div class="mb-4">
-                                <label class="form-label">Confirmar Contraseña <span
+                                <label class="form-label">Confirm Password <span
                                         class="text-danger">*</span></label>
                                 <div class="input-group">
                                     <input [type]="showConfirmPassword ? 'text' : 'password'" class="form-control"
@@ -108,23 +106,21 @@
                                 </div>
                                 <div *ngIf="form.get('confirmPassword')?.invalid && (form.get('confirmPassword')?.dirty || form.get('confirmPassword')?.touched)"
                                     class="text-danger small mt-1">
-                                    <div *ngIf="form.get('confirmPassword')?.errors?.['required']">Confirmar la
-                                        contraseña es obligatorio.</div>
-                                    <div *ngIf="form.get('confirmPassword')?.errors?.['mismatch']">Las contraseñas no
-                                        coinciden.</div>
+                                    <div *ngIf="form.get('confirmPassword')?.errors?.['required']">Confirm Password is required.</div>
+                                    <div *ngIf="form.get('confirmPassword')?.errors?.['mismatch']">Passwords do not match.</div>
                                 </div>
                             </div>
 
                             <div class="d-grid gap-2">
                                 <button type="submit" class="btn btn-primary btn-lg"
                                     [disabled]="form.invalid || isSubmitted">
-                                    Registrarse
+                                    Register
                                 </button>
                             </div>
 
                             <div class="text-center mt-4">
-                                <span class="text-secondary">¿Ya tienes cuenta? </span>
-                                <a routerLink="/account/login" class="text-decoration-none fw-bold">Iniciar Sesión</a>
+                                <span class="text-secondary">Already have an account? </span>
+                                <a routerLink="/account/login" class="text-decoration-none fw-bold">Login</a>
                             </div>
                         </form>
                     </div>

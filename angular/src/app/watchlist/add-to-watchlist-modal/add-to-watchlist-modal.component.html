@@ -1,9 +1,9 @@
 <div class="modal-header">
-    <h4 class="modal-title">{{ currentStatus ? 'Modificar Estado' : 'Agregar a Mi Lista' }}</h4>
+    <h4 class="modal-title">{{ currentStatus===null ? 'Add to Watchlist' : 'Modify Status' }}</h4>
     <button type="button" class="btn-close btn-close-white" aria-label="Close" (click)="activeModal.dismiss()"></button>
 </div>
 <div class="modal-body">
-    <p class="text-secondary mb-3">Selecciona el estado para <strong>{{ title }}</strong>:</p>
+    <p class="text-secondary mb-3">Select the status for <strong>{{ title }}</strong>:</p>
 
     <div class="d-grid gap-2 mb-2">
         <button *ngFor="let status of statuses" type="button" class="btn" [ngClass]="{
@@ -21,7 +21,7 @@
     </div>
 </div>
 <div class="modal-footer">
-    <button type="button" class="btn btn-outline-light" (click)="activeModal.dismiss()">Cancelar</button>
-    <button type="button" class="btn btn-primary" (click)="save()">{{ currentStatus ? 'Guardar Cambios' : 'Agregar'
+    <button type="button" class="btn btn-outline-light" (click)="activeModal.dismiss()">Cancel</button>
+    <button type="button" class="btn btn-primary" (click)="save()">{{ currentStatus===null ? 'Add' : 'Save Changes'
         }}</button>
 </div>

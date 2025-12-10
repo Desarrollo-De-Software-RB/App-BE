@@ -1,18 +1,18 @@
 <div class="container settings-container">
-    <h2 class="section-title">Mi Cuenta</h2>
+    <h5 class="section-title">My Account</h5>
 
     <div class="settings-card">
         <ul class="nav nav-tabs">
             <li class="nav-item">
                 <a class="nav-link" [class.active]="activeTab === 'profile'" (click)="setActiveTab('profile')"
                     style="cursor: pointer;">
-                    Información personal
+                    Personal Information
                 </a>
             </li>
             <li class="nav-item">
                 <a class="nav-link" [class.active]="activeTab === 'password'" (click)="setActiveTab('password')"
                     style="cursor: pointer;">
-                    Cambiar contraseña
+                    Change Password
                 </a>
             </li>
         </ul>
@@ -21,11 +21,11 @@
             <!-- Profile Form -->
             <form [formGroup]="form" (ngSubmit)="save()" *ngIf="activeTab === 'profile'">
                 <div class="mb-4">
-                    <label class="form-label">Usuario <span class="text-danger">*</span></label>
+                    <label class="form-label">User name <span class="text-danger">*</span></label>
                     <input type="text" class="form-control" formControlName="userName">
                     <div *ngIf="form.get('userName')?.invalid && (form.get('userName')?.dirty || form.get('userName')?.touched)"
                         class="text-danger small mt-1">
-                        <div *ngIf="form.get('userName')?.errors?.['required']">El usuario es obligatorio.</div>
+                        <div *ngIf="form.get('userName')?.errors?.['required']">The user name is required.</div>
                     </div>
                 </div>
                 <div class="mb-4">
@@ -33,44 +33,44 @@
                     <input type="email" class="form-control" formControlName="email">
                     <div *ngIf="form.get('email')?.invalid && (form.get('email')?.dirty || form.get('email')?.touched)"
                         class="text-danger small mt-1">
-                        <div *ngIf="form.get('email')?.errors?.['required']">El email es obligatorio.</div>
-                        <div *ngIf="form.get('email')?.errors?.['email']">El email no es válido.</div>
+                        <div *ngIf="form.get('email')?.errors?.['required']">The email is required.</div>
+                        <div *ngIf="form.get('email')?.errors?.['email']">The email is not valid.</div>
                     </div>
                 </div>
                 <div class="row">
                     <div class="col-md-6 mb-4">
-                        <label class="form-label">Nombre <span class="text-danger">*</span></label>
+                        <label class="form-label">Name <span class="text-danger">*</span></label>
                         <input type="text" class="form-control" formControlName="name">
                         <div *ngIf="form.get('name')?.invalid && (form.get('name')?.dirty || form.get('name')?.touched)"
                             class="text-danger small mt-1">
-                            <div *ngIf="form.get('name')?.errors?.['required']">El nombre es obligatorio.</div>
+                            <div *ngIf="form.get('name')?.errors?.['required']">The name is required.</div>
                         </div>
                     </div>
                     <div class="col-md-6 mb-4">
-                        <label class="form-label">Apellido <span class="text-danger">*</span></label>
+                        <label class="form-label">Surname <span class="text-danger">*</span></label>
                         <input type="text" class="form-control" formControlName="surname">
                         <div *ngIf="form.get('surname')?.invalid && (form.get('surname')?.dirty || form.get('surname')?.touched)"
                             class="text-danger small mt-1">
-                            <div *ngIf="form.get('surname')?.errors?.['required']">El apellido es obligatorio.</div>
+                            <div *ngIf="form.get('surname')?.errors?.['required']">The surname is required.</div>
                         </div>
                     </div>
                 </div>
                 <div class="mb-4">
-                    <label class="form-label">Teléfono</label>
+                    <label class="form-label">Phone number</label>
                     <input type="text" class="form-control" formControlName="phoneNumber">
                 </div>
                 <div class="mb-4">
-                    <label class="form-label">URL Foto de Perfil</label>
+                    <label class="form-label">URL Profile picture</label>
                     <input type="text" class="form-control" formControlName="profilePicture">
                 </div>
                 <div *ngIf="form.get('profilePicture').value" class="mb-4 text-center">
                     <img [src]="form.get('profilePicture').value" alt="Profile Picture" class="img-thumbnail"
-                        style="max-height: 150px; width: 150px; object-fit: cover; border-radius: 50%;">
+                        style="max-height: 150px; width: 150px; object-fit: cover; border-radius: 50%;border: 1px solid #3b82f6;">
                 </div>
 
                 <div class="text-end">
                     <button type="submit" class="btn btn-primary" [disabled]="form.invalid || form.pristine">
-                        Guardar Cambios
+                        Save Changes
                     </button>
                 </div>
             </form>
@@ -78,7 +78,7 @@
             <!-- Password Form -->
             <form [formGroup]="passwordForm" (ngSubmit)="changePassword()" *ngIf="activeTab === 'password'">
                 <div class="mb-4">
-                    <label class="form-label">Contraseña Actual <span class="text-danger">*</span></label>
+                    <label class="form-label">Current Password <span class="text-danger">*</span></label>
                     <div class="input-group">
                         <input [type]="showCurrentPassword ? 'text' : 'password'" class="form-control"
                             formControlName="currentPassword">
@@ -89,12 +89,12 @@
                     </div>
                     <div *ngIf="passwordForm.get('currentPassword')?.invalid && (passwordForm.get('currentPassword')?.dirty || passwordForm.get('currentPassword')?.touched)"
                         class="text-danger small mt-1">
-                        <div *ngIf="passwordForm.get('currentPassword')?.errors?.['required']">La contraseña actual es
-                            obligatoria.</div>
+                        <div *ngIf="passwordForm.get('currentPassword')?.errors?.['required']">The current password is
+                            required.</div>
                     </div>
                 </div>
                 <div class="mb-4">
-                    <label class="form-label">Nueva Contraseña <span class="text-danger">*</span></label>
+                    <label class="form-label">New Password <span class="text-danger">*</span></label>
                     <div class="input-group">
                         <input [type]="showNewPassword ? 'text' : 'password'" class="form-control"
                             formControlName="newPassword">
@@ -105,16 +105,16 @@
                     </div>
                     <div *ngIf="passwordForm.get('newPassword')?.invalid && (passwordForm.get('newPassword')?.dirty || passwordForm.get('newPassword')?.touched)"
                         class="text-danger small mt-1">
-                        <div *ngIf="passwordForm.get('newPassword')?.errors?.['required']">La nueva contraseña es
-                            obligatoria.</div>
-                        <div *ngIf="passwordForm.get('newPassword')?.errors?.['minlength']">La contraseña debe tener al
-                            menos 6 caracteres.</div>
-                        <div *ngIf="passwordForm.get('newPassword')?.errors?.['pattern']">La contraseña debe contener al
-                            menos una mayúscula, una minúscula, un número y un carácter especial.</div>
+                        <div *ngIf="passwordForm.get('newPassword')?.errors?.['required']">The new password is
+                            required.</div>
+                        <div *ngIf="passwordForm.get('newPassword')?.errors?.['minlength']">The password must have at
+                            least 6 characters.</div>
+                        <div *ngIf="passwordForm.get('newPassword')?.errors?.['pattern']">The password must contain at
+                            least one uppercase letter, one lowercase letter, one number and one special character.</div>
                     </div>
                 </div>
                 <div class="mb-4">
-                    <label class="form-label">Repetir Nueva Contraseña <span class="text-danger">*</span></label>
+                    <label class="form-label">Repeat New Password <span class="text-danger">*</span></label>
                     <div class="input-group">
                         <input [type]="showRepeatNewPassword ? 'text' : 'password'" class="form-control"
                             formControlName="repeatNewPassword">
@@ -125,16 +125,16 @@
                     </div>
                     <div *ngIf="passwordForm.get('repeatNewPassword')?.invalid && (passwordForm.get('repeatNewPassword')?.dirty || passwordForm.get('repeatNewPassword')?.touched)"
                         class="text-danger small mt-1">
-                        <div *ngIf="passwordForm.get('repeatNewPassword')?.errors?.['required']">Repetir la contraseña
-                            es obligatorio.</div>
-                        <div *ngIf="passwordForm.get('repeatNewPassword')?.errors?.['mismatch']">Las contraseñas no
-                            coinciden.</div>
+                        <div *ngIf="passwordForm.get('repeatNewPassword')?.errors?.['required']">Repeat the new
+                            password is required.</div>
+                        <div *ngIf="passwordForm.get('repeatNewPassword')?.errors?.['mismatch']">The passwords do not
+                            match.</div>
                     </div>
                 </div>
 
                 <div class="text-end">
                     <button type="submit" class="btn btn-primary" [disabled]="passwordForm.invalid">
-                        Cambiar Contraseña
+                        Change Password
                     </button>
                 </div>
             </form>

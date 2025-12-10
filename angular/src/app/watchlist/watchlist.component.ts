@@ -6,6 +6,7 @@ import { ListService } from '@abp/ng.core';
 
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { AddToWatchlistModalComponent } from './add-to-watchlist-modal/add-to-watchlist-modal.component';
+import { ConfirmationService, Confirmation } from '@abp/ng.theme.shared';
 
 @Component({
   selector: 'app-watchlist',
@@ -23,7 +24,8 @@ export class WatchlistComponent implements OnInit {
   constructor(
     private watchlistService: WatchlistService,
     private router: Router,
-    private modalService: NgbModal
+    private modalService: NgbModal,
+    private confirmation: ConfirmationService
   ) { }
 
   ngOnInit(): void {
@@ -79,13 +81,19 @@ export class WatchlistComponent implements OnInit {
     });
   }
 
-  removeItem(item: WatchlistItemDto) {
-    if (confirm(`Are you sure you want to remove ${item.serie.title} from your watchlist?`)) {
-      this.watchlistService.removeItem(item.serie.imdbid).subscribe(() => {
-        this.items = this.items.filter(i => i.id !== item.id);
-        this.filterItems();
-      });
-    }
+  removeItem(item: WatchlistItemDto, event: Event) {
+    event.stopPropagation();
+    this.confirmation.warn(
+      `Are you sure you want to remove "${item.serie.title}" from your list?`,
+      'Confirm deletion'
+    ).subscribe((status) => {
+      if (status === Confirmation.Status.confirm) {
+        this.watchlistService.removeItem(item.serie.imdbid).subscribe(() => {
+          this.items = this.items.filter(i => i.id !== item.id);
+          this.filterItems();
+        });
+      }
+    });
   }
 
   getStatusLabel(status: WatchlistStatus): string {

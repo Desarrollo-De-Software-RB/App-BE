@@ -90,12 +90,12 @@ export class RegisterComponent implements OnInit {
 
         this.accountService.register(input).subscribe({
             next: () => {
-                this.toaster.success('Usuario registrado exitosamente', 'Éxito');
+                this.toaster.success('User registered successfully', 'Success');
                 this.router.navigate(['/account/login']);
             },
             error: (err) => {
                 this.isSubmitted = false;
-                this.toaster.error(err.error?.error?.message || 'Ocurrió un error al registrarse', 'Error');
+                this.toaster.error(err.error?.error?.message || 'An error occurred while registering', 'Error');
             }
         });
     }

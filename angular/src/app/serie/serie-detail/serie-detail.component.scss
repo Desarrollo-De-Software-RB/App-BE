@@ -12,6 +12,10 @@
   cursor: pointer;
 }
 
+.card-body{
+  overflow: auto;
+}
+
 .backdrop {
   position: fixed;
   top: 0;
@@ -93,7 +97,7 @@
 .poster-img {
   height: 100%;
   width: auto;
-  max-width: 400px;
+  max-width: 360px;
   object-fit: contain;
   display: block;
 }
@@ -166,7 +170,7 @@ p {
 .see-ratings-btn {
   color: #ff69b4;
   border-color: #ff69b4;
-  border-width: 2px;
+  border-width: 1px;
   font-size: 1.2rem;
   font-weight: 600;
   transition: all 0.3s ease;
