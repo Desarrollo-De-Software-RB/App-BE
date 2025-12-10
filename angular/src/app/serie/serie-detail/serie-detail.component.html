@@ -14,64 +14,71 @@
                 </div>
               </ng-template>
             </div>
-            <div class="info-col d-flex flex-column">
+            <div class="info-col d-flex flex-column flex-grow-1 flex-shrink-1">
               <div class="card-body p-2 p-md-3">
                 <h1 class="card-title display-5 fw-bold mb-3">{{ serie.title }}</h1>
 
-                <div class="badges mb-2">
-                  <span class="badge bg-primary me-2">
-                    {{ serie.type ? (serie.type | titlecase) : 'Tipo: N/A' }}
-                  </span>
-                  <span class="badge bg-secondary me-2">
-                    {{ serie.year && serie.year !== 'N/A' ? serie.year : 'Año: N/A' }}
-                  </span>
-                  <span class="badge bg-info text-dark me-2">
-                    {{ serie.runtime && serie.runtime !== 'N/A' ? serie.runtime : 'Duración: N/A' }}
-                  </span>
-                  <span class="badge badge-animated badge-imdb text-white me-2">
-                    IMDB: {{ serie.imdbRating ? serie.imdbRating : 'N/A' }} <i class="fa fa-star"></i>
-                  </span>
-                  <span class="badge badge-animated badge-users text-white">
-                    <ng-container *ngIf="averageRating > 0; else noRating">
-                      Users: {{ averageRating | number:'1.1-1' }} <i class="fa fa-star"></i>
-                    </ng-container>
-                    <ng-template #noRating>
-                      Users: N/A <i class="fa fa-star"></i>
-                    </ng-template>
-                  </span>
-                </div>
-
-                <div>
-                  <span class="badge bg-success me-2 mb-2" *ngFor="let genre of serie.genre.split(',')">
-                    {{ genre.trim() }}
-                  </span>
-                </div>
-
-                <div class="info-group mb-3">
-                  <h5 class="text-muted text-uppercase small fw-bold">Plot</h5>
-                  <p>{{ serie.plot }}</p>
-                </div>
-
-                <div class="row">
-                  <div class="col-6">
-                    <div class="info-group mb-3">
-                      <h5 class="text-muted text-uppercase small fw-bold">Released</h5>
-                      <p>{{ serie.released }}</p>
+                <div class="row align-items-start mb-3">
+                  <div class="col-md-6" style="height: -webkit-fill-available;max-width: 40%;">
+                    <div class="p-2 rounded bg-secondary text-white h-100 d-flex flex-column justify-content-center">
+                      <p class="mb-0" style="font-size: 0.85rem; line-height: 1.4;">{{ serie.plot }}</p>
                     </div>
                   </div>
-                  <div class="col-6">
-                    <div class="info-group mb-3">
-                      <h5 class="text-muted text-uppercase small fw-bold">Country</h5>
-                      <p>{{ serie.country }}</p>
+                  <div class="col-md-6 p-0" style="height: -webkit-fill-available;min-width: 60%;">
+                    <div class="badges">
+                      <span class="badge bg-primary me-2" style="margin-bottom: 8px;">
+                        {{ serie.type ? (serie.type | titlecase) : 'Type: N/A' }}
+                      </span>
+                      <span class="badge bg-secondary me-2" style="margin-bottom: 8px;">
+                        {{ serie.year && serie.year !== 'N/A' ? serie.year : 'Year: N/A' }}
+                      </span>
+                      <span class="badge bg-info text-dark me-2" style="margin-bottom: 8px;">
+                        {{ serie.runtime && serie.runtime !== 'N/A' ? serie.runtime : 'Duration: N/A' }}
+                      </span>
+                    </div>
+                    <div class="badges">
+                      <span class="badge bg-success me-2" *ngFor="let genre of serie.genre.split(',')"
+                        style="margin-bottom: 8px;">
+                        {{ genre.trim() }}
+                      </span>
+                    </div>
+                    <div class="badges">
+                      <span class="badge badge-animated badge-imdb text-white me-2" style="margin-bottom: 8px;">
+                        IMDB: {{ serie.imdbRating ? serie.imdbRating : 'N/A' }} <i class="fa fa-star"></i>
+                      </span>
+                      <span class="badge badge-animated badge-users text-white me-2">
+                        <ng-container *ngIf="averageRating > 0; else noRating">
+                          Users: {{ averageRating | number:'1.1-1' }} <i class="fa fa-star"></i>
+                        </ng-container>
+                        <ng-template #noRating>
+                          Users: N/A <i class="fa fa-star"></i>
+                        </ng-template>
+                      </span>
                     </div>
                   </div>
                 </div>
 
-                <div class="info-group mb-3">
-                  <h5 class="text-muted text-uppercase small fw-bold">Team</h5>
-                  <p class="mb-1"><strong>Director:</strong> {{ serie.director }}</p>
-                  <p class="mb-1"><strong>Writer:</strong> {{ serie.writer }}</p>
-                  <p class="mb-0"><strong>Actors:</strong> {{ serie.actors }}</p>
+                <div class="row align-items-start mb-3">
+                  <div class="col-md-4">
+                    <div class="d-flex flex-column">
+                      <div class="mb-2 pb-2 w-100">
+                        <h5 class="text-muted text-uppercase small fw-bold mb-1">Released</h5>
+                        <p class="mb-0">{{ serie.released }}</p>
+                      </div>
+                      <div class="w-100">
+                        <h5 class="text-muted text-uppercase small fw-bold mb-1">Country</h5>
+                        <p class="mb-0">{{ serie.country }}</p>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="col-md-8">
+                    <div class="info-group">
+                      <h5 class="text-muted text-uppercase small fw-bold mb-1">Team</h5>
+                      <p class="mb-1"><strong>Director:</strong> {{ serie.director }}</p>
+                      <p class="mb-1"><strong>Writer:</strong> {{ serie.writer }}</p>
+                      <p class="mb-0"><strong>Actors:</strong> {{ serie.actors }}</p>
+                    </div>
+                  </div>
                 </div>
 
                 <div class="action-button gap-3 d-flex flex-wrap">

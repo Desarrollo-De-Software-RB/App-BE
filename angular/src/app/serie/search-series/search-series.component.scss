@@ -1,11 +1,14 @@
 .series-card {
     transition: all 0.3s ease;
-    border: none;
+    border: 3px solid rgba(255, 255, 255, 0.08);
+    border-radius: 16px;
     box-shadow: 0 2px 15px rgba(0, 0, 0, 0.1);
+    background-color: #0e0e14;
 
     &:hover {
         transform: translateY(-5px);
         box-shadow: 0 5px 20px rgba(0, 0, 0, 0.2);
+        border-color: rgba(#3b82f6, 0.3);
     }
 
     .image-container {
@@ -13,6 +16,7 @@
         overflow: hidden;
         height: 300px;
         cursor: pointer;
+        border-radius: 16px 16px 0 0;
 
         img {
             transition: filter 0.3s ease, transform 0.3s ease;
@@ -81,7 +85,37 @@
 
             .overlay {
                 opacity: 1;
+                border-radius: 16px 16px 0 0;
             }
         }
+    }
+}
+
+.search-title {
+    font-weight: 800;
+    font-size: 1.5rem;
+    background-image: linear-gradient(to left, #ff0073, #95a3e5, #ff0073);
+    background-clip: text;
+    color: transparent;
+    animation: 6s linear infinite textbg;
+    background-size: 200% auto;
+    text-transform: uppercase;
+}
+
+.search-button {
+    background-color: #3b82f6;
+    color: white;
+    font-weight: 600;
+    cursor: pointer;
+    background-image: linear-gradient(to right, #ff0073, #3b82f6);
+    background-size: 0% 120%;
+    background-repeat: no-repeat;
+    background-position: left;
+
+    transition: background-size 0.4s ease, transform 0.2s;
+
+    &:hover {
+        background-size: 120% 120%;
+        transform: scale(1.02);
     }
 }

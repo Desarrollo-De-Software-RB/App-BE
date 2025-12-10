@@ -1,5 +1,5 @@
 // Variables for the theme (matching users.component.scss)
-$card-bg: #1e1e2e;
+$card-bg: #0e0e14;
 $card-bg-hover: #252538;
 $text-primary: #ffffff;
 $text-secondary: #a0a0b0;
@@ -14,15 +14,14 @@ $input-bg: #2a2a3c;
 }
 
 .section-title {
-    font-size: 2rem;
-    font-weight: 700;
-    color: $text-primary;
-    text-transform: uppercase;
-    letter-spacing: 1px;
-    background: linear-gradient(to right, #3b82f6, #ec4899);
-    -webkit-background-clip: text;
+    font-weight: 800;
+    font-size: 1.5rem;
+    background-image: linear-gradient(to left, #ff0073, #95a3e5, #ff0073);
     background-clip: text;
-    -webkit-text-fill-color: transparent;
+    color: transparent;
+    animation: 6s linear infinite textbg;
+    background-size: 200% auto;
+    text-transform: uppercase;
 }
 
 .watchlist-card {

@@ -1,27 +1,206 @@
-/* Styles for the home component */
-.card-bg-image {
-  position: absolute;
-  width: 630px;
-  height: auto;
-  bottom: 0;
-  right: 0;
-  z-index: 1;
-}
+// Variables
+$color-blue: #3b82f6;
+$color-pink: #da0464;
 
-.starting-content {
+:host {
+  display: block;
+  height: 100%;
+  color: white;
+  overflow: hidden;
   position: relative;
-  z-index: 2;
+  font-family: 'Inter', sans-serif;
 }
 
+.home-container {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
 
-@media (min-width: 1199px) {
-  .h-lg-100 {
-    height: 100% !important;
+// --- Splash / Logo Styling ---
+.splash-layer {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  transition: all 1s cubic-bezier(0.86, 0, 0.07, 1);
+  z-index: 10;
+  width: 100%;
+  text-align: center;
+
+  &.move-up {
+    top: 10%;
+    transform: translate(-50%, 0) scale(0.8);
   }
 }
 
-@media (min-width: 768px) {
-  .h-md-100 {
-    height: 100% !important;
+.logo-container {
+  font-size: 4rem;
+  letter-spacing: -2px;
+  text-transform: uppercase;
+  display: flex;
+  justify-content: center;
+  align-items: flex-start;
+  gap: 0.1rem;
+
+  @media (max-width: 768px) {
+    font-size: 3rem;
   }
+}
+
+.logo-char {
+  display: inline-block;
+  opacity: 0;
+  font-weight: 700;
+  -webkit-text-stroke: 1px $color-blue;
+  color: transparent;
+
+  animation: charReveal 1s ease forwards;
+}
+
+@keyframes charReveal {
+  0% {
+    opacity: 0;
+    transform: scale(1) translateY(10px);
+    -webkit-text-stroke-color: $color-blue;
+    color: transparent;
+    text-shadow: none;
+  }
+
+  15% {
+    opacity: 1;
+    transform: scale(1.8) translateY(0);
+    -webkit-text-stroke-color: $color-blue;
+    color: transparent;
+    text-shadow: 0 0 3px $color-blue;
+  }
+
+  40% {
+    color: $color-blue;
+    -webkit-text-stroke-color: transparent;
+    text-shadow: 0 0 10px $color-blue;
+  }
+
+  60% {
+    color: $color-pink;
+    text-shadow: 0 0 10px $color-pink;
+  }
+
+  100% {
+    opacity: 1;
+    transform: scale(1);
+    color: $color-pink;
+    text-shadow: 0 0 15px rgba($color-pink, 0.8);
+    -webkit-text-stroke: 0;
+  }
+}
+
+// --- Content Layer ---
+.content-layer {
+  opacity: 0;
+  transform: translateY(20px);
+  transition: opacity 0.8s ease, transform 0.8s ease;
+  width: 100%;
+  max-width: 600px;
+  padding: 5rem 0 10px;
+  text-align: center;
+  z-index: 5;
+  margin-top: 100px;
+
+  &.visible {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.welcome-text {
+  font-size: 2.5rem;
+  font-weight: 700;
+  margin-bottom: 1rem;
+}
+
+.subtitle {
+  font-size: 1.2rem;
+  margin-bottom: 2rem;
+  font-weight: 300;
+}
+
+.btn-netflix {
+  background-color: $color-pink;
+  border: none;
+  color: white;
+  padding: 0.8rem 2rem;
+  font-size: 1rem;
+  font-weight: 600;
+  border-radius: 4px;
+  width: 100%;
+  margin-bottom: 1rem;
+  transition: background-color 0.2s;
+
+  &:hover {
+    background-color: darken($color-pink, 10%);
+  }
+}
+
+.btn-netflix-outline {
+  background-color: transparent;
+  border: 1px solid $color-blue;
+  color: $color-blue;
+  padding: 0.8rem 2rem;
+  font-size: 1rem;
+  font-weight: 600;
+  border-radius: 4px;
+  width: 100%;
+
+  &:hover {
+    background-color: rgba(255, 255, 255, 0.1);
+  }
+}
+
+// --- Dashboard Grid (Logged In) ---
+.grid-actions {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 1rem;
+  margin-top: 2rem;
+
+  @media (min-width: 576px) {
+    grid-template-columns: repeat(3, 1fr);
+  }
+}
+
+.action-card {
+  background-color: rgba(255, 255, 255, 0.1);
+  border-radius: 8px;
+  padding: 1.5rem;
+  cursor: pointer;
+  transition: transform 0.2s, background-color 0.2s;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 1rem;
+
+  i {
+    font-size: 2rem;
+    color: $color-pink;
+  }
+
+  span {
+    font-weight: 600;
+  }
+
+  &:hover {
+    transform: scale(1.05);
+    background-color: rgba(255, 255, 255, 0.2);
+    color: $color-blue;
+
+    i {
+      color: $color-blue;
+    }
+  }
+
 }

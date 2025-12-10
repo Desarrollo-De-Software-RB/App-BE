@@ -154,7 +154,7 @@ export class UsersComponent implements OnInit {
             };
 
             this.userService.update(this.currentUserId, input).subscribe(() => {
-                this.toaster.success('Usuario actualizado correctamente');
+                this.toaster.success('User updated successfully');
                 this.loadUsers();
                 modal.close();
             });
@@ -171,7 +171,7 @@ export class UsersComponent implements OnInit {
             };
 
             this.userService.create(input).subscribe(() => {
-                this.toaster.success('Usuario creado correctamente');
+                this.toaster.success('User created successfully');
                 this.loadUsers();
                 modal.close();
             });
@@ -182,12 +182,12 @@ export class UsersComponent implements OnInit {
         event.stopPropagation();
 
         this.confirmation.warn(
-            `¿Estás seguro de que deseas eliminar al usuario "${user.userName}"?`,
-            'Confirmar eliminación'
+            `Are you sure you want to delete "${user.userName}"?`,
+            'Confirm deletion'
         ).subscribe((status) => {
             if (status === Confirmation.Status.confirm) {
                 this.userService.delete(user.id).subscribe(() => {
-                    this.toaster.success('Usuario eliminado correctamente');
+                    this.toaster.success('User deleted successfully');
                     this.loadUsers();
                 });
             }
