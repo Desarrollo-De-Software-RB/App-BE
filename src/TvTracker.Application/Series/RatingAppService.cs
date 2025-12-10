@@ -48,14 +48,20 @@ namespace TvTracker.Series
         private string? GetProfilePictureUrl(IdentityUser user)
         {
             Logger.LogInformation($"[DEBUG] Checking profile picture for user: {user.UserName} ({user.Id})");
-            
-            var key = user.ExtraProperties.Keys.FirstOrDefault(k => k.Equals("ProfilePicture", StringComparison.OrdinalIgnoreCase) || k.Equals("picture", StringComparison.OrdinalIgnoreCase));
-            
-            if (key != null)
+
+            var profilePicture = user.GetProperty<string>("ProfilePicture");
+            if (!string.IsNullOrEmpty(profilePicture))
             {
-                var value = user.ExtraProperties[key];
-                Logger.LogInformation($"[DEBUG] Found picture with key '{key}': {value}");
-                return value?.ToString();
+                Logger.LogInformation($"[DEBUG] Found 'ProfilePicture': {profilePicture.Substring(0, Math.Min(20, profilePicture.Length))}...");
+                return profilePicture;
+            }
+
+            // Fallback to "picture" if "ProfilePicture" is empty
+            var picture = user.GetProperty<string>("picture");
+            if (!string.IsNullOrEmpty(picture))
+            {
+                Logger.LogInformation($"[DEBUG] Found 'picture': {picture.Substring(0, Math.Min(20, picture.Length))}...");
+                return picture;
             }
 
             Logger.LogInformation("[DEBUG] No profile picture found.");
