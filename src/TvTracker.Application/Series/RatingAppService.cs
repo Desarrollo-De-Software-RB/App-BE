@@ -5,6 +5,8 @@ using System.Threading.Tasks;
 using Volo.Abp.Application.Services;
 using Volo.Abp.Domain.Repositories;
 using Volo.Abp.Identity;
+using Volo.Abp.Data;
+using Microsoft.Extensions.Logging;
 
 namespace TvTracker.Series
 {
@@ -38,8 +40,26 @@ namespace TvTracker.Series
                 UserId = r.UserId,
                 UserName = userDictionary.ContainsKey(r.UserId) ? userDictionary[r.UserId] : "Unknown",
                 Score = r.Score,
-                Comment = r.Comment
+                Comment = r.Comment,
+                ProfilePictureUrl = GetProfilePictureUrl(users.First(u => u.Id == r.UserId))
             }).ToList();
+        }
+
+        private string? GetProfilePictureUrl(IdentityUser user)
+        {
+            Logger.LogInformation($"[DEBUG] Checking profile picture for user: {user.UserName} ({user.Id})");
+            
+            var key = user.ExtraProperties.Keys.FirstOrDefault(k => k.Equals("ProfilePicture", StringComparison.OrdinalIgnoreCase) || k.Equals("picture", StringComparison.OrdinalIgnoreCase));
+            
+            if (key != null)
+            {
+                var value = user.ExtraProperties[key];
+                Logger.LogInformation($"[DEBUG] Found picture with key '{key}': {value}");
+                return value?.ToString();
+            }
+
+            Logger.LogInformation("[DEBUG] No profile picture found.");
+            return null;
         }
 
         public async Task RateSeriesAsync(CreateUpdateRatingDto input)

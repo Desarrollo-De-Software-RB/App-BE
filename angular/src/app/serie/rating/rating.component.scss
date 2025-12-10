@@ -30,7 +30,7 @@
       font-size: 2rem;
       cursor: pointer;
       margin-bottom: 1rem;
-      
+
       span {
         color: #444; // Inactive star color
         transition: color 0.2s;
@@ -86,40 +86,83 @@
   .ratings-list {
     .rating-item {
       background: rgba(255, 255, 255, 0.03);
-      padding: 1rem;
-      border-radius: 8px;
+      padding: 1.5rem;
+      border-radius: 12px;
       margin-bottom: 1rem;
       border-left: 4px solid #6f42c1; // Violet accent
+      transition: background 0.2s, transform 0.2s;
+
+      &.editable {
+        cursor: pointer;
+
+        &:hover {
+          background: rgba(255, 255, 255, 0.08);
+          transform: translateX(5px);
+        }
+      }
 
       .rating-header {
-        display: flex;
-        justify-content: space-between;
-        align-items: center;
         margin-bottom: 0.5rem;
 
-        .username {
-          font-weight: bold;
-          color: #fff;
-          font-size: 1.1rem;
-        }
+        .user-info {
+          display: flex;
+          align-items: center;
+          gap: 1rem;
 
-        .stars-display {
-          span {
-            color: #444;
+          .profile-pic {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            object-fit: cover;
+            border: 2px solid #d63384; // Pink border
+          }
+
+          .default-avatar {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background-color: #ff5722; // Default color
+            color: white;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
             font-size: 1.2rem;
+            border: 2px solid #d63384; // Pink border
+          }
 
-            &.filled {
-              color: #d63384; // Pink stars
+          .username {
+            font-weight: bold;
+            color: #fff;
+            font-size: 1.1rem;
+          }
+
+          .stars-display {
+            margin-left: 0.5rem;
+            display: flex; // Ensure stars are in a row
+
+            span {
+              color: #444;
+              font-size: 1.4rem; // Increased size
+              margin-right: 2px;
+
+              &.filled {
+                color: #d63384; // Pink stars
+              }
             }
           }
         }
       }
 
-      .comment {
-        color: #ccc;
-        font-style: italic;
-        margin: 0;
-        line-height: 1.5;
+      .rating-content {
+        padding-left: calc(40px + 1rem); // Align with text, not image
+
+        .comment {
+          color: #ccc;
+          font-style: italic;
+          margin: 0;
+          line-height: 1.5;
+        }
       }
     }
 
@@ -136,12 +179,12 @@
     padding: 2rem;
     background: rgba(255, 255, 255, 0.05);
     border-radius: 10px;
-    
+
     a {
       color: #d63384;
       text-decoration: none;
       font-weight: bold;
-      
+
       &:hover {
         text-decoration: underline;
       }

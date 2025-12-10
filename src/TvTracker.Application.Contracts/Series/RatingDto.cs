@@ -10,5 +10,6 @@ namespace TvTracker.Series
         public string? UserName { get; set; }
         public int Score { get; set; }
         public string? Comment { get; set; }
+        public string? ProfilePictureUrl { get; set; }
     }
 }

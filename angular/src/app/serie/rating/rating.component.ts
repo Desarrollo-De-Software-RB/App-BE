@@ -16,7 +16,7 @@ export class RatingComponent implements OnInit {
   newRating: CreateUpdateRatingDto = { serieId: 0, score: 0, comment: '' };
   hoverScore = 0;
   isLoggedIn = false;
-  currentUserRating: RatingDto | null = null;
+  currentUserId: string | null = null;
 
   constructor(
     private ratingService: RatingService,
@@ -26,6 +26,10 @@ export class RatingComponent implements OnInit {
 
   ngOnInit(): void {
     this.isLoggedIn = this.authService.isAuthenticated;
+    if (this.isLoggedIn) {
+      this.currentUserId = (this.authService as any).currentUser?.id;
+    }
+
     if (this.serieId) {
       this.loadRatings();
     }
@@ -33,21 +37,25 @@ export class RatingComponent implements OnInit {
 
   loadRatings() {
     this.ratingService.getSeriesRatings(this.serieId).subscribe(result => {
+      console.log('Ratings loaded:', result);
       this.ratings = result;
-      this.checkUserRating();
     });
-  }
-
-  checkUserRating() {
-    // This logic might need adjustment depending on how we identify the current user's rating from the list
-    // For now, we'll just display all ratings. 
-    // If the backend returns the current user's ID, we could filter.
-    // Assuming the backend handles "one rating per user" or we just let them add more.
-    // But usually we want to know if the user already rated to show "Edit" or "Your Rating".
   }
 
   setScore(score: number) {
     this.newRating.score = score;
+  }
+
+  editRating(rating: RatingDto) {
+    if (this.currentUserId && rating.userId === this.currentUserId) {
+      this.newRating = {
+        serieId: rating.serieId,
+        score: rating.score,
+        comment: rating.comment
+      };
+      // Scroll to form
+      document.querySelector('.rating-form')?.scrollIntoView({ behavior: 'smooth' });
+    }
   }
 
   submitRating() {

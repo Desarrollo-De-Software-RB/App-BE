@@ -52,6 +52,7 @@ export interface RatingDto extends EntityDto<number> {
   userName?: string;
   score: number;
   comment?: string;
+  profilePictureUrl?: string;
 }
 
 export interface CreateUpdateRatingDto {

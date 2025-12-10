@@ -4,11 +4,8 @@
   <!-- Rating Form -->
   <div class="rating-form" *ngIf="isLoggedIn">
     <div class="stars-input">
-      <span *ngFor="let star of [1, 2, 3, 4, 5]" 
-            (mouseenter)="hoverScore = star" 
-            (mouseleave)="hoverScore = 0"
-            (click)="setScore(star)"
-            [class.filled]="star <= (hoverScore || newRating.score)">
+      <span *ngFor="let star of [1, 2, 3, 4, 5]" (mouseenter)="hoverScore = star" (mouseleave)="hoverScore = 0"
+        (click)="setScore(star)" [class.filled]="star <= (hoverScore || newRating.score)">
         ★
       </span>
     </div>
@@ -22,14 +19,26 @@
 
   <!-- Ratings List -->
   <div class="ratings-list">
-    <div class="rating-item" *ngFor="let rating of ratings">
+    <div class="rating-item" *ngFor="let rating of ratings" (click)="editRating(rating)"
+      [class.editable]="rating.userId === currentUserId">
       <div class="rating-header">
-        <span class="username">{{ rating.userName || 'Anonymous' }}</span>
-        <div class="stars-display">
-          <span *ngFor="let star of [1, 2, 3, 4, 5]" [class.filled]="star <= rating.score">★</span>
+        <div class="user-info">
+          <img *ngIf="rating.profilePictureUrl; else defaultAvatar" [src]="rating.profilePictureUrl" alt="Profile"
+            class="profile-pic" (error)="rating.profilePictureUrl = null">
+          <ng-template #defaultAvatar>
+            <div class="default-avatar" [style.backgroundColor]="'#ff5722'">
+              {{ (rating.userName || 'A').charAt(0).toUpperCase() }}
+            </div>
+          </ng-template>
+          <span class="username">{{ rating.userName || 'Anonymous' }}</span>
+          <div class="stars-display">
+            <span *ngFor="let star of [1, 2, 3, 4, 5]" [class.filled]="star <= rating.score">★</span>
+          </div>
         </div>
       </div>
-      <p class="comment" *ngIf="rating.comment">{{ rating.comment }}</p>
+      <div class="rating-content">
+        <p class="comment" *ngIf="rating.comment">{{ rating.comment }}</p>
+      </div>
     </div>
     <div class="no-ratings" *ngIf="ratings.length === 0">
       <p>No reviews yet. Be the first to rate!</p>
