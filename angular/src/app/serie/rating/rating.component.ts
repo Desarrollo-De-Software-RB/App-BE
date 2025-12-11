@@ -2,7 +2,7 @@ import { Component, Input, OnInit, Output, EventEmitter } from '@angular/core';
 import { RatingService } from '../../proxy/series/rating.service';
 import { RatingDto, CreateUpdateRatingDto } from '../../proxy/series/models';
 import { ToasterService } from '@abp/ng.theme.shared';
-import { AuthService } from '@abp/ng.core';
+import { AuthService, ConfigStateService } from '@abp/ng.core';
 
 @Component({
   selector: 'app-rating',
@@ -21,13 +21,15 @@ export class RatingComponent implements OnInit {
   constructor(
     private ratingService: RatingService,
     private toaster: ToasterService,
-    private authService: AuthService
+    private authService: AuthService,
+    private configState: ConfigStateService
   ) { }
 
   ngOnInit(): void {
     this.isLoggedIn = this.authService.isAuthenticated;
     if (this.isLoggedIn) {
-      this.currentUserId = (this.authService as any).currentUser?.id;
+      const currentUser = this.configState.getOne('currentUser');
+      this.currentUserId = currentUser?.id;
     }
 
     if (this.serieId) {
@@ -35,10 +37,19 @@ export class RatingComponent implements OnInit {
     }
   }
 
+  userRating: RatingDto | undefined;
+
   loadRatings() {
     this.ratingService.getSeriesRatings(this.serieId).subscribe(result => {
       console.log('Ratings loaded:', result);
-      this.ratings = result;
+
+      if (this.currentUserId) {
+        this.userRating = result.find(r => r.userId === this.currentUserId);
+        this.ratings = result.filter(r => r.userId !== this.currentUserId);
+      } else {
+        this.userRating = undefined;
+        this.ratings = result;
+      }
     });
   }
 

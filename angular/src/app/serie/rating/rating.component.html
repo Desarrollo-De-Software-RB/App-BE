@@ -17,6 +17,38 @@
     <p>Please <a routerLink="/account/login">login</a> to leave a review.</p>
   </div>
 
+  <!-- User Rating Pinned -->
+  <div class="user-rating-section" *ngIf="userRating">
+    <h3 class="subsection-title">Tu reseña:</h3>
+    <div class="rating-item editable" (click)="editRating(userRating)">
+      <div class="rating-header">
+        <div class="user-info">
+          <img *ngIf="userRating.profilePictureUrl; else defaultAvatarUser" [src]="userRating.profilePictureUrl"
+            alt="Profile" class="profile-pic" (error)="userRating.profilePictureUrl = null">
+          <ng-template #defaultAvatarUser>
+            <div class="default-avatar" [style.backgroundColor]="'#ff5722'">
+              {{ (userRating.userName || 'A').charAt(0).toUpperCase() }}
+            </div>
+          </ng-template>
+          <span class="username">{{ userRating.userName || 'Anonymous' }}</span>
+          <div class="stars-display">
+            <span *ngFor="let star of [1, 2, 3, 4, 5]" [class.filled]="star <= userRating.score">★</span>
+          </div>
+        </div>
+      </div>
+      <div class="rating-content">
+        <p class="comment" *ngIf="userRating.comment">
+          {{ isExpanded(userRating.id) ? userRating.comment : (userRating.comment | slice:0:100) }}
+          <span *ngIf="!isExpanded(userRating.id) && userRating.comment.length > 100">...</span>
+        </p>
+        <button class="btn-read-more" *ngIf="userRating.comment && userRating.comment.length > 100"
+          (click)="toggleExpansion(userRating.id); $event.stopPropagation()">
+          {{ isExpanded(userRating.id) ? 'Ver menos' : 'Ver más' }}
+        </button>
+      </div>
+    </div>
+  </div>
+
   <!-- Ratings List -->
   <div class="ratings-list">
     <div class="rating-item" *ngFor="let rating of ratings | slice:0:visibleRatingsCount" (click)="editRating(rating)"
