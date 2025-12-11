@@ -19,7 +19,7 @@
 
   <!-- Ratings List -->
   <div class="ratings-list">
-    <div class="rating-item" *ngFor="let rating of ratings" (click)="editRating(rating)"
+    <div class="rating-item" *ngFor="let rating of ratings | slice:0:visibleRatingsCount" (click)="editRating(rating)"
       [class.editable]="rating.userId === currentUserId">
       <div class="rating-header">
         <div class="user-info">
@@ -50,5 +50,9 @@
     <div class="no-ratings" *ngIf="ratings.length === 0">
       <p>No reviews yet. Be the first to rate!</p>
     </div>
+  </div>
+
+  <div class="load-more-container" *ngIf="visibleRatingsCount < ratings.length">
+    <button class="btn-load-more" (click)="showMoreRatings()">Ver más reseñas</button>
   </div>
 </div>

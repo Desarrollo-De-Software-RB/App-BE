@@ -75,6 +75,7 @@ export class RatingComponent implements OnInit {
   }
 
   expandedRatings: Set<number> = new Set();
+  visibleRatingsCount = 4;
 
   toggleExpansion(id: number) {
     if (this.expandedRatings.has(id)) {
@@ -86,5 +87,9 @@ export class RatingComponent implements OnInit {
 
   isExpanded(id: number): boolean {
     return this.expandedRatings.has(id);
+  }
+
+  showMoreRatings() {
+    this.visibleRatingsCount += 4;
   }
 }
