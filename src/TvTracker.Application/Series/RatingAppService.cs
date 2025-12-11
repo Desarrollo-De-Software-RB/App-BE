@@ -5,6 +5,8 @@ using System.Threading.Tasks;
 using Volo.Abp.Application.Services;
 using Volo.Abp.Domain.Repositories;
 using Volo.Abp.Identity;
+using Volo.Abp.Data;
+using Microsoft.Extensions.Logging;
 
 namespace TvTracker.Series
 {
@@ -38,8 +40,32 @@ namespace TvTracker.Series
                 UserId = r.UserId,
                 UserName = userDictionary.ContainsKey(r.UserId) ? userDictionary[r.UserId] : "Unknown",
                 Score = r.Score,
-                Comment = r.Comment
+                Comment = r.Comment,
+                ProfilePictureUrl = GetProfilePictureUrl(users.First(u => u.Id == r.UserId))
             }).ToList();
+        }
+
+        private string? GetProfilePictureUrl(IdentityUser user)
+        {
+            Logger.LogInformation($"[DEBUG] Checking profile picture for user: {user.UserName} ({user.Id})");
+
+            var profilePicture = user.GetProperty<string>("ProfilePicture");
+            if (!string.IsNullOrEmpty(profilePicture))
+            {
+                Logger.LogInformation($"[DEBUG] Found 'ProfilePicture': {profilePicture.Substring(0, Math.Min(20, profilePicture.Length))}...");
+                return profilePicture;
+            }
+
+            // Fallback to "picture" if "ProfilePicture" is empty
+            var picture = user.GetProperty<string>("picture");
+            if (!string.IsNullOrEmpty(picture))
+            {
+                Logger.LogInformation($"[DEBUG] Found 'picture': {picture.Substring(0, Math.Min(20, picture.Length))}...");
+                return picture;
+            }
+
+            Logger.LogInformation("[DEBUG] No profile picture found.");
+            return null;
         }
 
         public async Task RateSeriesAsync(CreateUpdateRatingDto input)

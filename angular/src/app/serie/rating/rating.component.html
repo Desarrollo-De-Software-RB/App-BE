@@ -4,11 +4,8 @@
   <!-- Rating Form -->
   <div class="rating-form" *ngIf="isLoggedIn">
     <div class="stars-input">
-      <span *ngFor="let star of [1, 2, 3, 4, 5]" 
-            (mouseenter)="hoverScore = star" 
-            (mouseleave)="hoverScore = 0"
-            (click)="setScore(star)"
-            [class.filled]="star <= (hoverScore || newRating.score)">
+      <span *ngFor="let star of [1, 2, 3, 4, 5]" (mouseenter)="hoverScore = star" (mouseleave)="hoverScore = 0"
+        (click)="setScore(star)" [class.filled]="star <= (hoverScore || newRating.score)">
         ★
       </span>
     </div>
@@ -20,19 +17,96 @@
     <p>Please <a routerLink="/account/login">login</a> to leave a review.</p>
   </div>
 
-  <!-- Ratings List -->
-  <div class="ratings-list">
-    <div class="rating-item" *ngFor="let rating of ratings">
+  <!-- User Rating Pinned -->
+  <div class="user-rating-section" *ngIf="userRating">
+    <h3 class="subsection-title">Tu reseña:</h3>
+    <div class="rating-item editable" [class.editing]="isEditing">
       <div class="rating-header">
-        <span class="username">{{ rating.userName || 'Anonymous' }}</span>
-        <div class="stars-display">
-          <span *ngFor="let star of [1, 2, 3, 4, 5]" [class.filled]="star <= rating.score">★</span>
+        <div class="user-info">
+          <img *ngIf="userRating.profilePictureUrl; else defaultAvatarUser" [src]="userRating.profilePictureUrl"
+            alt="Profile" class="profile-pic" (error)="userRating.profilePictureUrl = null">
+          <ng-template #defaultAvatarUser>
+            <div class="default-avatar" [style.backgroundColor]="'#ff5722'">
+              {{ (userRating.userName || 'A').charAt(0).toUpperCase() }}
+            </div>
+          </ng-template>
+          <span class="username">{{ userRating.userName || 'Anonymous' }}</span>
+
+          <!-- Stars Display (View Mode) -->
+          <div class="stars-display" *ngIf="!isEditing">
+            <span *ngFor="let star of [1, 2, 3, 4, 5]" [class.filled]="star <= userRating.score">★</span>
+          </div>
+
+          <!-- Stars Edit (Edit Mode) -->
+          <div class="stars-input small" *ngIf="isEditing">
+            <span *ngFor="let star of [1, 2, 3, 4, 5]" (mouseenter)="hoverScore = star" (mouseleave)="hoverScore = 0"
+              (click)="setScore(star)" [class.filled]="star <= (hoverScore || newRating.score)">
+              ★
+            </span>
+          </div>
         </div>
       </div>
-      <p class="comment" *ngIf="rating.comment">{{ rating.comment }}</p>
+
+      <!-- View Content -->
+      <div class="rating-content" *ngIf="!isEditing">
+        <p class="comment" *ngIf="userRating.comment">
+          {{ isExpanded(userRating.id) ? userRating.comment : (userRating.comment | slice:0:100) }}
+          <span *ngIf="!isExpanded(userRating.id) && userRating.comment.length > 100">...</span>
+        </p>
+        <button class="btn-read-more" *ngIf="userRating.comment && userRating.comment.length > 100"
+          (click)="toggleExpansion(userRating.id); $event.stopPropagation()">
+          {{ isExpanded(userRating.id) ? 'Ver menos' : 'Ver más' }}
+        </button>
+        <button class="btn-modify" (click)="editRating(userRating); $event.stopPropagation()">Modificar</button>
+      </div>
+
+      <!-- Edit Content -->
+      <div class="rating-content edit-mode" *ngIf="isEditing">
+        <textarea [(ngModel)]="newRating.comment" placeholder="Edit your comment..." rows="3"></textarea>
+        <div class="edit-actions">
+          <button class="btn-cancel" (click)="cancelEdit()">Cancelar</button>
+          <button class="btn-save" (click)="submitRating()">Guardar</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Ratings List -->
+  <div class="ratings-list">
+    <div class="rating-item" *ngFor="let rating of ratings | slice:0:visibleRatingsCount" (click)="editRating(rating)"
+      [class.editable]="rating.userId === currentUserId">
+      <div class="rating-header">
+        <div class="user-info">
+          <img *ngIf="rating.profilePictureUrl; else defaultAvatar" [src]="rating.profilePictureUrl" alt="Profile"
+            class="profile-pic" (error)="rating.profilePictureUrl = null">
+          <ng-template #defaultAvatar>
+            <div class="default-avatar" [style.backgroundColor]="'#ff5722'">
+              {{ (rating.userName || 'A').charAt(0).toUpperCase() }}
+            </div>
+          </ng-template>
+          <span class="username">{{ rating.userName || 'Anonymous' }}</span>
+          <div class="stars-display">
+            <span *ngFor="let star of [1, 2, 3, 4, 5]" [class.filled]="star <= rating.score">★</span>
+          </div>
+        </div>
+      </div>
+      <div class="rating-content">
+        <p class="comment" *ngIf="rating.comment">
+          {{ isExpanded(rating.id) ? rating.comment : (rating.comment | slice:0:100) }}
+          <span *ngIf="!isExpanded(rating.id) && rating.comment.length > 100">...</span>
+        </p>
+        <button class="btn-read-more" *ngIf="rating.comment && rating.comment.length > 100"
+          (click)="toggleExpansion(rating.id); $event.stopPropagation()">
+          {{ isExpanded(rating.id) ? 'Ver menos' : 'Ver más' }}
+        </button>
+      </div>
     </div>
     <div class="no-ratings" *ngIf="ratings.length === 0">
       <p>No reviews yet. Be the first to rate!</p>
     </div>
+  </div>
+
+  <div class="load-more-container" *ngIf="visibleRatingsCount < ratings.length">
+    <button class="btn-load-more" (click)="showMoreRatings()">Ver más reseñas</button>
   </div>
 </div>
