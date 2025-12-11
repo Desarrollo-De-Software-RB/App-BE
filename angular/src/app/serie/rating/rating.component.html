@@ -37,7 +37,14 @@
         </div>
       </div>
       <div class="rating-content">
-        <p class="comment" *ngIf="rating.comment">{{ rating.comment }}</p>
+        <p class="comment" *ngIf="rating.comment">
+          {{ isExpanded(rating.id) ? rating.comment : (rating.comment | slice:0:100) }}
+          <span *ngIf="!isExpanded(rating.id) && rating.comment.length > 100">...</span>
+        </p>
+        <button class="btn-read-more" *ngIf="rating.comment && rating.comment.length > 100"
+          (click)="toggleExpansion(rating.id); $event.stopPropagation()">
+          {{ isExpanded(rating.id) ? 'Ver menos' : 'Ver más' }}
+        </button>
       </div>
     </div>
     <div class="no-ratings" *ngIf="ratings.length === 0">

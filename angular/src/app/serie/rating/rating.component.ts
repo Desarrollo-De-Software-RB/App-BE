@@ -73,4 +73,18 @@ export class RatingComponent implements OnInit {
       this.ratingUpdated.emit();
     });
   }
+
+  expandedRatings: Set<number> = new Set();
+
+  toggleExpansion(id: number) {
+    if (this.expandedRatings.has(id)) {
+      this.expandedRatings.delete(id);
+    } else {
+      this.expandedRatings.add(id);
+    }
+  }
+
+  isExpanded(id: number): boolean {
+    return this.expandedRatings.has(id);
+  }
 }

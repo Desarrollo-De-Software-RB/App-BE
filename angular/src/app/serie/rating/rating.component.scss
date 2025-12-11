@@ -169,6 +169,23 @@
           margin: 0;
           line-height: 1.5;
         }
+
+        .btn-read-more {
+          background-color: rgba(214, 51, 132, 0.1);
+          color: #d63384;
+          border: 1px solid #d63384;
+          padding: 0.2rem 0.8rem;
+          border-radius: 12px;
+          cursor: pointer;
+          margin-top: 0.5rem;
+          font-size: 0.8rem;
+          transition: all 0.2s ease;
+
+          &:hover {
+            background-color: #d63384;
+            color: white;
+          }
+        }
       }
     }
 
