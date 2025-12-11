@@ -1,80 +1,122 @@
 <div class="container-fluid detail-container" *ngIf="serie; else loadingTpl">
   <div class="backdrop" [style.backgroundImage]="'url(' + serie.poster + ')'"></div>
   <div class="content-wrapper" (click)="goBack()">
-    <div class="row justify-content-center align-items-center h-100">
+    <div class="row justify-content-center align-items-center h-100 w-100">
       <div class="col-md-10 col-lg-15">
         <div class="card detail-card" (click)="$event.stopPropagation()">
-          <div class="row g-0">
-            <div class="col-md-5 poster-col">
-              <img [src]="serie.poster" class="img-fluid rounded-start poster-img" style="height: 100%; object-fit: cover; object-position: center;" alt="{{ serie.title }}"
-                (error)="handleImageError(serie)" *ngIf="serie.poster && serie.poster !== 'N/A'; else noPoster">
+          <div class="d-flex h-100 card-content">
+            <div class="poster-col">
+              <img [src]="serie.poster" class="rounded-start poster-img" alt="{{ serie.title }}"
+                (error)="handleImageError(serie)" *ngIf="serie.poster && serie.poster !== 'N/A'; else noPoster" />
               <ng-template #noPoster>
                 <div class="no-poster">
                   <span>{{ serie.title }}</span>
                 </div>
               </ng-template>
             </div>
-            <div class="col-md-7">
+            <div class="info-col d-flex flex-column flex-grow-1 flex-shrink-1">
               <div class="card-body p-2 p-md-3">
                 <h1 class="card-title display-5 fw-bold mb-3">{{ serie.title }}</h1>
 
-                <div class="badges mb-2">
-                  <span class="badge bg-primary me-2">{{ serie.type | titlecase }}</span>
-                  <span class="badge bg-secondary me-2">{{ serie.year }}</span>
-                  <span class="badge bg-warning text-dark me-2">IMDB: {{ serie.imdbRating }}</span>
-                  <span class="badge bg-info text-dark">{{ serie.runtime }}</span>
-                </div>
-
-                <div>
-                  <span class="badge bg-success me-2 mb-2" *ngFor="let genre of serie.genre.split(',')">
-                    {{ genre.trim() }}
-                  </span>
-                </div>
-
-                <div class="info-group mb-3">
-                  <h5 class="text-muted text-uppercase small fw-bold">Plot</h5>
-                  <p>{{ serie.plot }}</p>
-                </div>
-
-                <div class="row">
-                  <div class="col-6">
-                    <div class="info-group mb-3">
-                      <h5 class="text-muted text-uppercase small fw-bold">Released</h5>
-                      <p>{{ serie.released }}</p>
+                <div class="row align-items-start mb-3">
+                  <div class="col-md-6" style="height: -webkit-fill-available;max-width: 40%;">
+                    <div class="p-2 rounded bg-secondary text-white h-100 d-flex flex-column justify-content-center">
+                      <p class="mb-0" style="font-size: 0.85rem; line-height: 1.4;">{{ serie.plot }}</p>
                     </div>
                   </div>
-                  <div class="col-6">
-                    <div class="info-group mb-3">
-                      <h5 class="text-muted text-uppercase small fw-bold">Country</h5>
-                      <p>{{ serie.country }}</p>
+                  <div class="col-md-6 p-0" style="height: -webkit-fill-available;min-width: 60%;">
+                    <div class="badges">
+                      <span class="badge bg-primary me-2" style="margin-bottom: 8px;">
+                        {{ serie.type ? (serie.type | titlecase) : 'Type: N/A' }}
+                      </span>
+                      <span class="badge bg-secondary me-2" style="margin-bottom: 8px;">
+                        {{ serie.year && serie.year !== 'N/A' ? serie.year : 'Year: N/A' }}
+                      </span>
+                      <span class="badge bg-info text-dark me-2" style="margin-bottom: 8px;">
+                        {{ serie.runtime && serie.runtime !== 'N/A' ? serie.runtime : 'Duration: N/A' }}
+                      </span>
+                    </div>
+                    <div class="badges">
+                      <span class="badge bg-success me-2" *ngFor="let genre of serie.genre.split(',')"
+                        style="margin-bottom: 8px;">
+                        {{ genre.trim() }}
+                      </span>
+                    </div>
+                    <div class="badges">
+                      <span class="badge badge-animated badge-imdb text-white me-2" style="margin-bottom: 8px;">
+                        IMDB: {{ serie.imdbRating ? serie.imdbRating : 'N/A' }} <i class="fa fa-star"></i>
+                      </span>
+                      <span class="badge badge-animated badge-users text-white me-2">
+                        <ng-container *ngIf="averageRating > 0; else noRating">
+                          Users: {{ averageRating | number:'1.1-1' }} <i class="fa fa-star"></i>
+                        </ng-container>
+                        <ng-template #noRating>
+                          Users: N/A <i class="fa fa-star"></i>
+                        </ng-template>
+                      </span>
                     </div>
                   </div>
                 </div>
 
-                <div class="info-group mb-3">
-                  <h5 class="text-muted text-uppercase small fw-bold">Team</h5>
-                  <p class="mb-1"><strong>Director:</strong> {{ serie.director }}</p>
-                  <p class="mb-1"><strong>Writer:</strong> {{ serie.writer }}</p>
-                  <p class="mb-0"><strong>Actors:</strong> {{ serie.actors }}</p>
+                <div class="row align-items-start mb-3">
+                  <div class="col-md-4">
+                    <div class="d-flex flex-column">
+                      <div class="mb-2 pb-2 w-100">
+                        <h5 class="text-muted text-uppercase small fw-bold mb-1">Released</h5>
+                        <p class="mb-0">{{ serie.released }}</p>
+                      </div>
+                      <div class="w-100">
+                        <h5 class="text-muted text-uppercase small fw-bold mb-1">Country</h5>
+                        <p class="mb-0">{{ serie.country }}</p>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="col-md-8">
+                    <div class="info-group">
+                      <h5 class="text-muted text-uppercase small fw-bold mb-1">Team</h5>
+                      <p class="mb-1"><strong>Director:</strong> {{ serie.director }}</p>
+                      <p class="mb-1"><strong>Writer:</strong> {{ serie.writer }}</p>
+                      <p class="mb-0"><strong>Actors:</strong> {{ serie.actors }}</p>
+                    </div>
+                  </div>
                 </div>
 
-                <div>
-                  <button class="btn btn-outline-light" (click)="goBack()">
+                <div class="action-button gap-3 d-flex flex-wrap">
+                  <button class="btn btn-outline-light action-btn" (click)="goBack()">
                     <i class="fa fa-arrow-left me-2"></i> Back
+                  </button>
+                  <button *ngIf="!watchlistItem" class="btn btn-outline-primary action-btn"
+                    (click)="openAddToWatchlistModal()">
+                    + Add to Watchlist
+                  </button>
+                  <button *ngIf="watchlistItem" class="btn action-btn text-white" [ngClass]="{
+                                  'btn-success': watchlistItem.status === WatchlistStatus.Completed,
+                                  'btn-primary': watchlistItem.status === WatchlistStatus.Watching,
+                                  'btn-warning': watchlistItem.status === WatchlistStatus.Pending,
+                                  'btn-danger': watchlistItem.status === WatchlistStatus.Dropped
+                              }" (click)="openAddToWatchlistModal()">
+                    <i class="fa fa-check me-2"></i> {{ getStatusLabel(watchlistItem.status) }}
+                  </button>
+                  <button class="btn btn-link see-ratings-btn text-decoration-none gap-1 d-flex"
+                    (click)="scrollToRatings()">
+                    <span>See Ratings</span>
+                    <i class="fa fa-chevron-down bounce"></i>
                   </button>
                 </div>
               </div>
             </div>
           </div>
         </div>
+        <app-rating [serieId]="serie.id" id="ratings-section" (click)="$event.stopPropagation()"
+          style="cursor: default;z-index: 0;" (ratingUpdated)="loadRatings(serie.id)"></app-rating>
       </div>
     </div>
   </div>
 </div>
 
 <ng-template #loadingTpl>
-  <div class="d-flex justify-content-center align-items-center vh-100">
-    <div class="spinner-border text-primary" role="status">
+  <div class="text-center mt-5">
+    <div class="spinner-border text-light" role="status">
       <span class="visually-hidden">Loading...</span>
     </div>
   </div>

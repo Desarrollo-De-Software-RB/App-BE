@@ -1,5 +1,5 @@
 // Variables for the theme
-$card-bg: #1e1e2e;
+$card-bg: #0e0e14;
 $card-bg-hover: #252538;
 $text-primary: #ffffff;
 $text-secondary: #a0a0b0;
@@ -7,22 +7,39 @@ $accent-color: #3b82f6;
 $border-color: rgba(255, 255, 255, 0.08);
 $card-radius: 16px;
 $transition-speed: 0.3s;
-$input-bg: #2a2a3c;
+$input-bg: #0e0e14;
 
 .users-container {
     padding: 2rem 0;
 }
 
+.new-button {
+    background-color: #3b82f6;
+    color: white;
+    font-weight: 600;
+    cursor: pointer;
+    background-image: linear-gradient(to right, #ff0073, #3b82f6);
+    background-size: 0% 120%;
+    background-repeat: no-repeat;
+    background-position: left;
+
+    transition: background-size 0.4s ease, transform 0.2s;
+
+    &:hover {
+        background-size: 120% 120%;
+        transform: scale(1.02);
+    }
+}
+
 .section-title {
-    font-size: 2rem;
-    font-weight: 700;
-    color: $text-primary;
-    text-transform: uppercase;
-    letter-spacing: 1px;
-    background: linear-gradient(to right, #3b82f6, #ec4899);
-    -webkit-background-clip: text;
+    font-weight: 800;
+    font-size: 1.5rem;
+    background-image: linear-gradient(to left, #ff0073, #95a3e5, #ff0073);
     background-clip: text;
-    -webkit-text-fill-color: transparent;
+    color: transparent;
+    animation: 6s linear infinite textbg;
+    background-size: 200% auto;
+    text-transform: uppercase;
 }
 
 .user-card {
@@ -115,7 +132,8 @@ $input-bg: #2a2a3c;
     border-bottom: 1px solid $border-color;
 
     .modal-title {
-        color: $text-primary;
+        color: #3b82f6;
+        font-weight: 900;
     }
 
     .btn-close {
@@ -129,6 +147,8 @@ $input-bg: #2a2a3c;
 
 ::ng-deep .modal-footer {
     border-top: 1px solid $border-color;
+    display: flex;
+    justify-content: space-between;
 }
 
 // Form Styles
@@ -320,6 +340,7 @@ $input-bg: #2a2a3c;
 
     ::ng-deep .modal-body {
         padding: 2rem;
+        padding-top:2rem !important;
     }
 
     ::ng-deep .modal-footer {

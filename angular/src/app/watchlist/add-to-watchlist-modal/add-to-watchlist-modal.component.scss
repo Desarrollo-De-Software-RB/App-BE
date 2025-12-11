@@ -1,0 +1,28 @@
+.modal-header {
+    background-color: #1e1e2e;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+
+    .modal-title {
+        color: #fff;
+    }
+}
+
+.modal-body {
+    background-color: #1e1e2e;
+    color: #fff;
+}
+
+.modal-footer {
+    background-color: #1e1e2e;
+    display:flex;
+    justify-content: space-between;
+    border-top: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.btn-check:checked+.btn,
+.btn.active,
+.btn.show,
+.btn:first-child:active,
+:not(.btn-check)+.btn:active {
+    color: #fff;
+}

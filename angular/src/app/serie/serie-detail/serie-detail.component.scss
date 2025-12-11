@@ -3,19 +3,21 @@
   top: 0;
   left: 0;
   width: 100vw;
-  height: 100vh;
-  overflow: hidden;
-  /* Prevent page scroll */
+  height: 100dvh;
+  overflow-y: auto;
   background-color: #141414;
   color: #fff;
   z-index: 1000;
-  display: flex;
-  align-items: center;
-  justify-content: center;
+  display: block;
+  cursor: pointer;
+}
+
+.card-body{
+  overflow: auto;
 }
 
 .backdrop {
-  position: absolute;
+  position: fixed;
   top: 0;
   left: 0;
   width: 100%;
@@ -30,97 +32,91 @@
 .content-wrapper {
   position: relative;
   z-index: 1;
+  min-height: 100%;
+  padding: 1.5rem 0;
   width: 100%;
-  height: 100%;
   display: flex;
+  flex-direction: column;
   align-items: center;
-  justify-content: center;
-  padding: 2rem;
-  cursor: pointer;
+  justify-content: flex-start;
 }
 
 .detail-card {
-  background: rgba(0, 0, 0, 0.7);
+  background: rgba(30, 30, 30, 0.95);
   backdrop-filter: blur(10px);
-  border: none;
+  border: 1px solid rgba(255, 255, 255, 0.1);
   border-radius: 15px;
   overflow: hidden;
   box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
   color: #fff;
-  max-height: 90vh;
-  /* Limit card height */
-  width: 100%;
-  max-width: 1200px;
   cursor: default;
+  margin-bottom: 0rem;
+  z-index: 1;
+  width: 100%;
+  height: 95dvh;
+  display: flex;
+  flex-direction: column;
 }
 
-.row.g-0 {
+.card-content {
+  flex: 1;
+  display: flex;
+  min-height: 0;
   height: 100%;
+  width: 100%;
+  overflow: hidden;
+  padding-right: 1.5rem;
 }
 
 .poster-col {
-  position: relative;
-  min-height: 60dvh;
-  max-height: 100dvh;
-  /* Ensure image has height */
   display: flex;
+  align-items: center;
+  justify-content: center;
+  background-color: #000;
+  height: 100%;
+  flex: 0 0 auto;
 
   .no-poster {
-    width: 100%;
+    width: 300px;
     height: 100%;
-    background-color: #e0e0e0;
+    background-color: #2a2a2a;
     display: flex;
     justify-content: center;
     align-items: center;
     text-align: center;
     padding: 1rem;
+    color: #888;
 
     span {
       font-size: 1.5rem;
       font-weight: bold;
-      color: #666;
     }
   }
 }
 
 .poster-img {
-  width: 100%;
   height: 100%;
-  object-fit: cover;
+  width: auto;
+  max-width: 360px;
+  object-fit: contain;
   display: block;
 }
 
-.col-md-7 {
-  max-height: 90vh;
-  overflow-y: auto;
-  /* Scroll only text content */
-}
-
-.card-body {
-  height: 100%;
-  overflow-y: auto;
-}
-
-/* Custom scrollbar for webkit */
-.col-md-7::-webkit-scrollbar,
-.card-body::-webkit-scrollbar {
+::-webkit-scrollbar {
   width: 8px;
 }
 
-.col-md-7::-webkit-scrollbar-track,
-.card-body::-webkit-scrollbar-track {
-  background: rgba(255, 255, 255, 0.1);
+::-webkit-scrollbar-track {
+  background: rgba(255, 154, 154, 0.1);
 }
 
-.col-md-7::-webkit-scrollbar-thumb,
-.card-body::-webkit-scrollbar-thumb {
-  background: rgba(255, 255, 255, 0.3);
+::-webkit-scrollbar-thumb {
+  background: rgba(255, 154, 154, 0.3);
   border-radius: 4px;
 }
 
-.col-md-7::-webkit-scrollbar-thumb:hover,
-.card-body::-webkit-scrollbar-thumb:hover {
-  background: rgba(255, 255, 255, 0.5);
+::-webkit-scrollbar-thumb:hover {
+  background: rgba(255, 154, 154, 0.5);
 }
 
 .card-title {
@@ -134,17 +130,87 @@
 }
 
 .badge {
-  font-size: 0.9rem;
-  padding: 0.5em 0.8em;
+  font-size: 1rem;
+  padding: 0.6em 1em;
+  font-weight: 500;
+  border-radius: 6px;
 }
 
-.btn-outline-light {
-  border-color: rgba(255, 255, 255, 0.5);
-  color: rgba(255, 255, 255, 0.8);
+.badge-animated {
+  background-size: 200% auto;
+  animation: 6s linear infinite textbg;
+  border: none;
+}
+
+.badge-imdb {
+  background-image: linear-gradient(to right, #f5c518, #ff9800, #f5c518);
+}
+
+.badge-users {
+  background-image: linear-gradient(to right, #d92577, #bf3bb0, #d92577);
+}
+
+p {
+  line-height: 1.6;
+}
+
+.action-btn {
+  padding: 0.8rem 1.5rem;
+  font-size: 1.1rem;
+  font-weight: 500;
+  border-radius: 8px;
+  transition: all 0.2s ease;
 
   &:hover {
-    background-color: rgba(255, 255, 255, 0.1);
-    color: #fff;
-    border-color: #fff;
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
   }
+}
+
+.see-ratings-btn {
+  color: #ff69b4;
+  border-color: #ff69b4;
+  border-width: 1px;
+  font-size: 1.2rem;
+  font-weight: 600;
+  transition: all 0.3s ease;
+  padding: 1rem;
+
+  &:hover {
+    background-color: #ff69b4;
+    color: #fff;
+    transform: translateY(2px);
+  }
+
+  i {
+    font-size: 1.5rem;
+    margin-top: 0.5rem;
+  }
+}
+
+.bounce {
+  animation: bounce 2s infinite;
+}
+
+@keyframes bounce {
+
+  0%,
+  20%,
+  50%,
+  80%,
+  100% {
+    transform: translateY(-5px);
+  }
+
+  40% {
+    transform: translateY(-15px);
+  }
+
+  60% {
+    transform: translateY(-10px);
+  }
+}
+
+#ratings-section {
+  background: rgba(0, 0, 0, 0.4);
 }

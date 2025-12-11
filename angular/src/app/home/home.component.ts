@@ -19,6 +19,12 @@ export class HomeComponent implements OnInit {
   showRegister = false;
   isAdmin = false;
 
+  // Splash Screen State
+  showSplash = true;
+  logoMoved = false;
+  showContent = false;
+  titleChars = 'Tracker'.split('');
+
   constructor(
     private authService: AuthService,
     private fb: FormBuilder,
@@ -33,6 +39,23 @@ export class HomeComponent implements OnInit {
     if (this.hasLoggedIn) {
       this.checkAdmin();
     }
+
+    // Start Animation Flow
+    this.startSplashAnimation();
+  }
+
+  startSplashAnimation() {
+    // Phase 1: Logo loads letter by letter (Total approx 2s)
+
+    // Phase 2: Move Logo Up after animation completes
+    setTimeout(() => {
+      this.logoMoved = true;
+
+      // Phase 3: Show Content
+      setTimeout(() => {
+        this.showContent = true;
+      }, 800);
+    }, 1200);
   }
 
   buildForm() {
@@ -67,13 +90,14 @@ export class HomeComponent implements OnInit {
       next: () => {
         this.toaster.success('Registration successful! Please login.');
         this.showRegister = false;
-        this.registerForm.reset();
+        this.login();
       },
       error: (err) => {
         this.toaster.error(err.error?.error?.message || 'Registration failed');
       }
     });
   }
+
   goToSearch() {
     this.router.navigate(['/series/search']);
   }

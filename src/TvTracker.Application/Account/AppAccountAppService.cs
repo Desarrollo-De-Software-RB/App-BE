@@ -37,6 +37,10 @@ public class AppAccountAppService : TvTrackerAppService, IAppAccountAppService
 
     public async Task<IdentityUserDto> UpdateProfileAsync(AppUpdateProfileDto input)
     {
+        if (CurrentUser.Id == null)
+        {
+             throw new UnauthorizedAccessException();
+        }
         var user = await _userManager.GetByIdAsync(CurrentUser.Id.Value);
 
         (await _userManager.SetUserNameAsync(user, input.UserName)).CheckErrors();
