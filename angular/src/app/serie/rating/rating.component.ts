@@ -45,7 +45,7 @@ export class RatingComponent implements OnInit {
 
       if (this.currentUserId) {
         this.userRating = result.find(r => r.userId === this.currentUserId);
-        this.ratings = result.filter(r => r.userId !== this.currentUserId);
+        this.ratings = result; // Keep all ratings including user's
       } else {
         this.userRating = undefined;
         this.ratings = result;
