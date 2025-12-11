@@ -57,16 +57,22 @@ export class RatingComponent implements OnInit {
     this.newRating.score = score;
   }
 
+  isEditing = false;
+
   editRating(rating: RatingDto) {
     if (this.currentUserId && rating.userId === this.currentUserId) {
+      this.isEditing = true;
       this.newRating = {
         serieId: rating.serieId,
         score: rating.score,
-        comment: rating.comment
+        comment: rating.comment || ''
       };
-      // Scroll to form
-      document.querySelector('.rating-form')?.scrollIntoView({ behavior: 'smooth' });
     }
+  }
+
+  cancelEdit() {
+    this.isEditing = false;
+    this.newRating = { serieId: 0, score: 0, comment: '' };
   }
 
   submitRating() {
@@ -80,6 +86,7 @@ export class RatingComponent implements OnInit {
     this.ratingService.rateSeries(this.newRating).subscribe(() => {
       this.toaster.success('Rating submitted successfully');
       this.newRating = { serieId: 0, score: 0, comment: '' };
+      this.isEditing = false;
       this.loadRatings();
       this.ratingUpdated.emit();
     });

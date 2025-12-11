@@ -41,6 +41,117 @@
       .rating-header .user-info .default-avatar {
         border-color: #6f42c1; // Violet border for own pic
       }
+
+      .btn-modify {
+        background: rgba(214, 51, 132, 0.2);
+        color: #d63384;
+        border: 1px solid #d63384;
+        padding: 0.4rem 1rem;
+        border-radius: 8px;
+        cursor: pointer;
+        font-weight: bold;
+        transition: all 0.2s;
+        float: right;
+        margin-top: 1rem;
+
+        &:hover {
+          background: #d63384;
+          color: white;
+        }
+      }
+
+      // Clearfix if using float
+      &::after {
+        content: "";
+        display: table;
+        clear: both;
+      }
+    }
+
+    &.editing {
+      border-color: #d63384;
+      background: rgba(255, 255, 255, 0.08);
+
+      .btn-modify {
+        display: none; // Hide modify button in edit mode
+      }
+    }
+
+    .stars-input.small {
+      margin-left: 0.5rem;
+      cursor: pointer;
+
+      span {
+        font-size: 1.4rem;
+        color: #444;
+        margin-right: 2px;
+        transition: color 0.2s;
+
+        &.filled {
+          color: #d63384;
+        }
+
+        &:hover {
+          color: #e85d9e;
+        }
+      }
+    }
+
+    .edit-mode {
+      margin-top: 1rem;
+      width: 100%;
+
+      textarea {
+        width: 100%;
+        background: rgba(0, 0, 0, 0.3);
+        border: 1px solid #6f42c1;
+        color: #fff;
+        padding: 0.8rem;
+        border-radius: 8px;
+        margin-bottom: 1rem;
+        resize: vertical;
+
+        &:focus {
+          outline: none;
+          border-color: #d63384;
+          box-shadow: 0 0 0 2px rgba(214, 51, 132, 0.2);
+        }
+      }
+
+      .edit-actions {
+        display: flex;
+        justify-content: flex-end;
+        gap: 1rem;
+
+        button {
+          padding: 0.5rem 1.5rem;
+          border-radius: 20px;
+          font-weight: bold;
+          cursor: pointer;
+          border: none;
+          transition: transform 0.2s;
+
+          &:hover {
+            transform: translateY(-2px);
+          }
+        }
+
+        .btn-cancel {
+          background: rgba(255, 255, 255, 0.1);
+          color: #ccc;
+
+          &:hover {
+            background: rgba(255, 255, 255, 0.2);
+            color: white;
+          }
+        }
+
+        .btn-save {
+          background: linear-gradient(45deg, #6f42c1, #d63384);
+          color: white;
+          box-shadow: 0 4px 10px rgba(214, 51, 132, 0.3);
+        }
+      }
     }
   }
 
