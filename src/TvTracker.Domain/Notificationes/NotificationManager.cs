@@ -35,7 +35,7 @@ namespace TvTracker.Notificationes
             string title,
             string message,
             NotificationType type,
-            string relatedEntityId = null)
+            string? relatedEntityId = null)
         {
             var prefs = await _preferenceRepository.GetListAsync(p => p.UserId == userId && p.Type == type);
             var inAppPref = prefs.FirstOrDefault(p => p.Channel == NotificationChannel.InApp);

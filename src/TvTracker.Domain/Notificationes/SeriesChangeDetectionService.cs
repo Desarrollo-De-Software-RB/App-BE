@@ -53,6 +53,7 @@ namespace TvTracker.Notificationes
             foreach (var localSerie in seriesToCheck)
             {
                 // 2. Fetch from OMDB
+                if (localSerie.IMDBID == null) continue;
                 var omdbSerie = await _omdbService.GetSerieDetailsAsync(localSerie.IMDBID);
                 if (omdbSerie == null) continue;
 
@@ -93,7 +94,8 @@ namespace TvTracker.Notificationes
             if (local.IMDBVotes != remote.IMDBVotes)
             {
                 // Simple string check for now, logic could be improved to parse int
-                if (IsSignificantVoteIncrease(local.IMDBVotes, remote.IMDBVotes))
+                if (local.IMDBVotes != null && remote.IMDBVotes != null && 
+                    IsSignificantVoteIncrease(local.IMDBVotes, remote.IMDBVotes))
                 {
                      string msg = $"{local.Title} is gaining popularity on IMDB.";
                      changes.Add((NotificationType.VotesChange, msg));

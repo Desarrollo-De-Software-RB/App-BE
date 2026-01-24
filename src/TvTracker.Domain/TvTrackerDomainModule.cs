@@ -8,7 +8,7 @@ using Volo.Abp.MultiTenancy;
 using Volo.Abp.PermissionManagement.Identity;
 using Volo.Abp.SettingManagement;
 using Volo.Abp.Settings; // Added
-using Volo.Abp.Emailing; // Added
+
 using Volo.Abp.BlobStoring.Database;
 using Volo.Abp.Caching;
 using Volo.Abp.OpenIddict;
