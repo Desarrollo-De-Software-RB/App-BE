@@ -29,5 +29,6 @@ namespace TvTracker.Series
         public string IMDBID { get; set; }
         public string Type { get; set; }
         public int TotalSeasons { get; set; }
+        public DateTime? LastOmdbCheck { get; set; }
     }
 }

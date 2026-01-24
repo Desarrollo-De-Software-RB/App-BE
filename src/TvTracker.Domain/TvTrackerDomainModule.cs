@@ -7,6 +7,8 @@ using Volo.Abp.Modularity;
 using Volo.Abp.MultiTenancy;
 using Volo.Abp.PermissionManagement.Identity;
 using Volo.Abp.SettingManagement;
+using Volo.Abp.Settings; // Added
+using Volo.Abp.Emailing; // Added
 using Volo.Abp.BlobStoring.Database;
 using Volo.Abp.Caching;
 using Volo.Abp.OpenIddict;
@@ -44,10 +46,7 @@ public class TvTrackerDomainModule : AbpModule
 {
     public override async Task OnApplicationInitializationAsync(ApplicationInitializationContext context)
     {
-        var notificationWorker = context.ServiceProvider.GetRequiredService<NotificationWorker>();
-
-        await notificationWorker.SendNotificationsOnSeriesChange();
-
+        await context.AddBackgroundWorkerAsync<NotificationWorker>();
     }
     public override void ConfigureServices(ServiceConfigurationContext context)
     {
@@ -76,11 +75,16 @@ public class TvTrackerDomainModule : AbpModule
             options.Languages.Add(new LanguageInfo("de-DE", "de-DE", "Deutsch"));
             options.Languages.Add(new LanguageInfo("es", "es", "Español"));
         });
+
+
+
         context.Services.AddTransient<INotificationService, NotificationService>();
 
 
+
+
 #if DEBUG
-        context.Services.Replace(ServiceDescriptor.Singleton<IEmailSender, NullEmailSender>());
+        context.Services.Replace(ServiceDescriptor.Transient<Volo.Abp.Security.Encryption.IStringEncryptionService, TvTracker.Security.PlainStringEncryptionService>());
 #endif
         context.Services.AddHttpClient();
     }

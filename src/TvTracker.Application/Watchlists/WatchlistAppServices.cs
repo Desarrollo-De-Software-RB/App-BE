@@ -9,6 +9,8 @@ using Volo.Abp.Application.Services;
 using Volo.Abp.Domain.Repositories;
 using Volo.Abp;
 
+using TvTracker.Notificationes;
+
 namespace TvTracker.Watchlists
 {
     [RemoteService(Name = "Watchlist")]
@@ -17,15 +19,18 @@ namespace TvTracker.Watchlists
         private readonly IRepository<WatchlistItem, Guid> _watchlistItemRepository;
         private readonly IRepository<TvTracker.Series.Serie, int> _serieRepository;
         private readonly ISeriesApiService _seriesApiService;
+        private readonly NotificationManager _notificationManager;
 
         public WatchlistAppServices(
             IRepository<WatchlistItem, Guid> watchlistItemRepository,
             IRepository<TvTracker.Series.Serie, int> serieRepository,
-            ISeriesApiService seriesApiService)
+            ISeriesApiService seriesApiService,
+            NotificationManager notificationManager)
         {
             _watchlistItemRepository = watchlistItemRepository;
             _serieRepository = serieRepository;
             _seriesApiService = seriesApiService;
+            _notificationManager = notificationManager;
         }
 
         public async Task<List<WatchlistItemDto>> GetListAsync()
@@ -96,6 +101,13 @@ namespace TvTracker.Watchlists
 
             await _watchlistItemRepository.InsertAsync(item);
 
+            await _notificationManager.CreateAsync(
+                userId.Value,
+                "Watchlist Update",
+                $"You added {serie.Title} to your watchlist.",
+                NotificationType.UserActivity,
+                serie.Id.ToString());
+
             return new WatchlistItemDto
             {
                 Id = item.Id,
@@ -123,6 +135,13 @@ namespace TvTracker.Watchlists
             if (item != null)
             {
                 await _watchlistItemRepository.DeleteAsync(item);
+
+                await _notificationManager.CreateAsync(
+                    userId.Value,
+                    "Watchlist Update",
+                    $"You removed {serie.Title} from your watchlist.",
+                    NotificationType.UserActivity,
+                    serie.Id.ToString());
             }
         }
 
@@ -144,6 +163,13 @@ namespace TvTracker.Watchlists
             {
                 item.Status = input.Status;
                 await _watchlistItemRepository.UpdateAsync(item);
+
+                await _notificationManager.CreateAsync(
+                    userId.Value,
+                    "Watchlist Update",
+                    $"You marked {serie.Title} as {input.Status}.",
+                    NotificationType.UserActivity,
+                    serie.Id.ToString());
             }
         }
     }

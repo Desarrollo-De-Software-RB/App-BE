@@ -8,6 +8,7 @@ using Volo.Abp.Data;
 using Volo.Abp.Domain.Repositories;
 using Volo.Abp.Identity;
 using TvTracker.Permissions;
+using IdentityUser = Volo.Abp.Identity.IdentityUser;
 
 namespace TvTracker.Users;
 

@@ -7,6 +7,7 @@ using Volo.Abp.Domain.Repositories;
 using Volo.Abp.Identity;
 using Volo.Abp.Data;
 using Microsoft.Extensions.Logging;
+using TvTracker.Notificationes;
 
 namespace TvTracker.Series
 {
@@ -15,15 +16,18 @@ namespace TvTracker.Series
         private readonly IRatingRepository _ratingRepository;
         private readonly IRepository<Serie, int> _serieRepository;
         private readonly IRepository<IdentityUser, Guid> _userRepository;
+        private readonly NotificationManager _notificationManager;
 
         public RatingAppService(
             IRatingRepository ratingRepository, 
             IRepository<Serie, int> serieRepository,
-            IRepository<IdentityUser, Guid> userRepository)
+            IRepository<IdentityUser, Guid> userRepository,
+            NotificationManager notificationManager)
         {
             _ratingRepository = ratingRepository;
             _serieRepository = serieRepository;
             _userRepository = userRepository;
+            _notificationManager = notificationManager;
         }
 
         public async Task<List<RatingDto>> GetSeriesRatingsAsync(int serieId)
@@ -38,10 +42,10 @@ namespace TvTracker.Series
                 Id = r.Id,
                 SerieId = r.SerieId,
                 UserId = r.UserId,
-                UserName = userDictionary.ContainsKey(r.UserId) ? userDictionary[r.UserId] : "Unknown",
+                UserName = userDictionary.ContainsKey(r.UserId) ? userDictionary[r.UserId] : "Deleted User",
                 Score = r.Score,
                 Comment = r.Comment,
-                ProfilePictureUrl = GetProfilePictureUrl(users.First(u => u.Id == r.UserId))
+                ProfilePictureUrl = userDictionary.ContainsKey(r.UserId) ? GetProfilePictureUrl(users.First(u => u.Id == r.UserId)) : null
             }).ToList();
         }
 
@@ -100,6 +104,13 @@ namespace TvTracker.Series
                 };
                 await _ratingRepository.InsertAsync(newRating);
             }
+
+            await _notificationManager.CreateAsync(
+                userId.Value,
+                "New Rating",
+                $"You rated {serie.Title} with {input.Score} stars.",
+                NotificationType.UserActivity,
+                serie.Id.ToString());
         }
     }
 }
