@@ -1,0 +1,94 @@
+<div class="container watchlist-container mt-4">
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <h2 class="section-title mb-0">Notifications</h2>
+        <div>
+            <button class="btn w-100 search-button" (click)="toggleSettings()">
+                    <i class="bi bi-gear-fill me-1"></i>
+                    Settings
+                </button>
+        </div>
+    </div>
+
+    <div *ngIf="showSettings" class="settings-panel mb-4">
+        <app-notification-settings (close)="toggleSettings()"></app-notification-settings>
+    </div>
+
+    <div class="card" *ngIf="!showSettings">
+        <div class="card-header">
+            <ul class="nav nav-tabs card-header-tabs">
+                <li class="nav-item">
+                    <a class="nav-link" [class.active]="filter === 'unread'" (click)="setFilter('unread')"
+                        href="javascript:void(0)">Unread</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" [class.active]="filter === 'read'" (click)="setFilter('read')"
+                        href="javascript:void(0)">Read</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" [class.active]="filter === 'all'" (click)="setFilter('all')"
+                        href="javascript:void(0)">All</a>
+                </li>
+            </ul>
+        </div>
+        <div class="card-body">
+            <!-- Buttons for Unread Tab -->
+            <div class="d-flex justify-content-end mb-3 gap-2" *ngIf="filter === 'unread' && notifications.length > 0">
+                <button class="btn btn-outline-secondary btn-sm" (click)="markAllAsRead()">
+                    <i class="bi bi-check-all"></i> Mark All as Read
+                </button>
+                <button class="btn btn-outline-danger btn-sm" (click)="deleteAllUnread()">
+                    <i class="bi bi-trash"></i> Delete All Unread
+                </button>
+            </div>
+
+            <!-- Buttons for Read Tab -->
+            <div class="d-flex justify-content-end mb-3" *ngIf="filter === 'read' && filteredNotifications.length > 0">
+                <button class="btn btn-outline-danger btn-sm" (click)="deleteAllRead()">
+                    <i class="bi bi-trash"></i> Delete All Read
+                </button>
+            </div>
+
+            <!-- Buttons for All Tab -->
+            <div class="d-flex justify-content-end mb-3" *ngIf="filter === 'all' && notifications.length > 0">
+                <button class="btn btn-outline-danger btn-sm" (click)="deleteAll()">
+                    <i class="bi bi-trash"></i> Delete All
+                </button>
+            </div>
+            <div *ngIf="loading" class="text-center p-3">
+                <div class="spinner-border text-primary" role="status">
+                    <span class="visually-hidden">Loading...</span>
+                </div>
+            </div>
+
+            <div *ngIf="!loading && filteredNotifications.length === 0" class="text-center p-3 text-muted">
+                No notifications found.
+            </div>
+
+            <div class="list-group list-group-flush" *ngIf="!loading && filteredNotifications.length > 0">
+                <div *ngFor="let item of filteredNotifications"
+                    class="list-group-item list-group-item-action d-flex align-items-start"
+                    [class.list-group-item-light]="!item.isRead" (click)="markAsRead(item)">
+                    <div class="me-3 mt-1">
+                        <i class="bi" [ngClass]="getIconForType(item.type)" style="font-size: 1.2rem;"></i>
+                    </div>
+                    <div class="flex-grow-1">
+                        <div class="d-flex w-100 justify-content-between">
+                            <h5 class="mb-1" [class.fw-bold]="!item.isRead">{{ item.title }}</h5>
+                            <small class="text-muted">{{ item.creationTime | date:'medium' }}</small>
+                        </div>
+                        <p class="mb-1">{{ item.message }}</p>
+                    </div>
+                    <div *ngIf="!item.isRead" class="ms-2">
+                        <span class="badge bg-primary rounded-pill">New</span>
+                    </div>
+                    <div class="ms-2">
+                        <button class="btn btn-sm btn-outline-danger" (click)="deleteNotification(item, $event)"
+                            title="Delete">
+                            <i class="bi bi-trash"></i>
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

@@ -1,0 +1,46 @@
+.section-title {
+    font-weight: 800;
+    font-size: 1.5rem;
+    background-image: linear-gradient(to left, #ff0073, #95a3e5, #ff0073);
+    background-clip: text;
+    color: transparent;
+    animation: 6s linear infinite textbg;
+    background-size: 200% auto;
+    text-transform: uppercase;
+}
+
+.settings-panel {
+    border: 1px solid #dee2e6;
+    border-radius: 0.25rem;
+    padding: 1rem;
+    background-color: #f8f9fa;
+}
+
+.list-group-item {
+    cursor: pointer;
+
+    &:hover {
+        background-color: #f1f1f1;
+    }
+}
+
+.fw-bold {
+    color: #000;
+}
+.search-button {
+    background-color: #3b82f6;
+    color: white;
+    font-weight: 600;
+    cursor: pointer;
+    background-image: linear-gradient(to right, #ff0073, #3b82f6);
+    background-size: 0% 120%;
+    background-repeat: no-repeat;
+    background-position: left;
+
+    transition: background-size 0.4s ease, transform 0.2s;
+
+    &:hover {
+        background-size: 120% 120%;
+        transform: scale(1.02);
+    }
+}
