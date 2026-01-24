@@ -1,0 +1,26 @@
+<div class="notification-wrapper" *ngIf="hasLoggedIn">
+  <div class="notification-icon" (click)="toggleDropdown()">
+    <i class="bi bi-bell"></i>
+    <span class="badge" *ngIf="unreadCount > 0">{{ unreadCount }}</span>
+  </div>
+
+  <div class="notification-dropdown" *ngIf="isDropdownOpen">
+    <div class="dropdown-header">
+      All Notifications
+    </div>
+    <div class="dropdown-content custom-scroll">
+      <div *ngIf="notifications.length === 0" class="no-notifications">
+        No notifications
+      </div>
+      <div *ngFor="let item of notifications.slice(0, 5)" class="notification-item" [class.unread]="!item.isRead"
+        (click)="markAsRead(item)">
+        <div class="notif-title">{{ item.title }}</div>
+        <div class="notif-message">{{ item.message }}</div>
+        <div class="notif-time">{{ item.creationTime | date:'short' }}</div>
+      </div>
+    </div>
+    <div class="dropdown-footer" (click)="viewAll()">
+      View All
+    </div>
+  </div>
+</div>

@@ -1,0 +1,116 @@
+.notification-wrapper {
+  position: relative;
+  cursor: pointer;
+  justify-content: center;
+}
+
+.notification-icon {
+  font-size: 1.2rem;
+  position: relative;
+  color: #000000;
+  transition: all 0.3s ease;
+  padding-inline: 5px;
+}
+
+.notification-icon:hover {
+  background-color: rgba(69, 137, 255, 0.15);
+  border-radius: 50%;
+  transform: scale(1.1);
+  color: #0d6efd;
+}
+
+.badge {
+  position: absolute;
+  top: -5px;
+  right: -5px;
+  background-color: #ff3b30;
+  color: white;
+  border-radius: 50%;
+  padding: 2px 5px;
+  font-size: 0.75rem;
+  min-width: 18px;
+  text-align: center;
+}
+
+.notification-dropdown {
+  position: absolute;
+  top: 100%;
+  right: 0;
+  width: 300px;
+  background-color: #1a1a1a;
+  border: 1px solid #333;
+  border-radius: 8px;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.3);
+  z-index: 1000;
+  margin-top: 10px;
+  overflow: hidden;
+}
+
+.dropdown-header {
+  padding: 10px 15px;
+  background-color: #2a2a2a;
+  font-weight: bold;
+  border-bottom: 1px solid #333;
+  color: #eee;
+}
+
+.dropdown-content {
+  max-height: 300px;
+  overflow-y: auto;
+}
+
+.notification-item {
+  padding: 10px 15px;
+  border-bottom: 1px solid #333;
+  cursor: pointer;
+  transition: background-color 0.2s;
+
+  &:hover {
+    background-color: #333;
+  }
+
+  &.unread {
+    background-color: rgba(69, 137, 255, 0.1);
+    border-left: 3px solid #4589ff;
+  }
+
+  .notif-title {
+    font-weight: bold;
+    color: #fff;
+    font-size: 0.9rem;
+  }
+
+  .notif-message {
+    color: #ccc;
+    font-size: 0.85rem;
+    margin-top: 2px;
+  }
+
+  .notif-time {
+    color: #888;
+    font-size: 0.75rem;
+    margin-top: 5px;
+    text-align: right;
+  }
+}
+
+.no-notifications {
+  padding: 20px;
+  text-align: center;
+  color: #888;
+}
+
+.dropdown-footer {
+  padding: 10px;
+  text-align: center;
+  background-color: #2a2a2a;
+  border-top: 1px solid #333;
+  color: #4589ff;
+  font-weight: bold;
+  cursor: pointer;
+
+  &:hover {
+    background-color: #333;
+    text-decoration: underline;
+  }
+}
