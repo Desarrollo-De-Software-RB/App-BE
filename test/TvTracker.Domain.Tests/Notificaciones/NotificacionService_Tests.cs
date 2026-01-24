@@ -1,79 +1,64 @@
 ﻿using Microsoft.Extensions.DependencyInjection;
 using NSubstitute;
 using System;
-using System.Collections.Generic;
 using System.Threading.Tasks;
 using TvTracker.Notificationes;
-using Volo.Abp.Domain.Repositories;
+using Volo.Abp.BackgroundWorkers;
 using Volo.Abp.Modularity;
 using Volo.Abp.Threading;
+using Volo.Abp.Uow;
 using Xunit;
 
 public class NotificationWorker_Tests
 {
-    [Fact]
-    public async Task Should_Notify_On_Series_Change()
+    // Subclass to expose protected DoWorkAsync for testing
+    public class TestableNotificationWorker : NotificationWorker
     {
-        var userId = Guid.NewGuid();
-
-        // Crear dos series de prueba
-        var trackedSeries1 = new TrackedSeries
+        public TestableNotificationWorker(
+            AbpAsyncTimer timer,
+            IServiceScopeFactory serviceScopeFactory,
+            IUnitOfWorkManager unitOfWorkManager)
+            : base(timer, serviceScopeFactory, unitOfWorkManager)
         {
-            SeriesId = Guid.NewGuid(),
-            Name = "Serie de prueba 1",
-            UserId = userId,
-            LastUpdated = DateTime.UtcNow
-        };
+        }
 
-        var trackedSeries2 = new TrackedSeries
+        public Task ExecuteDoWorkAsync(PeriodicBackgroundWorkerContext workerContext)
         {
-            SeriesId = Guid.NewGuid(),
-            Name = "Serie de prueba 2",
-            UserId = userId,
-            LastUpdated = DateTime.UtcNow
-        };
+            return DoWorkAsync(workerContext);
+        }
+    }
 
+    [Fact]
+    public async Task Should_Call_Detection_Service()
+    {
         // Arrange
         var seriesChangeDetectionService = Substitute.For<ISeriesChangeDetectionService>();
-        var notificationRepository = Substitute.For<IRepository<Notification, Guid>>();
-
-        // Simular el comportamiento de DetectChangesAsync
-        var expectedNotification1 = new Notification
-        {
-            Message = $"La serie {trackedSeries1.Name} ha tenido actualizaciones.",
-            Method = "PushNotification",
-            UserId = userId
-        };
-
-        var expectedNotification2 = new Notification
-        {
-            Message = $"La serie {trackedSeries2.Name} ha tenido actualizaciones.",
-            Method = "PushNotification",
-            UserId = userId
-        };
-
-        seriesChangeDetectionService.DetectChangesAsync().Returns(new List<Notification>
-    {
-        expectedNotification1,
-        expectedNotification2
-    });
-
-        // Instanciar el NotificationWorker
+        
         var timer = Substitute.For<AbpAsyncTimer>();
         var serviceScopeFactory = Substitute.For<IServiceScopeFactory>();
+        var unitOfWorkManager = Substitute.For<IUnitOfWorkManager>();
+        var unitOfWork = Substitute.For<IUnitOfWork>();
+        
+        // Setup UoW mock
+        unitOfWorkManager.Begin(Arg.Any<AbpUnitOfWorkOptions>(), Arg.Any<bool>()).Returns(unitOfWork);
 
-        var notificationWorker = new NotificationWorker(
+        // Setup ServiceProvider mock
+        var serviceProvider = Substitute.For<IServiceProvider>();
+        serviceProvider.GetService(typeof(ISeriesChangeDetectionService)).Returns(seriesChangeDetectionService);
+
+        var workerContext = new PeriodicBackgroundWorkerContext(serviceProvider);
+
+        var notificationWorker = new TestableNotificationWorker(
             timer,
             serviceScopeFactory,
-            seriesChangeDetectionService,
-            notificationRepository
+            unitOfWorkManager
         );
 
         // Act
-        await notificationWorker.SendNotificationsOnSeriesChange();
+        await notificationWorker.ExecuteDoWorkAsync(workerContext);
 
         // Assert
-        await notificationRepository.Received(1).InsertAsync(expectedNotification1, Arg.Any<bool>());
-        await notificationRepository.Received(1).InsertAsync(expectedNotification2, Arg.Any<bool>());
+        await seriesChangeDetectionService.Received(1).DetectChangesAsync();
+        await unitOfWork.Received(1).CompleteAsync();
     }
 }
