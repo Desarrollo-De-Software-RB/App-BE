@@ -1,5 +1,6 @@
 using AutoMapper;
 using TvTracker.Series;
+using TvTracker.Notificationes;
 
 namespace TvTracker;
 
@@ -13,5 +14,6 @@ public class TvTrackerApplicationAutoMapperProfile : Profile
 
         CreateMap<Serie, SerieDto>();
         CreateMap<CreateUpdateSerieDto, Serie>();
+        CreateMap<Notification, NotificationDto>();
     }
 }
