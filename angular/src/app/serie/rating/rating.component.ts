@@ -3,6 +3,7 @@ import { RatingService } from '../../proxy/series/rating.service';
 import { RatingDto, CreateUpdateRatingDto } from '../../proxy/series/models';
 import { ToasterService } from '@abp/ng.theme.shared';
 import { AuthService, ConfigStateService } from '@abp/ng.core';
+import { NotificationStateService } from '../../services/notification-state.service';
 
 @Component({
   selector: 'app-rating',
@@ -22,7 +23,8 @@ export class RatingComponent implements OnInit {
     private ratingService: RatingService,
     private toaster: ToasterService,
     private authService: AuthService,
-    private configState: ConfigStateService
+    private configState: ConfigStateService,
+    private notificationStateService: NotificationStateService
   ) { }
 
   ngOnInit(): void {
@@ -89,6 +91,7 @@ export class RatingComponent implements OnInit {
       this.isEditing = false;
       this.loadRatings();
       this.ratingUpdated.emit();
+      this.notificationStateService.triggerRefresh();
     });
   }
 
