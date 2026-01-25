@@ -26,7 +26,8 @@ export enum NotificationType {
   UserActivity = 7,
   System = 8,
   Trend = 9,
-  Reminder = 10
+  Reminder = 10,
+  UserRating = 11
 }
 
 export enum NotificationChannel {
