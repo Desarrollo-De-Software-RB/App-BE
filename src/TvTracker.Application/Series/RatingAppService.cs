@@ -109,7 +109,7 @@ namespace TvTracker.Series
                 userId.Value,
                 "New Rating",
                 $"You rated {serie.Title} with {input.Score} stars.",
-                NotificationType.UserActivity,
+                NotificationType.UserRating,
                 serie.Id.ToString());
         }
     }

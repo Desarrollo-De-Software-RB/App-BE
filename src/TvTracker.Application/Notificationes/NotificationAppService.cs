@@ -140,11 +140,19 @@ namespace TvTracker.Notificationes
             
             foreach (var item in input)
             {
-                var pref = existingPrefs.FirstOrDefault(p => p.Type == item.Type && p.Channel == item.Channel);
-                if (pref != null)
+                var matches = existingPrefs.Where(p => p.Type == item.Type && p.Channel == item.Channel).ToList();
+                if (matches.Any())
                 {
-                    pref.IsEnabled = item.IsEnabled;
-                    await _preferenceRepository.UpdateAsync(pref);
+                    // Update first, delete duplicates if any
+                    var first = matches.First();
+                    first.IsEnabled = item.IsEnabled;
+                    await _preferenceRepository.UpdateAsync(first, autoSave: true);
+
+                    if (matches.Count > 1)
+                    {
+                        var duplicates = matches.Skip(1);
+                        await _preferenceRepository.DeleteManyAsync(duplicates, autoSave: true);
+                    }
                 }
                 else
                 {
@@ -154,7 +162,7 @@ namespace TvTracker.Notificationes
                         item.Type,
                         item.Channel,
                         item.IsEnabled
-                    ));
+                    ), autoSave: true);
                 }
             }
         }

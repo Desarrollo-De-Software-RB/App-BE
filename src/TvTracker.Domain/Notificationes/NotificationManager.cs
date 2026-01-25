@@ -44,6 +44,8 @@ namespace TvTracker.Notificationes
             bool sendInApp = inAppPref?.IsEnabled ?? true; 
             bool sendEmail = emailPref?.IsEnabled ?? false;
 
+            _logger.LogInformation($"[NotificationManager] Creating notification for user {userId}, Type {type}. InApp: {sendInApp}, Email: {sendEmail}");
+
             if (sendInApp)
             {
                 var notification = new Notification
@@ -95,6 +97,7 @@ namespace TvTracker.Notificationes
             switch (type)
             {
                 case NotificationType.RatingChange:
+                case NotificationType.UserRating:
                     headerColor = "#f6c23e";
                     icon = "⭐";
                     break;

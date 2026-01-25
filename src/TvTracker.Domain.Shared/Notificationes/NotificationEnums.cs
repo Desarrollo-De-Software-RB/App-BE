@@ -12,7 +12,8 @@ namespace TvTracker.Notificationes
         UserActivity,
         System,
         Trend,
-        Reminder
+        Reminder,
+        UserRating
     }
 
     public enum NotificationChannel
