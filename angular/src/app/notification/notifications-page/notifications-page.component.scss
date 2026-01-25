@@ -1,3 +1,17 @@
+// Variables matching watchlist
+$card-bg: #0e0e14;
+$card-bg-hover: #252538;
+$text-primary: #ffffff;
+$text-secondary: #a0a0b0;
+$accent-color: #3b82f6;
+$border-color: rgba(255, 255, 255, 0.08);
+$card-radius: 16px;
+$transition-speed: 0.3s;
+
+.watchlist-container {
+    padding: 2rem 0;
+}
+
 .section-title {
     font-weight: 800;
     font-size: 1.5rem;
@@ -10,37 +24,318 @@
 }
 
 .settings-panel {
-    border: 1px solid #dee2e6;
-    border-radius: 0.25rem;
-    padding: 1rem;
-    background-color: #f8f9fa;
+    border: 1px solid $border-color;
+    border-radius: 0.5rem;
+    padding: 1.5rem;
+    background-color: $card-bg;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.2);
 }
 
-.list-group-item {
-    cursor: pointer;
+.btn-group .btn {
+    border-color: $border-color;
+    color: $text-secondary; // Default text color
 
     &:hover {
-        background-color: #f1f1f1;
+        color: white;
+    }
+
+    &.btn-outline-light {
+        color: $text-secondary;
+
+        &:hover {
+            background-color: #f8f9fa;
+            color: #000;
+        }
+    }
+
+    &.btn-light {
+        background-color: #f8f9fa;
+        color: #000;
+        border-color: #f8f9fa;
+    }
+
+    &.btn-outline-primary {
+        color: $accent-color;
+        border-color: $accent-color;
+
+        &:hover {
+            background-color: $accent-color;
+            color: white;
+        }
+    }
+
+    &.btn-primary {
+        background-color: $accent-color;
+        color: white;
+        border-color: $accent-color;
+    }
+
+    &.btn-outline-secondary {
+        color: #6c757d;
+        border-color: #6c757d;
+
+        &:hover {
+            background-color: #6c757d;
+            color: white;
+        }
+    }
+
+    &.btn-secondary {
+        background-color: #6c757d;
+        color: white;
+        border-color: #6c757d;
     }
 }
 
-.fw-bold {
-    color: #000;
-}
-.search-button {
-    background-color: #3b82f6;
-    color: white;
-    font-weight: 600;
-    cursor: pointer;
-    background-image: linear-gradient(to right, #ff0073, #3b82f6);
-    background-size: 0% 120%;
-    background-repeat: no-repeat;
-    background-position: left;
 
-    transition: background-size 0.4s ease, transform 0.2s;
+.watchlist-card {
+    background-color: $card-bg;
+    border: 1px solid $border-color;
+    border-radius: $card-radius;
+    padding: 1.5rem;
+    text-align: center;
+    transition: all $transition-speed ease;
+    position: relative;
+    overflow: hidden;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    cursor: pointer;
 
     &:hover {
-        background-size: 120% 120%;
-        transform: scale(1.02);
+        transform: translateY(-8px);
+        box-shadow: 0 15px 30px rgba(0, 0, 0, 0.4);
+        background-color: $card-bg-hover;
+        border-color: rgba($accent-color, 0.3);
+
+        .poster-wrapper {
+            transform: scale(1.05);
+            // border-color: $accent-color; // Optionally highlight border
+        }
+
+        .delete-btn {
+            background-color: #dc3545;
+            color: white;
+            border-color: #dc3545;
+        }
+    }
+
+    /* Unread indicator */
+    &.unread {
+        border: 1px solid $accent-color;
+        box-shadow: 0 0 10px rgba($accent-color, 0.1);
+
+        .unread-indicator {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            height: 24px;
+            background-color: rgba($accent-color, 0.2);
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            padding: 0 5px;
+            /* compact initially */
+            transition: all 0.3s ease;
+            cursor: pointer;
+            overflow: hidden;
+            width: 28px;
+            /* Slightly wider for icon */
+            /* Dot size */
+            justify-content: center;
+
+            .dot-icon {
+                display: block;
+                font-size: 1rem;
+                color: $accent-color;
+                flex-shrink: 0;
+            }
+
+            .text {
+                color: white;
+                font-size: 0.75rem;
+                white-space: nowrap;
+                opacity: 0;
+                margin-left: 0;
+                width: 0;
+                overflow: hidden;
+                transition: all 0.3s ease;
+            }
+        }
+
+        /* Trigger expansion when CARD is hovered */
+        &:hover .unread-indicator {
+            width: 120px;
+            background-color: $accent-color;
+            justify-content: flex-start;
+            padding-left: 8px;
+
+            .dot-icon {
+                color: white;
+            }
+
+            .text {
+                opacity: 1;
+                margin-left: 8px;
+                width: auto;
+            }
+        }
+    }
+
+    /* Checkmark Animation Overlay */
+    .checkmark-overlay {
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background-color: rgba($card-bg, 0.9);
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        z-index: 10;
+        animation: fadeIn 0.2s ease;
+
+        .check-icon {
+            font-size: 4rem;
+            color: #20c997;
+            /* Teal/Success */
+            animation: bounceIn 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+        }
+    }
+
+    .poster-wrapper {
+        width: 100px;
+        /* Smaller than poster */
+        height: 100px;
+        border-radius: 50%;
+        /* Circle for icon */
+        margin: 0 auto 1rem;
+        /* padding: 3px; */
+        /* border: 2px solid $border-color; */
+        transition: all $transition-speed ease;
+        background-color: rgba(255, 255, 255, 0.05);
+
+        i {
+            transition: transform 0.3s;
+        }
+    }
+
+    /* Shooting Star Effect */
+    .shooting-star {
+        position: relative;
+        /* text-shadow: -10px 10px 0px rgba(255,193,7,0.2), -20px 20px 0px rgba(255,193,7,0.1); Simple trail */
+
+        &::after {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            width: 40px;
+            height: 4px;
+            background: linear-gradient(90deg, rgba(255, 193, 7, 0.8), transparent);
+            transform: translate(-50%, -50%) rotate(-45deg) translateX(-25px);
+            border-radius: 50%;
+            z-index: -1;
+        }
+    }
+
+    .serie-title {
+        font-size: 1.1rem;
+        font-weight: 600;
+        color: white;
+        /* Ensure white text */
+        width: 100%;
+    }
+
+    .message-clamp {
+        display: -webkit-box;
+        -webkit-line-clamp: 3;
+        line-clamp: 3;
+        -webkit-box-orient: vertical;
+        overflow: hidden;
+        margin-bottom: 1rem;
+        flex-grow: 1;
+        color: white !important;
+        /* Force white text over muted */
+    }
+
+    .card-actions {
+        width: 100%;
+        margin-top: auto;
     }
 }
+
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+    }
+
+    to {
+        opacity: 1;
+    }
+}
+
+@keyframes bounceIn {
+    0% {
+        opacity: 0;
+        transform: scale(0);
+    }
+
+    50% {
+        opacity: 1;
+        transform: scale(1.2);
+    }
+
+    100% {
+        transform: scale(1);
+    }
+}
+
+/* Dynamic Backgrounds for Icon Wrapper based on type (optional subtle tint) */
+.type-bg-0 {
+    background-color: rgba(255, 193, 7, 0.1);
+
+    i {
+        color: #ffc107;
+    }
+}
+
+// Rating
+.type-bg-1 {
+    background-color: rgba(13, 202, 240, 0.1);
+
+    i {
+        color: #0dcaf0;
+    }
+}
+
+// Votes
+.type-bg-2 {
+    background-color: rgba(111, 66, 193, 0.1);
+
+    i {
+        color: #6f42c1;
+    }
+}
+
+// Poster
+.type-bg-3 {
+    background-color: rgba(214, 51, 132, 0.1);
+
+    i {
+        color: #d63384;
+    }
+}
+
+// Plot
+.type-bg-7 {
+    background-color: rgba(13, 110, 253, 0.1);
+
+    i {
+        color: #0d6efd;
+    }
+}
+
+// UserActivity

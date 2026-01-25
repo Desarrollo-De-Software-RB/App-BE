@@ -61,6 +61,7 @@ export class NotificationSettingsComponent implements OnInit {
     getTypeLabel(type: NotificationType): string {
         switch (type) {
             case NotificationType.RatingChange: return 'Rating Updates';
+            case NotificationType.UserRating: return 'My Ratings';
             case NotificationType.UserActivity: return 'My Watchlist Actions';
             case NotificationType.PosterChange: return 'New Art/Poster';
             case NotificationType.StatusChange: return 'Status Updates (Renewed/Ended)';

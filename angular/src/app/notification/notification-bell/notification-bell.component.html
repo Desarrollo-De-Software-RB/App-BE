@@ -5,22 +5,33 @@
   </div>
 
   <div class="notification-dropdown" *ngIf="isDropdownOpen">
-    <div class="dropdown-header">
-      All Notifications
+    <div class="dropdown-header d-flex justify-content-between align-items-center">
+      <span class="header-title">Notifications</span>
+      <div class="d-flex align-items-center gap-3">
+        <i class="bi bi-arrows-fullscreen action-icon expand-icon" title="View all" (click)="viewAll()"></i>
+      </div>
     </div>
     <div class="dropdown-content custom-scroll">
-      <div *ngIf="notifications.length === 0" class="no-notifications">
-        No notifications
+      <div *ngIf="unreadNotifications.length === 0" class="no-notifications">
+        <i class="bi bi-check2-circle" style="margin-right: 5px;"></i> You're all caught up!
       </div>
-      <div *ngFor="let item of notifications.slice(0, 5)" class="notification-item" [class.unread]="!item.isRead"
-        (click)="markAsRead(item)">
-        <div class="notif-title">{{ item.title }}</div>
-        <div class="notif-message">{{ item.message }}</div>
-        <div class="notif-time">{{ item.creationTime | date:'short' }}</div>
+      <div *ngFor="let item of unreadNotifications.slice(0, 5)" class="notification-item unread"
+        (click)="markAsRead(item, $event)" style="position: relative;">
+
+        <!-- Checkmark Overlay for Animation -->
+        <div class="checkmark-overlay" *ngIf="item.isAnimating">
+          <i class="bi bi-check-lg check-icon"></i>
+        </div>
+
+        <div [style.opacity]="item.isAnimating ? '0' : '1'">
+          <div class="d-flex align-items-center gap-2 mb-1">
+            <i class="bi" [ngClass]="getIconForType(item.type)" style="font-size: 0.9rem;"></i>
+            <div class="notif-title mb-0">{{ item.title }}</div>
+          </div>
+          <div class="notif-message">{{ item.message }}</div>
+          <div class="notif-time">{{ item.creationTime | date:'short' }}</div>
+        </div>
       </div>
-    </div>
-    <div class="dropdown-footer" (click)="viewAll()">
-      View All
     </div>
   </div>
 </div>
