@@ -20,14 +20,13 @@ export enum NotificationType {
   VotesChange = 1,
   PosterChange = 2,
   PlotChange = 3,
-  AwardsChange = 4,
-  RuntimeChange = 5,
-  StatusChange = 6,
-  UserActivity = 7,
-  System = 8,
-  Trend = 9,
-  Reminder = 10,
-  UserRating = 11
+  RuntimeChange = 4,
+  StatusChange = 5,
+  UserActivity = 6,
+  System = 7,
+  Trend = 8,
+  Reminder = 9,
+  UserRating = 10
 }
 
 export enum NotificationChannel {

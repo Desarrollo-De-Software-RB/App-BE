@@ -1,6 +1,7 @@
 <div class="notification-wrapper" *ngIf="hasLoggedIn">
   <div class="notification-icon" (click)="toggleDropdown()">
-    <i class="bi bi-bell"></i>
+    <i class="bi bi-bell" *ngIf="unreadCount === 0"></i>
+    <i class="bi bi-bell-fill" *ngIf="unreadCount > 0"></i>
     <span class="badge" *ngIf="unreadCount > 0">{{ unreadCount }}</span>
   </div>
 

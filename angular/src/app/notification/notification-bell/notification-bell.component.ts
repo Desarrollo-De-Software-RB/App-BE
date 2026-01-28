@@ -134,7 +134,6 @@ export class NotificationBellComponent implements OnInit, OnDestroy {
             case NotificationType.StatusChange: return 'bi-info-circle-fill text-success';
             case NotificationType.System: return 'bi-gear-fill text-secondary';
             case NotificationType.PlotChange: return 'bi-card-text text-danger';
-            case NotificationType.AwardsChange: return 'bi-trophy-fill text-warning';
             case NotificationType.RuntimeChange: return 'bi-clock-fill text-success';
             case NotificationType.UserActivity: return 'bi-list-ul text-primary';
             case NotificationType.Trend: return 'bi-activity text-danger';
