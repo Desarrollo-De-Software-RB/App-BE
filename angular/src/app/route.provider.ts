@@ -41,9 +41,10 @@ function configureRoutes(routes: RoutesService, authService: AuthService) {
       {
         path: '/notifications',
         name: 'Notifications',
-        iconClass: 'bi bi-bell',
+        iconClass: 'bi bi-bell-fill',
         order: 5,
         layout: eLayoutType.application,
+        invisible: true,
       },
     ]);
   };

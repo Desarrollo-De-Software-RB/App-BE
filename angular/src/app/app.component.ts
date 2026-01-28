@@ -62,6 +62,12 @@ export class AppComponent implements OnInit {
           invisible: !isAuthenticated
         });
       }
+      const notificationsRoute = this.routes.find(r => r.name === 'Notifications');
+      if (notificationsRoute) {
+        this.routes.patch('Notifications', {
+          invisible: !isAuthenticated
+        });
+      }
     });
 
     // Force hide default avatar (temporary fix to identify the element)
