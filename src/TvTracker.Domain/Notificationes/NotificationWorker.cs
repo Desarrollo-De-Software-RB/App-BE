@@ -29,10 +29,13 @@ namespace TvTracker.Notificationes
             {
                 // Resolve service from the scope created for this run
                 var seriesDetectionService = workerContext.ServiceProvider.GetRequiredService<ISeriesChangeDetectionService>();
+                var userEngagementService = workerContext.ServiceProvider.GetRequiredService<UserEngagementService>();
              
                 // Run detection
                 await seriesDetectionService.DetectChangesAsync();
                 
+                // Run analysis for user engagement (Reminders, Trends)
+                await userEngagementService.AnalyzeUserEngagementAsync();
                 await uow.CompleteAsync();
             }
         }

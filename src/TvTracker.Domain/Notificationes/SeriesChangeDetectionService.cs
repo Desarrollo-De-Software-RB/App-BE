@@ -37,15 +37,13 @@ namespace TvTracker.Notificationes
         public async Task<List<Notification>> DetectChangesAsync()
         {
             // 1. Get series not updated in the last 24 hours (or never updated)
-            // Ideally this should be paginated or limited to prevent timeout, let's limit to 20 for now per run
-            // 1. Get series not updated in the last 12 hours (or never updated)
-            var cutoffDate = DateTime.UtcNow.AddHours(-12);
+            var cutoffDate = DateTime.UtcNow.AddHours(-24);
             var query = await _serieRepository.GetQueryableAsync();
             
             // Execute query on DB side
             var seriesToCheck = query
                                 .Where(s => s.LastOmdbCheck == null || s.LastOmdbCheck < cutoffDate)
-                                .Take(20)
+                                .Take(200)
                                 .ToList();
 
             var newNotifications = new List<Notification>();

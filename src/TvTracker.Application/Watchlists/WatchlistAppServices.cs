@@ -104,7 +104,7 @@ namespace TvTracker.Watchlists
             await _notificationManager.CreateAsync(
                 userId.Value,
                 "Watchlist Update",
-                $"You added {serie.Title} to your watchlist.",
+                $"You added {serie.Title} to your watchlist as {input.Status}.",
                 NotificationType.UserActivity,
                 serie.Id.ToString());
 
@@ -164,10 +164,21 @@ namespace TvTracker.Watchlists
                 item.Status = input.Status;
                 await _watchlistItemRepository.UpdateAsync(item);
 
+                string message = $"You marked {serie.Title} as {input.Status}.";
+                
+                if (input.Status == WatchlistStatus.Completed)
+                    message = $"¡Congratulations! You completed {serie.Title}.";
+                else if (input.Status == WatchlistStatus.Watching)
+                    message = $"You started following {serie.Title}.";
+                else if (input.Status == WatchlistStatus.Dropped)
+                    message = $"You dropped {serie.Title}.";
+                else if (input.Status == WatchlistStatus.Pending)
+                    message = $"You marked {serie.Title} as pending.";
+
                 await _notificationManager.CreateAsync(
                     userId.Value,
                     "Watchlist Update",
-                    $"You marked {serie.Title} as {input.Status}.",
+                    message,
                     NotificationType.UserActivity,
                     serie.Id.ToString());
             }
