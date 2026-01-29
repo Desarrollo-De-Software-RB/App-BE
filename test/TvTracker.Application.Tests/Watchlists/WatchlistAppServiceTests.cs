@@ -10,6 +10,7 @@ using Moq;
 using Shouldly;
 using TvTracker.Series;
 using TvTracker.Watchlists;
+using TvTracker.Notificationes;
 using Volo.Abp.Application.Dtos;
 using Volo.Abp;
 using Volo.Abp.DependencyInjection;
@@ -28,6 +29,7 @@ public class WatchlistAppServiceTests
     private readonly Mock<ISeriesApiService> _seriesApiServiceMock;
     private readonly Mock<IObjectMapper> _objectMapperMock;
     private readonly Mock<ICurrentUser> _currentUserMock;
+    private readonly Mock<IRepository<Notification, Guid>> _notificationRepositoryMock;
     private readonly WatchlistAppServices _watchlistAppService;
 
     private List<WatchlistItem> _watchlistDb;
@@ -38,6 +40,7 @@ public class WatchlistAppServiceTests
         _watchlistRepositoryMock = new Mock<IRepository<WatchlistItem, Guid>>();
         _serieRepositoryMock = new Mock<IRepository<Serie, int>>();
         _seriesApiServiceMock = new Mock<ISeriesApiService>();
+        _notificationRepositoryMock = new Mock<IRepository<Notification, Guid>>();
         _objectMapperMock = new Mock<IObjectMapper>();
         _currentUserMock = new Mock<ICurrentUser>();
 
@@ -59,6 +62,10 @@ public class WatchlistAppServiceTests
                 _watchlistDb.Add(w);
             })
             .ReturnsAsync((WatchlistItem w, bool b, CancellationToken c) => w);
+            
+        // Mock Notification Insert
+        _notificationRepositoryMock.Setup(x => x.InsertAsync(It.IsAny<Notification>(), It.IsAny<bool>(), It.IsAny<CancellationToken>()))
+            .ReturnsAsync((Notification n, bool b, CancellationToken c) => n);
 
         _serieRepositoryMock.Setup(x => x.InsertAsync(It.IsAny<Serie>(), It.IsAny<bool>(), It.IsAny<CancellationToken>()))
             .Callback<Serie, bool, CancellationToken>((s, b, c) => _serieDb.Add(s))
@@ -85,11 +92,27 @@ public class WatchlistAppServiceTests
          _serieRepositoryMock.Setup(x => x.GetAsync(It.IsAny<int>(), It.IsAny<bool>(), It.IsAny<CancellationToken>()))
             .ReturnsAsync((int id, bool b, CancellationToken c) => _serieDb.FirstOrDefault(s => s.Id == id));
 
+        // Create mocks for NotificationManager dependencies
+        var preferenceRepositoryMock = new Mock<IRepository<NotificationPreference, Guid>>();
+        preferenceRepositoryMock.Setup(x => x.GetListAsync(It.IsAny<Expression<Func<NotificationPreference, bool>>>(), It.IsAny<bool>(), It.IsAny<CancellationToken>()))
+            .ReturnsAsync(new List<NotificationPreference>());
+        var emailSenderMock = new Mock<Volo.Abp.Emailing.IEmailSender>();
+        var notificationLoggerMock = new Mock<Microsoft.Extensions.Logging.ILogger<NotificationManager>>();
+        var userRepositoryMock = new Mock<Volo.Abp.Identity.IIdentityUserRepository>();
+
+        var notificationManager = new NotificationManager(
+            _notificationRepositoryMock.Object, 
+            preferenceRepositoryMock.Object, 
+            emailSenderMock.Object, 
+            userRepositoryMock.Object, 
+            notificationLoggerMock.Object
+        );
 
         _watchlistAppService = new WatchlistAppServices(
             _watchlistRepositoryMock.Object,
             _serieRepositoryMock.Object,
-            _seriesApiServiceMock.Object
+            _seriesApiServiceMock.Object,
+            notificationManager
         );
         
         _watchlistAppService.LazyServiceProvider = new FakeLazyServiceProvider(_objectMapperMock.Object, _currentUserMock.Object);
@@ -314,9 +337,9 @@ public class WatchlistAppServiceTests
         }
 
         public object? GetKeyedService(Type serviceType, object? serviceKey) => null;
-        public object? GetRequiredKeyedService(Type serviceType, object? serviceKey) => null;
+        public object GetRequiredKeyedService(Type serviceType, object? serviceKey) => null!;
 
-        public object? GetService(Type serviceType, Func<IServiceProvider, object> factory)
+        public object GetService(Type serviceType, Func<IServiceProvider, object> factory)
         {
              if (serviceType == typeof(IObjectMapper)) return _objectMapper;
              if (serviceType == typeof(ICurrentUser)) return _currentUser;

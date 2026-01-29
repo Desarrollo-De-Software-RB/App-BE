@@ -38,6 +38,22 @@ function configureRoutes(routes: RoutesService, authService: AuthService) {
         layout: eLayoutType.application,
         invisible: true,
       },
+      {
+        path: '/notifications',
+        name: 'Notifications',
+        iconClass: 'bi bi-bell-fill',
+        order: 5,
+        layout: eLayoutType.application,
+        invisible: true,
+      },
+      {
+        path: '/monitoring',
+        name: 'Monitoring',
+        iconClass: 'fas fa-chart-line',
+        order: 6,
+        layout: eLayoutType.application,
+        requiredPolicy: 'TvTracker.AdminOptions',
+      },
     ]);
   };
 }

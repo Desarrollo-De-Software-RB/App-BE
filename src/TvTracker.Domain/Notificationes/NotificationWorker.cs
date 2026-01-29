@@ -5,34 +5,38 @@ using Volo.Abp.BackgroundWorkers;
 using Volo.Abp.Domain.Repositories;
 using Volo.Abp.Threading;
 
+using Volo.Abp.Uow; // Added using
+
 namespace TvTracker.Notificationes
 {
     public class NotificationWorker : AsyncPeriodicBackgroundWorkerBase
     {
-        private readonly ISeriesChangeDetectionService _seriesChangeDetectionService;
-        private readonly IRepository<Notification, Guid> _notificationRepository;
+        private readonly IUnitOfWorkManager _unitOfWorkManager;
 
-        public NotificationWorker(AbpAsyncTimer timer, IServiceScopeFactory serviceScopeFactory, ISeriesChangeDetectionService seriesChangeDetectionService, IRepository<Notification, Guid> notificationRepository)
+        public NotificationWorker(
+            AbpAsyncTimer timer, 
+            IServiceScopeFactory serviceScopeFactory,
+            IUnitOfWorkManager unitOfWorkManager)
             : base(timer, serviceScopeFactory)
         {
-            timer.Period = 3600000; // 1 hora en milisegundos
-            _seriesChangeDetectionService = seriesChangeDetectionService;
-            _notificationRepository = notificationRepository;
+            timer.Period = 3600000; // 1 hour (Standard interval)
+            _unitOfWorkManager = unitOfWorkManager;
         }
 
-        // Método para ejecutarse periódicamente
         protected override async Task DoWorkAsync(PeriodicBackgroundWorkerContext workerContext)
         {
-            await SendNotificationsOnSeriesChange();
-        }
-
-        // Lógica para enviar notificaciones cuando detecta cambios en las series
-        public async Task SendNotificationsOnSeriesChange()
-        {
-            var notifications = await _seriesChangeDetectionService.DetectChangesAsync();
-            foreach (var notification in notifications)
+            using (var uow = _unitOfWorkManager.Begin(new AbpUnitOfWorkOptions(), true))
             {
-                await _notificationRepository.InsertAsync(notification);
+                // Resolve service from the scope created for this run
+                var seriesDetectionService = workerContext.ServiceProvider.GetRequiredService<ISeriesChangeDetectionService>();
+                var userEngagementService = workerContext.ServiceProvider.GetRequiredService<IUserEngagementService>();
+             
+                // Run detection
+                await seriesDetectionService.DetectChangesAsync();
+                
+                // Run analysis for user engagement (Reminders, Trends)
+                await userEngagementService.AnalyzeUserEngagementAsync();
+                await uow.CompleteAsync();
             }
         }
     }

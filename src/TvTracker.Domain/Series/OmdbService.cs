@@ -7,6 +7,7 @@ using System.Linq;
 using System.Net.Http;
 using System.Threading.Tasks;
 using Volo.Abp.DependencyInjection;
+using TvTracker.Monitoring;
 
 namespace TvTracker.Series
 {
@@ -14,11 +15,13 @@ namespace TvTracker.Series
     {
         private readonly IHttpClientFactory _httpClientFactory;
         private readonly IConfiguration _configuration;
+        private readonly IApiMonitoringService _monitoringService;
 
-        public OmdbService(IHttpClientFactory httpClientFactory, IConfiguration configuration)
+        public OmdbService(IHttpClientFactory httpClientFactory, IConfiguration configuration, IApiMonitoringService monitoringService)
         {
             _httpClientFactory = httpClientFactory;
             _configuration = configuration;
+            _monitoringService = monitoringService;
         }
 
         public async Task<ICollection<Serie>> SearchByTitleAsync(string title, string? type = null)
@@ -33,6 +36,7 @@ namespace TvTracker.Series
             {
                 string encodedTitle = Uri.EscapeDataString(title);
                 string searchUrl = $"{baseUrl}?s={encodedTitle}&type={searchType}&apikey={apiKey}";
+                _monitoringService.RecordExternalRequest("OMDB");
                 var response = await client.GetAsync(searchUrl);
                 if (response.IsSuccessStatusCode)
                 {
@@ -72,19 +76,21 @@ namespace TvTracker.Series
             }
         }
 
-        public async Task<Serie> GetSerieDetailsAsync(string imdbId)
+        public async Task<Serie?> GetSerieDetailsAsync(string imdbId)
         {
             var apiKey = _configuration["Omdb:ApiKey"];
             var baseUrl = "https://www.omdbapi.com/";
 
             using var client = _httpClientFactory.CreateClient();
             string detailUrl = $"{baseUrl}?i={imdbId}&apikey={apiKey}";
+            _monitoringService.RecordExternalRequest("OMDB");
             var detailResponse = await client.GetAsync(detailUrl);
 
             if (detailResponse.IsSuccessStatusCode)
             {
                 string detailJson = await detailResponse.Content.ReadAsStringAsync();
                 var fullDetail = JsonConvert.DeserializeObject<SerieOmdb>(detailJson);
+                if (fullDetail == null) return null;
 
                 float.TryParse(fullDetail.IMDBRating, NumberStyles.Any, CultureInfo.InvariantCulture, out float rating);
                 int.TryParse(fullDetail.TotalSeasons, out int totalSeasons);
@@ -120,31 +126,31 @@ namespace TvTracker.Series
         private class SearchResponse
         {
             [JsonProperty("Search")]
-            public List<SerieOmdb> Search { get; set; }
+            public List<SerieOmdb>? Search { get; set; }
         }
 
         private class SerieOmdb
         {
-            public string Title { get; set; }
-            public string Year { get; set; }
-            public string IMDBID { get; set; }
-            public string Type { get; set; }
-            public string Poster { get; set; }
-            public string Genre { get; set; }
-            public string Plot { get; set; }
-            public string Actors { get; set; }
-            public string Director { get; set; }
-            public string Writer { get; set; }
-            public string Language { get; set; }
-            public string Country { get; set; }
-            public string Awards { get; set; }
-            public string Metascore { get; set; }
-            public string IMDBRating { get; set; }
-            public string IMDBVotes { get; set; }
-            public string Released { get; set; }
-            public string Runtime { get; set; }
-            public string Rated { get; set; }
-            public string TotalSeasons { get; set; }
+            public string? Title { get; set; }
+            public string? Year { get; set; }
+            public string? IMDBID { get; set; }
+            public string? Type { get; set; }
+            public string? Poster { get; set; }
+            public string? Genre { get; set; }
+            public string? Plot { get; set; }
+            public string? Actors { get; set; }
+            public string? Director { get; set; }
+            public string? Writer { get; set; }
+            public string? Language { get; set; }
+            public string? Country { get; set; }
+            public string? Awards { get; set; }
+            public string? Metascore { get; set; }
+            public string? IMDBRating { get; set; }
+            public string? IMDBVotes { get; set; }
+            public string? Released { get; set; }
+            public string? Runtime { get; set; }
+            public string? Rated { get; set; }
+            public string? TotalSeasons { get; set; }
         }
     }
 }

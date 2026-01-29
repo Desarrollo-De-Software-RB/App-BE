@@ -9,6 +9,7 @@ import { RatingService } from '../../proxy/series/rating.service';
 import { SerieDto, RatingDto, CreateUpdateRatingDto } from '../../proxy/series/models';
 import { ToasterService } from '@abp/ng.theme.shared';
 import { ConfigStateService } from '@abp/ng.core';
+import { NotificationStateService } from '../../services/notification-state.service';
 
 @Component({
     selector: 'app-serie-detail',
@@ -31,7 +32,8 @@ export class SerieDetailComponent implements OnInit {
         private modalService: NgbModal,
         private ratingService: RatingService,
         private toaster: ToasterService,
-        private configState: ConfigStateService
+        private configState: ConfigStateService,
+        private notificationStateService: NotificationStateService
     ) { }
 
     ngOnInit(): void {
@@ -96,6 +98,7 @@ export class SerieDetailComponent implements OnInit {
                 this.toaster.success('Rating submitted successfully');
                 this.loadRatings(this.serie!.id);
                 this.isSubmitting = false;
+                this.notificationStateService.triggerRefresh();
             },
             error: (err) => {
                 this.toaster.error('Error submitting rating');
@@ -141,11 +144,13 @@ export class SerieDetailComponent implements OnInit {
             // Update
             this.watchlistService.updateStatus(input).subscribe(() => {
                 this.loadWatchlistStatus(this.serie!.imdbid || '');
+                this.notificationStateService.triggerRefresh();
             });
         } else {
             // Add
             this.watchlistService.addItem(input).subscribe(() => {
                 this.loadWatchlistStatus(this.serie!.imdbid || '');
+                this.notificationStateService.triggerRefresh();
             });
         }
     }

@@ -7,6 +7,7 @@ using Volo.Abp.Domain.Repositories;
 using Volo.Abp.Identity;
 using Volo.Abp.Data;
 using Microsoft.Extensions.Logging;
+using TvTracker.Notificationes;
 
 namespace TvTracker.Series
 {
@@ -14,16 +15,22 @@ namespace TvTracker.Series
     {
         private readonly IRatingRepository _ratingRepository;
         private readonly IRepository<Serie, int> _serieRepository;
+        private readonly IRepository<TvTracker.Watchlists.WatchlistItem, Guid> _watchlistRepository;
         private readonly IRepository<IdentityUser, Guid> _userRepository;
+        private readonly NotificationManager _notificationManager;
 
         public RatingAppService(
             IRatingRepository ratingRepository, 
             IRepository<Serie, int> serieRepository,
-            IRepository<IdentityUser, Guid> userRepository)
+            IRepository<TvTracker.Watchlists.WatchlistItem, Guid> watchlistRepository,
+            IRepository<IdentityUser, Guid> userRepository,
+            NotificationManager notificationManager)
         {
             _ratingRepository = ratingRepository;
             _serieRepository = serieRepository;
+            _watchlistRepository = watchlistRepository;
             _userRepository = userRepository;
+            _notificationManager = notificationManager;
         }
 
         public async Task<List<RatingDto>> GetSeriesRatingsAsync(int serieId)
@@ -38,10 +45,10 @@ namespace TvTracker.Series
                 Id = r.Id,
                 SerieId = r.SerieId,
                 UserId = r.UserId,
-                UserName = userDictionary.ContainsKey(r.UserId) ? userDictionary[r.UserId] : "Unknown",
+                UserName = userDictionary.ContainsKey(r.UserId) ? userDictionary[r.UserId] : "Deleted User",
                 Score = r.Score,
                 Comment = r.Comment,
-                ProfilePictureUrl = GetProfilePictureUrl(users.First(u => u.Id == r.UserId))
+                ProfilePictureUrl = userDictionary.ContainsKey(r.UserId) ? GetProfilePictureUrl(users.First(u => u.Id == r.UserId)) : null
             }).ToList();
         }
 
@@ -82,6 +89,7 @@ namespace TvTracker.Series
                 throw new ArgumentException("Serie not found.");
             }
 
+            var isNewRating = false;
             var existingRating = await _ratingRepository.GetRatingByUserAndSerieAsync(userId.Value, input.SerieId);
             if (existingRating != null)
             {
@@ -91,6 +99,7 @@ namespace TvTracker.Series
             }
             else
             {
+                isNewRating = true;
                 var newRating = new Rating
                 {
                     SerieId = input.SerieId,
@@ -99,6 +108,45 @@ namespace TvTracker.Series
                     Comment = input.Comment
                 };
                 await _ratingRepository.InsertAsync(newRating);
+            }
+
+            await _notificationManager.CreateAsync(
+                userId.Value,
+                "New Rating",
+                $"You rated {serie.Title} with {input.Score} stars.",
+                NotificationType.UserRating,
+                serie.Id.ToString());
+            // Trend Check
+            await CheckAndNotifyTrendAsync(serie.Id, serie.Title, isNewRating);
+        }
+
+        private async Task CheckAndNotifyTrendAsync(int serieId, string serieTitle, bool isNewRating)
+        {
+            if (!isNewRating)
+            {
+                return;
+            }
+
+            var count = await _ratingRepository.CountAsync(r => r.SerieId == serieId);
+            var adjustedCount = count + 1;
+            
+            // Send notification for every 10 ratings
+            if (adjustedCount > 0 && adjustedCount % 10 == 0) 
+            {
+                 var query = await _watchlistRepository.GetQueryableAsync();
+                 // Notify anyone watching this show that it's getting hits
+                 var usersWatching = query.Where(w => w.SerieId == serieId).Select(w => w.UserId).Distinct().ToList();
+
+                 foreach (var uid in usersWatching)
+                 {
+                     // Notify all users who have it in watchlist, including the rater
+                     await _notificationManager.CreateAsync(
+                        uid,
+                        "Trending Series",
+                        $"{serieTitle} is trending! It has reached {adjustedCount} ratings.",
+                        NotificationType.Trend,
+                        serieId.ToString());
+                 }
             }
         }
     }

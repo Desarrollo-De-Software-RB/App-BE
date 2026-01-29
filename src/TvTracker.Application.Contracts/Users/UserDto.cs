@@ -5,6 +5,6 @@ namespace TvTracker.Users;
 
 public class UserDto : EntityDto<Guid>
 {
-    public string UserName { get; set; }
+    public string? UserName { get; set; }
     public string? ProfilePicture { get; set; }
 }

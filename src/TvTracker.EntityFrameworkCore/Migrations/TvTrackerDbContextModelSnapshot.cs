@@ -29,43 +29,65 @@ namespace TvTracker.Migrations
                     b.Property<Guid>("Id")
                         .HasColumnType("uniqueidentifier");
 
+                    b.Property<DateTime>("CreationTime")
+                        .HasColumnType("datetime2")
+                        .HasColumnName("CreationTime");
+
+                    b.Property<Guid?>("CreatorId")
+                        .HasColumnType("uniqueidentifier")
+                        .HasColumnName("CreatorId");
+
+                    b.Property<bool>("IsRead")
+                        .HasColumnType("bit");
+
                     b.Property<string>("Message")
                         .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                        .HasMaxLength(512)
+                        .HasColumnType("nvarchar(512)");
 
-                    b.Property<string>("Method")
+                    b.Property<string>("RelatedEntityId")
+                        .HasMaxLength(64)
+                        .HasColumnType("nvarchar(64)");
+
+                    b.Property<string>("Title")
                         .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                        .HasMaxLength(128)
+                        .HasColumnType("nvarchar(128)");
+
+                    b.Property<int>("Type")
+                        .HasColumnType("int");
 
                     b.Property<Guid>("UserId")
                         .HasColumnType("uniqueidentifier");
 
                     b.HasKey("Id");
 
-                    b.ToTable("Notifications");
+                    b.ToTable("AppNotifications", (string)null);
                 });
 
-            modelBuilder.Entity("TvTracker.Notificationes.TrackedSeries", b =>
+            modelBuilder.Entity("TvTracker.Notificationes.NotificationPreference", b =>
                 {
                     b.Property<Guid>("Id")
                         .HasColumnType("uniqueidentifier");
 
-                    b.Property<DateTime>("LastUpdated")
-                        .HasColumnType("datetime2");
+                    b.Property<int>("Channel")
+                        .HasColumnType("int");
 
-                    b.Property<string>("Name")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                    b.Property<bool>("IsEnabled")
+                        .HasColumnType("bit");
 
-                    b.Property<Guid>("SeriesId")
-                        .HasColumnType("uniqueidentifier");
+                    b.Property<int>("Type")
+                        .HasColumnType("int");
 
                     b.Property<Guid>("UserId")
                         .HasColumnType("uniqueidentifier");
 
                     b.HasKey("Id");
 
-                    b.ToTable("TrackedSeries");
+                    b.HasIndex("UserId", "Type", "Channel")
+                        .IsUnique();
+
+                    b.ToTable("AppNotificationPreferences", (string)null);
                 });
 
             modelBuilder.Entity("TvTracker.Series.Rating", b =>
@@ -141,13 +163,6 @@ namespace TvTracker.Migrations
                         .HasMaxLength(256)
                         .HasColumnType("nvarchar(256)");
 
-                    b.Property<Guid>("Creator")
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<Guid>("CreatorId")
-                        .HasColumnType("uniqueidentifier")
-                        .HasColumnName("CreatorId");
-
                     b.Property<string>("Director")
                         .IsRequired()
                         .ValueGeneratedOnAdd()
@@ -183,6 +198,9 @@ namespace TvTracker.Migrations
                         .IsRequired()
                         .HasMaxLength(128)
                         .HasColumnType("nvarchar(128)");
+
+                    b.Property<DateTime?>("LastOmdbCheck")
+                        .HasColumnType("datetime2");
 
                     b.Property<string>("Metascore")
                         .IsRequired()

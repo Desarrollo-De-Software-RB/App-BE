@@ -8,7 +8,7 @@ namespace TvTracker.Watchlists
     {
         public Guid UserId { get; set; }
         public int SerieId { get; set; }
-        public SerieDto Serie { get; set; }
+        public SerieDto? Serie { get; set; }
         public WatchlistStatus Status { get; set; }
     }
 }
