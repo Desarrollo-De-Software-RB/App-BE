@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq.Expressions;
 using System.Threading.Tasks;
 using NSubstitute;
+using TvTracker.Watchlists;
 using Volo.Abp.DependencyInjection;
 using Volo.Abp.Domain.Repositories;
 using Volo.Abp.Identity;
@@ -23,6 +24,7 @@ namespace TvTracker.Series
 
             var ratingRepository = Substitute.For<IRatingRepository>();
             var serieRepository = Substitute.For<IRepository<Serie, int>>();
+            var watchlistRepository = Substitute.For<IRepository<WatchlistItem, Guid>>();
             var userRepositoryMock = Substitute.For(new[] { typeof(IIdentityUserRepository), typeof(IRepository<IdentityUser, Guid>) }, null);
             var userRepository = (IIdentityUserRepository)userRepositoryMock;
             var userRepositoryRepo = (IRepository<IdentityUser, Guid>)userRepositoryMock;
@@ -43,7 +45,7 @@ namespace TvTracker.Series
             var serie = new Serie();
             serieRepository.GetAsync(serieId).Returns(serie);
 
-            var appService = new RatingAppService(ratingRepository, serieRepository, userRepositoryRepo, notificationManager);
+            var appService = new RatingAppService(ratingRepository, serieRepository, watchlistRepository, userRepositoryRepo, notificationManager);
             appService.LazyServiceProvider = weakServiceProvider;
 
             var input = new CreateUpdateRatingDto
@@ -81,6 +83,7 @@ namespace TvTracker.Series
             ratingRepository.GetRatingByUserAndSerieAsync(userId, serieId).Returns(existingRating);
 
             var serieRepository = Substitute.For<IRepository<Serie, int>>();
+            var watchlistRepository = Substitute.For<IRepository<WatchlistItem, Guid>>();
             var serie = new Serie();
             serieRepository.GetAsync(serieId).Returns(serie);
             
@@ -101,7 +104,7 @@ namespace TvTracker.Series
             currentUser.Id.Returns(userId);
             weakServiceProvider.LazyGetRequiredService<ICurrentUser>().Returns(currentUser);
 
-            var appService = new RatingAppService(ratingRepository, serieRepository, userRepositoryRepo, notificationManager);
+            var appService = new RatingAppService(ratingRepository, serieRepository, watchlistRepository, userRepositoryRepo, notificationManager);
             appService.LazyServiceProvider = weakServiceProvider;
 
             var input = new CreateUpdateRatingDto
@@ -152,6 +155,7 @@ namespace TvTracker.Series
             ratingRepository.GetRatingByUserAndSerieAsync(user2Id, serieId).Returns((Rating?)null); 
 
             var serieRepository = Substitute.For<IRepository<Serie, int>>();
+            var watchlistRepository = Substitute.For<IRepository<WatchlistItem, Guid>>();
             var serie = new Serie();
             serieRepository.GetAsync(serieId).Returns(serie);
 
@@ -173,7 +177,7 @@ namespace TvTracker.Series
             currentUser.Id.Returns(user2Id);
             weakServiceProvider.LazyGetRequiredService<ICurrentUser>().Returns(currentUser);
 
-            var appService = new RatingAppService(ratingRepository, serieRepository, userRepositoryRepo, notificationManager);
+            var appService = new RatingAppService(ratingRepository, serieRepository, watchlistRepository, userRepositoryRepo, notificationManager);
             appService.LazyServiceProvider = weakServiceProvider;
 
             var input = new CreateUpdateRatingDto

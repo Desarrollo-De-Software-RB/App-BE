@@ -1,0 +1,150 @@
+<div class="container watchlist-container">
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <h2 class="section-title mb-0">API Monitoring</h2>
+        <button class="btn search-button" (click)="downloadLogs()">
+            <i class="fa fa-download me-2"></i> Download Logs
+        </button>
+    </div>
+
+    <div class="row g-4" *ngIf="stats; else loadingTpl">
+        <!-- 1. Last Minute Errors -->
+        <div class="col-md-4">
+            <div class="watchlist-card">
+                <div class="card-body d-flex flex-column justify-content-center align-items-center h-100">
+                    <h5 class="serie-title">Errors (Last Min)</h5>
+                    <h1 class="display-4 text-danger">{{ stats.lastMinuteErrors }}</h1>
+                    <p class="text-secondary">Recent issues</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- 2. Total Errors -->
+        <div class="col-md-4">
+            <div class="watchlist-card">
+                <div class="card-body d-flex flex-column justify-content-center align-items-center h-100">
+                    <h5 class="serie-title">Total Errors</h5>
+                    <h1 class="display-4" [class.text-danger]="stats.totalErrors > 0"
+                        [class.text-white]="stats.totalErrors === 0">{{ stats.totalErrors }}</h1>
+                    <p class="text-secondary">Since startup</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- 3. Avg Latency -->
+        <div class="col-md-4">
+            <div class="watchlist-card">
+                <div class="card-body d-flex flex-column justify-content-center align-items-center h-100">
+                    <h5 class="serie-title">Avg Latency</h5>
+                    <h1 class="display-4 text-info">{{ stats.averageResponseTimeMs }} <span class="fs-6">ms</span></h1>
+                    <p class="text-secondary">Response time</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- 4. Total Requests -->
+        <div class="col-md-4">
+            <div class="watchlist-card">
+                <div class="card-body d-flex flex-column justify-content-center align-items-center h-100">
+                    <h5 class="serie-title">Total Requests</h5>
+                    <h1 class="display-4 text-success">{{ stats.totalRequests }}</h1>
+                    <p class="text-secondary">Processed</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- 5. Uptime -->
+        <div class="col-md-4">
+            <div class="watchlist-card">
+                <div class="card-body d-flex flex-column justify-content-center align-items-center h-100">
+                    <h5 class="serie-title">Uptime</h5>
+                    <h3 class="text-warning mb-0">{{ formatUptime(stats.uptimeSeconds) }}</h3>
+                    <p class="text-secondary mt-2">System Running</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- 6. OMDB Calls -->
+        <div class="col-md-4">
+            <div class="watchlist-card">
+                <div class="card-body d-flex flex-column justify-content-center align-items-center h-100">
+                    <h5 class="serie-title">OMDB API Calls</h5>
+                    <h1 class="display-4 text-primary">{{ stats.externalRequests?.['OMDB'] || 0 }}</h1>
+                    <p class="text-secondary">External Fetch</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <ng-template #loadingTpl>
+        <div class="text-center text-white mt-5">
+            <div class="spinner-border" role="status">
+                <span class="visually-hidden">Loading...</span>
+            </div>
+            <p class="mt-2">Loading metrics...</p>
+        </div>
+    </ng-template>
+
+    <!-- Download Logs Modal -->
+    <div class="modal fade" id="downloadLogsModal" tabindex="-1" aria-labelledby="downloadLogsModalLabel"
+        aria-hidden="true" [ngClass]="{'show d-block': showModal}">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content"
+                style="background-color: #0e0e14; border: 1px solid rgba(255, 255, 255, 0.08); color: white;">
+                <div class="modal-header" style="border-bottom-color: rgba(255, 255, 255, 0.08);">
+                    <h5 class="section-title" id="downloadLogsModalLabel">Download Logs</h5>
+                    <button type="button" class="btn-close btn-close-white" (click)="closeModal()"
+                        aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <label class="form-label">Date Range</label>
+                    <div class="row mb-3">
+                        <div class="col">
+                            <label for="startDateInput" class="form-label small text-muted">From</label>
+                            <input type="date" class="form-control" id="startDateInput"
+                                [(ngModel)]="logFilter.startDate"
+                                style="background-color: #2a2a3c; color: white; border-color: rgba(255, 255, 255, 0.08);">
+                        </div>
+                        <div class="col">
+                            <label for="endDateInput" class="form-label small text-muted">To</label>
+                            <input type="date" class="form-control" id="endDateInput" [(ngModel)]="logFilter.endDate"
+                                style="background-color: #2a2a3c; color: white; border-color: rgba(255, 255, 255, 0.08);">
+                        </div>
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label">Log Levels</label>
+                        <div class="form-check">
+                            <input class="form-check-input" type="checkbox" id="levelInf"
+                                [(ngModel)]="logFilter.levels.INF">
+                            <label class="form-check-label" for="levelInf">INFO (INF)</label>
+                        </div>
+                        <div class="form-check">
+                            <input class="form-check-input" type="checkbox" id="levelDbg"
+                                [(ngModel)]="logFilter.levels.DBG">
+                            <label class="form-check-label" for="levelDbg">DEBUG (DBG)</label>
+                        </div>
+                        <div class="form-check">
+                            <input class="form-check-input" type="checkbox" id="levelErr"
+                                [(ngModel)]="logFilter.levels.ERR">
+                            <label class="form-check-label" for="levelErr">ERROR (ERR)</label>
+                        </div>
+                        <div class="form-check">
+                            <input class="form-check-input" type="checkbox" id="levelWrn"
+                                [(ngModel)]="logFilter.levels.WRN">
+                            <label class="form-check-label" for="levelWrn">WARN (WRN)</label>
+                        </div>
+                        <div class="form-check">
+                            <input class="form-check-input" type="checkbox" id="levelFtl"
+                                [(ngModel)]="logFilter.levels.FTL">
+                            <label class="form-check-label" for="levelFtl">FATAL (FTL)</label>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer" style="border-top-color: rgba(255, 255, 255, 0.08);">
+                    <button type="button" class="btn btn-secondary" (click)="closeModal()">Cancel</button>
+                    <button type="button" class="btn btn-primary" (click)="confirmDownload()">Download</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="modal-backdrop fade show" *ngIf="showModal"></div>
+</div>

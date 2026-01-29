@@ -16,15 +16,17 @@ namespace TvTracker.Series
         private readonly OmdbService _omdbService;
         private readonly Mock<IHttpClientFactory> _httpClientFactoryMock;
         private readonly Mock<IConfiguration> _configurationMock;
+        private readonly Mock<TvTracker.Monitoring.IApiMonitoringService> _monitoringServiceMock;
 
         public OmdbService_Tests()
         {
             _httpClientFactoryMock = new Mock<IHttpClientFactory>();
             _configurationMock = new Mock<IConfiguration>();
+            _monitoringServiceMock = new Mock<TvTracker.Monitoring.IApiMonitoringService>();
 
             _configurationMock.Setup(c => c["Omdb:ApiKey"]).Returns("test_api_key");
 
-            _omdbService = new OmdbService(_httpClientFactoryMock.Object, _configurationMock.Object);
+            _omdbService = new OmdbService(_httpClientFactoryMock.Object, _configurationMock.Object, _monitoringServiceMock.Object);
         }
 
         [Fact]
@@ -60,6 +62,8 @@ namespace TvTracker.Series
             var serie = result.First();
             serie.Title.ShouldBe("Friends");
             serie.IMDBID.ShouldBe("tt0108778");
+            
+            _monitoringServiceMock.Verify(x => x.RecordExternalRequest("OMDB"), Times.AtLeastOnce);
         }
 
         [Fact]

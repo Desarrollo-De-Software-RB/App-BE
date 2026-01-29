@@ -5,6 +5,8 @@ import { RouterModule, Routes } from '@angular/router';
 import { PersonalSettingsComponent } from './account/personal-settings/personal-settings.component';
 import { RegisterComponent } from './account/register/register.component';
 import { NotificationsPageComponent } from './notification/notifications-page/notifications-page.component';
+import { AdminGuard } from './admin.guard';
+import { MonitoringComponent } from './monitoring/monitoring.component';
 
 
 const routes: Routes = [
@@ -50,6 +52,11 @@ const routes: Routes = [
     path: 'notifications',
     component: NotificationsPageComponent,
     canActivate: [authGuard]
+  },
+  {
+    path: 'monitoring',
+    component: MonitoringComponent,
+    canActivate: [AdminGuard]
   },
 ];
 

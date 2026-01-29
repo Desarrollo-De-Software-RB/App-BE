@@ -9,7 +9,7 @@ using Volo.Abp.Domain.Repositories;
 
 namespace TvTracker.Notificationes
 {
-    public class UserEngagementService : ITransientDependency
+    public class UserEngagementService : IUserEngagementService
     {
         private readonly IRepository<WatchlistItem, Guid> _watchlistRepository;
         private readonly IRepository<Notification, Guid> _notificationRepository;

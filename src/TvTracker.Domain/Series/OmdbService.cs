@@ -7,6 +7,7 @@ using System.Linq;
 using System.Net.Http;
 using System.Threading.Tasks;
 using Volo.Abp.DependencyInjection;
+using TvTracker.Monitoring;
 
 namespace TvTracker.Series
 {
@@ -14,11 +15,13 @@ namespace TvTracker.Series
     {
         private readonly IHttpClientFactory _httpClientFactory;
         private readonly IConfiguration _configuration;
+        private readonly IApiMonitoringService _monitoringService;
 
-        public OmdbService(IHttpClientFactory httpClientFactory, IConfiguration configuration)
+        public OmdbService(IHttpClientFactory httpClientFactory, IConfiguration configuration, IApiMonitoringService monitoringService)
         {
             _httpClientFactory = httpClientFactory;
             _configuration = configuration;
+            _monitoringService = monitoringService;
         }
 
         public async Task<ICollection<Serie>> SearchByTitleAsync(string title, string? type = null)
@@ -33,6 +36,7 @@ namespace TvTracker.Series
             {
                 string encodedTitle = Uri.EscapeDataString(title);
                 string searchUrl = $"{baseUrl}?s={encodedTitle}&type={searchType}&apikey={apiKey}";
+                _monitoringService.RecordExternalRequest("OMDB");
                 var response = await client.GetAsync(searchUrl);
                 if (response.IsSuccessStatusCode)
                 {
@@ -79,6 +83,7 @@ namespace TvTracker.Series
 
             using var client = _httpClientFactory.CreateClient();
             string detailUrl = $"{baseUrl}?i={imdbId}&apikey={apiKey}";
+            _monitoringService.RecordExternalRequest("OMDB");
             var detailResponse = await client.GetAsync(detailUrl);
 
             if (detailResponse.IsSuccessStatusCode)

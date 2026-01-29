@@ -39,6 +39,9 @@ using Volo.Abp.Swashbuckle;
 using Volo.Abp.Studio.Client.AspNetCore;
 using Volo.Abp.Security.Claims;
 
+using TvTracker.Middleware;
+using TvTracker.Monitoring;
+
 namespace TvTracker;
 
 [DependsOn(
@@ -110,6 +113,8 @@ public class TvTrackerHttpApiHostModule : AbpModule
         ConfigureSwagger(context, configuration);
         ConfigureVirtualFileSystem(context);
         ConfigureCors(context, configuration);
+        
+        context.Services.AddSingleton<IApiMonitoringService, ApiMonitoringService>();
     }
 
     private void ConfigureAuthentication(ServiceConfigurationContext context)
@@ -251,6 +256,7 @@ public class TvTrackerHttpApiHostModule : AbpModule
         });
         app.UseAuditing();
         app.UseAbpSerilogEnrichers();
+        app.UseMiddleware<ApiMonitoringMiddleware>();
         app.UseConfiguredEndpoints();
     }
 }
