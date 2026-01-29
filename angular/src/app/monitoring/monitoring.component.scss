@@ -1,0 +1,79 @@
+// Variables
+$card-bg: #0e0e14;
+$card-bg-hover: #252538;
+$text-primary: #ffffff;
+$text-secondary: #a0a0b0;
+$accent-color: #3b82f6;
+$border-color: rgba(255, 255, 255, 0.08);
+$card-radius: 16px;
+$transition-speed: 0.3s;
+
+.watchlist-container {
+    padding: 2rem 0;
+}
+
+.section-title {
+    font-weight: 800;
+    font-size: 1.5rem;
+    background-image: linear-gradient(to left, #ff0073, #95a3e5, #ff0073);
+    background-clip: text;
+    color: transparent;
+    animation: 6s linear infinite textbg;
+    background-size: 200% auto;
+    text-transform: uppercase;
+}
+
+// Watchlist Card Style reutilization
+.watchlist-card {
+    background-color: $card-bg;
+    border: 1px solid $border-color;
+    border-radius: $card-radius;
+    padding: 1.5rem;
+    text-align: center;
+    transition: all $transition-speed ease;
+    height: 100%;
+    min-height: 200px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+
+    &:hover {
+        transform: translateY(-8px);
+        box-shadow: 0 15px 30px rgba(0, 0, 0, 0.4);
+        background-color: $card-bg-hover;
+        border-color: rgba($accent-color, 0.3);
+    }
+}
+
+.serie-title {
+    font-size: 1.1rem;
+    font-weight: 600;
+    color: $text-primary;
+    margin-bottom: 0.5rem;
+}
+
+// Search Button Style reutilization
+.search-button {
+    background-color: #3b82f6;
+    color: white;
+    font-weight: 600;
+    cursor: pointer;
+    background-image: linear-gradient(to right, #ff0073, #3b82f6);
+    background-size: 0% 120%;
+    background-repeat: no-repeat;
+    background-position: left;
+    transition: background-size 0.4s ease, transform 0.2s;
+    border: none;
+    padding: 0.5rem 1.5rem;
+
+    &:hover {
+        background-size: 120% 120%;
+        transform: scale(1.02);
+    }
+}
+
+@keyframes textbg {
+    to {
+        background-position: 200% center;
+    }
+}
