@@ -1,55 +1,98 @@
-﻿# TvTracker
+﻿# ![TvTracker](https://github.com/Desarrollo-De-Software-RB/App-BE/blob/master/angular/src/assets/images/logo/TvtrackerLogo.png?raw=true)
+TvTracker is a web application designed to help users track their favorite TV series, discover new shows, and manage their watchlist. Built with a robust **.NET** backend using the **ABP Framework** and a dynamic **Angular** frontend, it integrates with the **OMDB API** to provide real-time information about TV shows.
 
-## About this solution
+## 👥 Team Members
 
-This is a layered startup solution based on [Domain Driven Design (DDD)](https://docs.abp.io/en/abp/latest/Domain-Driven-Design) practises. All the fundamental ABP modules are already installed. Check the [Application Startup Template](https://abp.io/docs/latest/startup-templates/application/index) documentation for more info.
+- Felipe Palazzi
+- Mauricio Nahuel Salto
+- Leandro Fidel Ruano
 
-### Pre-requirements
+## 🚀 Features
 
-* [.NET8.0+ SDK](https://dotnet.microsoft.com/download/dotnet)
-* [Node v18 or 20](https://nodejs.org/en)
+### 1. Series Search
+*   **Search Series**: Users can search for TV series by title or genre using the external OMDB API.
 
-### Configurations
+### 2. Series Management
+*   **Get Series Information**: Retrieves detailed information (title, genre, release date, duration, team, cover photo, country of origin, and IMDB rating) from the internal database.
+*   **Persist Series Information**: Saves series details fetched from the API into the internal database for future access.
 
-The solution comes with a default configuration that works out of the box. However, you may consider to change the following configuration before running your solution:
+### 3. Watchlist
+*   **View Watchlist**: Users can view the series currently in their watchlist.
+*   **Add to Watchlist**: Allows users to add series to their watchlist to receive notifications about relevant updates.
+*   **Remove from Watchlist**: Users can remove series from their watchlist.
 
-**
-### Before running the application
+### 4. Notifications
+*   **On-Screen Notifications**: Displays notifications about changes to watchlist series on the main screen, differentiating between read and unread messages.
+*   **Email Notifications**: Sends notifications via email to the user.
+*   **Notification Settings**: Users can configure which types of notifications they wish to receive.
+*   **Notification Generation**: A background system process periodically checks for updates and generates notifications for watchlist series, persisting them in the database.
 
-* Run `abp install-libs` command on your solution folder to install client-side package dependencies. This step is automatically done when you create a new solution, if you didn't especially disabled it. However, you should run it yourself if you have first cloned this solution from your source control, or added a new client-side package dependency to your solution.
-* Run `TvTracker.DbMigrator` to create the initial database. This step is also automatically done when you create a new solution, if you didn't especially disabled it. This should be done in the first run. It is also needed if a new database migration is added to the solution later.
+### 5. Series Rating
+*   **Rate Series**: Users can rate series on a scale of 1 to 5 stars and add optional comments.
+*   **Edit Rating**: Users can modify their previous ratings and comments.
 
-#### Generating a Signing Certificate
+### 6. Authentication
+*   **Login**: Secure login with username and password.
 
-In the production environment, you need to use a production signing certificate. ABP Framework sets up signing and encryption certificates in your application and expects an `openiddict.pfx` file in your application.
+### 7. Administrative Features
+*   **User Management**: Full access to user management functionalities.
+*   **API Monitoring Panel**: Visualizes statistics such as API access count, response times, error rates, etc.
+*   **Monitoring Log**: Records events in a log file for error diagnosis and debugging.
 
-To generate a signing certificate, you can use the following command:
+### 8. User Administration
+*   **Register New User**: Admins can create new users with username, full name, password, and profile picture.
+*   **Delete User**: Admins can remove existing users.
+*   **View Users**: Admins can view full details of all users. Standard users can only see the names of other users.
+*   **Edit Profile**: Users can update their own profile information (full name, password, profile picture).
 
-```bash
-dotnet dev-certs https -v -ep openiddict.pfx -p 9059242b-6366-4491-b90e-5189db96a02f
-```
+## 🛠️ Technologies Used
 
-> `9059242b-6366-4491-b90e-5189db96a02f` is the password of the certificate, you can change it to any password you want.
+*   **Backend**: .NET 8, ABP Framework
+*   **Frontend**: Angular
+*   **Database**: SQL Server (via Entity Framework Core)
+*   **External API**: OMDB API
 
-It is recommended to use **two** RSA certificates, distinct from the certificate(s) used for HTTPS: one for encryption, one for signing.
+## 💻 How to Run the Application
 
-For more information, please refer to: https://documentation.openiddict.com/configuration/encryption-and-signing-credentials.html#registering-a-certificate-recommended-for-production-ready-scenarios
+### Prerequisites
+*   [.NET 8.0 SDK](https://dotnet.microsoft.com/download/dotnet)
+*   [Node.js](https://nodejs.org/en) (v18 or v20)
+*   [SQL Server](https://www.microsoft.com/en-us/sql-server/sql-server-downloads) (or LocalDB)
 
-> Also, see the [Configuring OpenIddict](https://docs.abp.io/en/abp/latest/Deployment/Configuring-OpenIddict#production-environment) documentation for more information.
+### Backend Setup
 
-### Solution structure
+1.  **Clone the repository**.
+2.  **Navigate to the backend directory**:
+    The solution file `TvTracker.sln` is in the root directory.
+3.  **Run Database Migrations**:
+    Execute the `TvTracker.DbMigrator` project to set up the database and seed initial data.
+    ```bash
+    dotnet run --project src/TvTracker.DbMigrator/TvTracker.DbMigrator.csproj
+    ```
+4.  **Start the Backend API**:
+    Run the `TvTracker.HttpApi.Host` project.
+    ```bash
+    dotnet run --project src/TvTracker.HttpApi.Host/TvTracker.HttpApi.Host.csproj
+    ```
 
-This is a layered monolith application that consists of the following applications:
+### Frontend Setup
 
-* `TvTracker.DbMigrator`: A console application which applies the migrations and also seeds the initial data. It is useful on development as well as on production environment.
-*
-## Deploying the application
+1.  **Navigate to the Angular directory**:
+    ```bash
+    cd angular
+    ```
+2.  **Install Dependencies**:
+    ```bash
+    npm install
+    ```
+3.  **Start the Development Server**:
+    ```bash
+    npm start
+    ```
+    Typically, the application will be available at `http://localhost:4200`.
 
-Deploying an ABP application is not different than deploying any .NET or ASP.NET Core application. However, there are some topics that you should care about when you are deploying your applications. You can check ABP's [Deployment documentation](https://docs.abp.io/en/abp/latest/Deployment/Index) and ABP Commercial's [Deployment documentation](https://abp.io/docs/latest/startup-templates/application/deployment?UI=MVC&DB=EF&Tiered=No) before deploying your application.
+## 🧪 Testing and Monitoring
 
-### Additional resources
-
-You can see the following resources to learn more about your solution and the ABP Framework:
-
-* [Web Application Development Tutorial](https://abp.io/docs/latest/tutorials/book-store/part-1)
-* [Application Startup Template](https://abp.io/docs/latest/startup-templates/application/index)
+*   **Unit/Integration Tests**: The solution includes a `test` folder with automated tests. run `dotnet test` in the root directory to execute them.
+*   **Background Jobs**: The notification generation process runs automatically in the background when the backend is running.
+*   **Logs**: Check the `Logs` folder (usually inside `src/TvTracker.HttpApi.Host/Logs` or similar) for the monitoring bitacora/logs.
