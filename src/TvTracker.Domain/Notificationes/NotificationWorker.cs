@@ -29,7 +29,7 @@ namespace TvTracker.Notificationes
             {
                 // Resolve service from the scope created for this run
                 var seriesDetectionService = workerContext.ServiceProvider.GetRequiredService<ISeriesChangeDetectionService>();
-                var userEngagementService = workerContext.ServiceProvider.GetRequiredService<UserEngagementService>();
+                var userEngagementService = workerContext.ServiceProvider.GetRequiredService<IUserEngagementService>();
              
                 // Run detection
                 await seriesDetectionService.DetectChangesAsync();

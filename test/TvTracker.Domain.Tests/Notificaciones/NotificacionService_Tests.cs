@@ -33,6 +33,7 @@ public class NotificationWorker_Tests
     {
         // Arrange
         var seriesChangeDetectionService = Substitute.For<ISeriesChangeDetectionService>();
+        var userEngagementService = Substitute.For<IUserEngagementService>();
         
         var timer = Substitute.For<AbpAsyncTimer>();
         var serviceScopeFactory = Substitute.For<IServiceScopeFactory>();
@@ -45,6 +46,7 @@ public class NotificationWorker_Tests
         // Setup ServiceProvider mock
         var serviceProvider = Substitute.For<IServiceProvider>();
         serviceProvider.GetService(typeof(ISeriesChangeDetectionService)).Returns(seriesChangeDetectionService);
+        serviceProvider.GetService(typeof(IUserEngagementService)).Returns(userEngagementService);
 
         var workerContext = new PeriodicBackgroundWorkerContext(serviceProvider);
 
