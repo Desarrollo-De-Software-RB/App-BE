@@ -3,16 +3,21 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Identity;
 using Volo.Abp.Data;
 using Volo.Abp.Identity;
+using Volo.Abp.Identity;
+using IdentityUser = Volo.Abp.Identity.IdentityUser;
+using TvTracker.Notificationes;
 
 namespace TvTracker.Account;
 
 public class AppAccountAppService : TvTrackerAppService, IAppAccountAppService
 {
     private readonly IdentityUserManager _userManager;
+    private readonly NotificationManager _notificationManager;
 
-    public AppAccountAppService(IdentityUserManager userManager)
+    public AppAccountAppService(IdentityUserManager userManager, NotificationManager notificationManager)
     {
         _userManager = userManager;
+        _notificationManager = notificationManager;
     }
 
     public async Task<IdentityUserDto> RegisterAsync(AppRegisterDto input)
@@ -52,6 +57,14 @@ public class AppAccountAppService : TvTrackerAppService, IAppAccountAppService
         user.SetProperty("ProfilePicture", input.ProfilePicture);
 
         (await _userManager.UpdateAsync(user)).CheckErrors();
+
+        await _notificationManager.CreateAsync(
+            user.Id,
+            "System",
+            "You have updated your personal data.",
+            TvTracker.Notificationes.NotificationType.System,
+            user.Id.ToString()
+        );
 
         return ObjectMapper.Map<IdentityUser, IdentityUserDto>(user);
     }

@@ -17,13 +17,18 @@ import { PersonalSettingsModule } from './account/personal-settings/personal-set
 import { UserProfileModule } from './account/user-profile/user-profile.module';
 import { RegisterComponent } from './account/register/register.component';
 import { ReactiveFormsModule } from '@angular/forms';
+import { NotificationBellComponent } from './notification/notification-bell/notification-bell.component';
+import { NotificationsPageComponent } from './notification/notifications-page/notifications-page.component';
+import { NotificationSettingsComponent } from './notification/notification-settings/notification-settings.component';
+import { FormsModule } from '@angular/forms';
 
 @NgModule({
-  declarations: [AppComponent, RegisterComponent],
+  declarations: [AppComponent, RegisterComponent, NotificationBellComponent, NotificationsPageComponent, NotificationSettingsComponent],
   imports: [
     BrowserModule,
     BrowserAnimationsModule,
     ReactiveFormsModule,
+    FormsModule,
     AppRoutingModule,
     ThemeSharedModule,
     CoreModule,

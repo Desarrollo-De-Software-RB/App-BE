@@ -7,6 +7,7 @@ import { WatchlistService } from '../../proxy/watchlists/watchlist.service';
 import { CreateUpdateWatchlistItemDto, WatchlistStatus, WatchlistItemDto } from '../../proxy/watchlists/models';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { AddToWatchlistModalComponent } from '../../watchlist/add-to-watchlist-modal/add-to-watchlist-modal.component';
+import { NotificationStateService } from '../../services/notification-state.service';
 
 @Component({
     selector: 'app-search-series',
@@ -28,7 +29,8 @@ export class SearchSeriesComponent implements OnInit {
         private router: Router,
         private searchStateService: SearchStateService,
         private watchlistService: WatchlistService,
-        private modalService: NgbModal
+        private modalService: NgbModal,
+        private notificationStateService: NotificationStateService
     ) { }
 
     ngOnInit() {
@@ -120,11 +122,13 @@ export class SearchSeriesComponent implements OnInit {
             // Update
             this.watchlistService.updateStatus(input).subscribe(() => {
                 this.loadUserWatchlist(); // Reload to update local state
+                this.notificationStateService.triggerRefresh();
             });
         } else {
             // Add
             this.watchlistService.addItem(input).subscribe(() => {
                 this.loadUserWatchlist(); // Reload to update local state
+                this.notificationStateService.triggerRefresh();
             });
         }
     }

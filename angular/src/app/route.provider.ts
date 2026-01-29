@@ -38,6 +38,14 @@ function configureRoutes(routes: RoutesService, authService: AuthService) {
         layout: eLayoutType.application,
         invisible: true,
       },
+      {
+        path: '/notifications',
+        name: 'Notifications',
+        iconClass: 'bi bi-bell-fill',
+        order: 5,
+        layout: eLayoutType.application,
+        invisible: true,
+      },
     ]);
   };
 }

@@ -52,7 +52,7 @@ namespace TvTracker.Series
             _httpClientFactoryMock.Setup(x => x.CreateClient(It.IsAny<string>())).Returns(httpClient);
 
             // Act
-            var result = await _omdbService.SearchByTitleAsync("Friends", null);
+            var result = await _omdbService.SearchByTitleAsync("Friends", "series");
 
             // Assert
             result.ShouldNotBeNull();

@@ -72,7 +72,7 @@ namespace TvTracker.Series
             }
         }
 
-        public async Task<Serie> GetSerieDetailsAsync(string imdbId)
+        public async Task<Serie?> GetSerieDetailsAsync(string imdbId)
         {
             var apiKey = _configuration["Omdb:ApiKey"];
             var baseUrl = "https://www.omdbapi.com/";
@@ -85,6 +85,7 @@ namespace TvTracker.Series
             {
                 string detailJson = await detailResponse.Content.ReadAsStringAsync();
                 var fullDetail = JsonConvert.DeserializeObject<SerieOmdb>(detailJson);
+                if (fullDetail == null) return null;
 
                 float.TryParse(fullDetail.IMDBRating, NumberStyles.Any, CultureInfo.InvariantCulture, out float rating);
                 int.TryParse(fullDetail.TotalSeasons, out int totalSeasons);
@@ -120,31 +121,31 @@ namespace TvTracker.Series
         private class SearchResponse
         {
             [JsonProperty("Search")]
-            public List<SerieOmdb> Search { get; set; }
+            public List<SerieOmdb>? Search { get; set; }
         }
 
         private class SerieOmdb
         {
-            public string Title { get; set; }
-            public string Year { get; set; }
-            public string IMDBID { get; set; }
-            public string Type { get; set; }
-            public string Poster { get; set; }
-            public string Genre { get; set; }
-            public string Plot { get; set; }
-            public string Actors { get; set; }
-            public string Director { get; set; }
-            public string Writer { get; set; }
-            public string Language { get; set; }
-            public string Country { get; set; }
-            public string Awards { get; set; }
-            public string Metascore { get; set; }
-            public string IMDBRating { get; set; }
-            public string IMDBVotes { get; set; }
-            public string Released { get; set; }
-            public string Runtime { get; set; }
-            public string Rated { get; set; }
-            public string TotalSeasons { get; set; }
+            public string? Title { get; set; }
+            public string? Year { get; set; }
+            public string? IMDBID { get; set; }
+            public string? Type { get; set; }
+            public string? Poster { get; set; }
+            public string? Genre { get; set; }
+            public string? Plot { get; set; }
+            public string? Actors { get; set; }
+            public string? Director { get; set; }
+            public string? Writer { get; set; }
+            public string? Language { get; set; }
+            public string? Country { get; set; }
+            public string? Awards { get; set; }
+            public string? Metascore { get; set; }
+            public string? IMDBRating { get; set; }
+            public string? IMDBVotes { get; set; }
+            public string? Released { get; set; }
+            public string? Runtime { get; set; }
+            public string? Rated { get; set; }
+            public string? TotalSeasons { get; set; }
         }
     }
 }

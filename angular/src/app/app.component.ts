@@ -5,6 +5,7 @@ import { UserProfileComponent } from './account/user-profile/user-profile.compon
 import { ReplaceableComponentsService } from '@abp/ng.core';
 import { eAccountComponents } from '@abp/ng.account';
 import { RegisterComponent } from './account/register/register.component';
+import { NotificationBellComponent } from './notification/notification-bell/notification-bell.component';
 
 @Component({
   selector: 'app-root',
@@ -26,6 +27,11 @@ export class AppComponent implements OnInit {
     });
 
     this.navItems.addItems([
+      {
+        id: 'NotificationBell',
+        order: 99,
+        component: NotificationBellComponent,
+      },
       {
         id: 'MyProfilePicture',
         order: 100,
@@ -53,6 +59,12 @@ export class AppComponent implements OnInit {
       const usersRoute = this.routes.find(r => r.name === 'Users');
       if (usersRoute) {
         this.routes.patch('Users', {
+          invisible: !isAuthenticated
+        });
+      }
+      const notificationsRoute = this.routes.find(r => r.name === 'Notifications');
+      if (notificationsRoute) {
+        this.routes.patch('Notifications', {
           invisible: !isAuthenticated
         });
       }

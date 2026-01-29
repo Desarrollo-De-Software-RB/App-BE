@@ -1,0 +1,94 @@
+<div class="container watchlist-container mt-4">
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <h2 class="section-title mb-0">Notifications</h2>
+        <div class="d-flex gap-3">
+            <div class="btn-group" *ngIf="!showSettings">
+                <button type="button" class="btn" [ngClass]="{
+                    'btn-light': filter === 'all',
+                    'btn-outline-light': filter !== 'all'
+                }" (click)="setFilter('all')">All</button>
+                <button type="button" class="btn" [ngClass]="{
+                    'btn-primary': filter === 'unread',
+                    'btn-outline-primary': filter !== 'unread'
+                }" (click)="setFilter('unread')">Unread</button>
+                <button type="button" class="btn" [ngClass]="{
+                    'btn-secondary': filter === 'read',
+                    'btn-outline-secondary': filter !== 'read'
+                }" (click)="setFilter('read')">Read</button>
+            </div>
+            <button class="btn btn-outline-light" (click)="toggleSettings()">
+                <i class="bi bi-gear-fill"></i>
+            </button>
+        </div>
+    </div>
+
+    <div *ngIf="showSettings" class="settings-panel mb-4">
+        <app-notification-settings (close)="toggleSettings()"></app-notification-settings>
+    </div>
+
+    <div *ngIf="!showSettings">
+        <!-- Mass Actions -->
+        <div class="d-flex justify-content-end mb-4 gap-2 action-buttons" *ngIf="filteredNotifications.length > 0">
+            <button class="btn btn-outline-secondary btn-sm" (click)="markAllAsRead()" *ngIf="filter === 'unread'">
+                <i class="bi bi-check-all"></i> Mark All as Read
+            </button>
+            <button class="btn btn-outline-danger btn-sm" (click)="deleteAllUnread()" *ngIf="filter === 'unread'">
+                <i class="bi bi-trash"></i> Delete All Unread
+            </button>
+            <button class="btn btn-outline-danger btn-sm" (click)="deleteAllRead()" *ngIf="filter === 'read'">
+                <i class="bi bi-trash"></i> Delete All Read
+            </button>
+            <button class="btn btn-outline-danger btn-sm" (click)="deleteAll()" *ngIf="filter === 'all'">
+                <i class="bi bi-trash"></i> Delete All
+            </button>
+        </div>
+
+        <div *ngIf="loading" class="text-center p-5">
+            <div class="spinner-border text-primary" role="status">
+                <span class="visually-hidden">Loading...</span>
+            </div>
+        </div>
+
+        <div *ngIf="!loading && filteredNotifications.length === 0" class="alert alert-info mt-4"
+            style="text-align: center;color: white; background-color: rgba(255, 255, 255, 0.05); border: 1px solid rgba(255, 255, 255, 0.1);">
+            <i class="bi bi-check2-circle fs-4 d-block mb-2" style="color: white;"></i>
+            You're all caught up! No notifications here.
+        </div>
+
+        <!-- Grid Layout (Matching Watchlist) -->
+        <div class="row g-4" *ngIf="!loading && filteredNotifications.length > 0">
+            <div class="col-sm-6 col-md-4 col-lg-3" *ngFor="let item of filteredNotifications">
+                <div class="watchlist-card notification-card" [class.unread]="!item.isRead" (click)="markAsRead(item)">
+
+                    <!-- Checkmark Overlay for Animation -->
+                    <div class="checkmark-overlay" *ngIf="item.isAnimating">
+                        <i class="bi bi-check-lg check-icon"></i>
+                    </div>
+
+                    <!-- Unread Indicator (Dot -> Text on Hover) -->
+                    <div class="unread-indicator" *ngIf="!item.isRead && !item.isAnimating">
+                        <i class="bi bi-check-lg dot-icon"></i>
+                        <span class="text">Mark as Read</span>
+                    </div>
+
+                    <!-- Icon Wrapper acting as Poster -->
+                    <div class="poster-wrapper d-flex align-items-center justify-content-center"
+                        [ngClass]="'type-bg-' + item.type">
+                        <i class="bi" [ngClass]="getIconForType(item.type)" style="font-size: 3rem;"></i>
+                    </div>
+
+                    <h5 class="serie-title text-truncate mb-2" title="{{ item.title }}">{{ item.title }}</h5>
+                    <p class="text-muted small mb-3 text-center message-clamp">{{ item.message }}</p>
+                    <span class="badge rounded-pill bg-dark mb-3">{{ item.creationTime | date:'short' }}</span>
+
+                    <div class="card-actions" (click)="$event.stopPropagation()">
+                        <button class="btn btn-sm btn-outline-danger w-100 delete-btn"
+                            (click)="deleteNotification(item, $event)">
+                            <i class="bi bi-trash me-1"></i> Delete
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

@@ -4,6 +4,7 @@ import { RouterModule, Routes } from '@angular/router';
 
 import { PersonalSettingsComponent } from './account/personal-settings/personal-settings.component';
 import { RegisterComponent } from './account/register/register.component';
+import { NotificationsPageComponent } from './notification/notifications-page/notifications-page.component';
 
 
 const routes: Routes = [
@@ -44,6 +45,11 @@ const routes: Routes = [
     canActivate: [authGuard],
     loadChildren: () =>
       import('./watchlist/watchlist.module').then(m => m.WatchlistModule)
+  },
+  {
+    path: 'notifications',
+    component: NotificationsPageComponent,
+    canActivate: [authGuard]
   },
 ];
 

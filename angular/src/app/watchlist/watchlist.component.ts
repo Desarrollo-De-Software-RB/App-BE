@@ -2,7 +2,9 @@ import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { WatchlistService } from '../proxy/watchlists/watchlist.service';
 import { WatchlistItemDto, WatchlistStatus, CreateUpdateWatchlistItemDto } from '../proxy/watchlists/models';
+import { NotificationService } from '../proxy/notificationes/notification.service';
 import { ListService } from '@abp/ng.core';
+import { NotificationStateService } from '../services/notification-state.service';
 
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { AddToWatchlistModalComponent } from './add-to-watchlist-modal/add-to-watchlist-modal.component';
@@ -23,9 +25,11 @@ export class WatchlistComponent implements OnInit {
 
   constructor(
     private watchlistService: WatchlistService,
+    private notificationService: NotificationService,
     private router: Router,
     private modalService: NgbModal,
-    private confirmation: ConfirmationService
+    private confirmation: ConfirmationService,
+    private notificationStateService: NotificationStateService
   ) { }
 
   ngOnInit(): void {
@@ -78,6 +82,7 @@ export class WatchlistComponent implements OnInit {
     this.watchlistService.updateStatus(input).subscribe(() => {
       item.status = newStatus;
       this.filterItems(); // Re-filter in case the item should move
+      this.notificationStateService.triggerRefresh();
     });
   }
 
@@ -91,6 +96,7 @@ export class WatchlistComponent implements OnInit {
         this.watchlistService.removeItem(item.serie.imdbid).subscribe(() => {
           this.items = this.items.filter(i => i.id !== item.id);
           this.filterItems();
+          this.notificationStateService.triggerRefresh();
         });
       }
     });

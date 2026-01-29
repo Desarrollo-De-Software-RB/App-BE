@@ -36,7 +36,7 @@ public class TvTrackerDbContext :
     public DbSet<Serie> Series { get; set; }
     public DbSet<WatchlistItem> WatchlistItems { get; set; }
     public DbSet<Notification> Notifications { get; set; }
-    public DbSet<TrackedSeries> TrackedSeries { get; set; }
+    public DbSet<NotificationPreference> NotificationPreferences { get; set; }
     public DbSet<Rating> Ratings { get; set; }
 
     #region Entities from the modules
@@ -135,11 +135,20 @@ public class TvTrackerDbContext :
         
         /* Configure your own tables/entities inside here */
 
-        //builder.Entity<YourEntity>(b =>
-        //{
-        //    b.ToTable(TvTrackerConsts.DbTablePrefix + "YourEntities", TvTrackerConsts.DbSchema);
-        //    b.ConfigureByConvention(); //auto configure for the base class props
-        //    //...
-        //});
+        builder.Entity<Notification>(b =>
+        {
+            b.ToTable(TvTrackerConsts.DbTablePrefix + "Notifications", TvTrackerConsts.DbSchema);
+            b.ConfigureByConvention();
+            b.Property(x => x.Title).HasMaxLength(128);
+            b.Property(x => x.Message).HasMaxLength(512);
+            b.Property(x => x.RelatedEntityId).HasMaxLength(64);
+        });
+
+        builder.Entity<NotificationPreference>(b =>
+        {
+            b.ToTable(TvTrackerConsts.DbTablePrefix + "NotificationPreferences", TvTrackerConsts.DbSchema);
+            b.ConfigureByConvention();
+            b.HasIndex(x => new { x.UserId, x.Type, x.Channel }).IsUnique();
+        });
     }
 }
