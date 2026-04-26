@@ -1,6 +1,9 @@
 ﻿# ![TvTracker](https://github.com/Desarrollo-De-Software-RB/App-BE/blob/master/angular/src/assets/images/logo/TvtrackerLogo.png?raw=true)
 TvTracker is a web application designed to help users track their favorite TV series, discover new shows, and manage their watchlist. Built with a robust **.NET** backend using the **ABP Framework** and a dynamic **Angular** frontend, it integrates with the **OMDB API** to provide real-time information about TV shows.
 
+> ![TvTracker DEMO](./README_Images/demo_tv_tracker.gif)
+> ![TvTracker Home](./README_Images/home_page.png)
+
 ## 👥 Team Members
 
 - Felipe Palazzi
@@ -11,39 +14,48 @@ TvTracker is a web application designed to help users track their favorite TV se
 
 ### 1. Series Search
 *   **Search Series**: Users can search for TV series by title or genre using the external OMDB API.
+> ![Search Series](./README_Images/search-series.png)
 
 ### 2. Series Management
 *   **Get Series Information**: Retrieves detailed information (title, genre, release date, duration, team, cover photo, country of origin, and IMDB rating) from the internal database.
 *   **Persist Series Information**: Saves series details fetched from the API into the internal database for future access.
+> ![Get Series Information](./README_Images/get-series-information.png)
 
 ### 3. Watchlist
 *   **View Watchlist**: Users can view the series currently in their watchlist.
 *   **Add to Watchlist**: Allows users to add series to their watchlist to receive notifications about relevant updates.
 *   **Remove from Watchlist**: Users can remove series from their watchlist.
+> ![View Watchlist](./README_Images/view-watchlist.png)
 
 ### 4. Notifications
 *   **On-Screen Notifications**: Displays notifications about changes to watchlist series on the main screen, differentiating between read and unread messages.
 *   **Email Notifications**: Sends notifications via email to the user.
 *   **Notification Settings**: Users can configure which types of notifications they wish to receive.
 *   **Notification Generation**: A background system process periodically checks for updates and generates notifications for watchlist series, persisting them in the database.
+> ![Notifications](./README_Images/notifications.png)
 
 ### 5. Series Rating
 *   **Rate Series**: Users can rate series on a scale of 1 to 5 stars and add optional comments.
 *   **Edit Rating**: Users can modify their previous ratings and comments.
+*   **View Ratings**: Users can see their own ratings and comments for each series, as well as the average rating and comments from other users.
+> ![View Ratings](./README_Images/view-ratings.png)
 
 ### 6. Authentication
 *   **Login**: Secure login with username and password.
+> ![Login](./README_Images/login.png)
 
 ### 7. Administrative Features
 *   **User Management**: Full access to user management functionalities.
 *   **API Monitoring Panel**: Visualizes statistics such as API access count, response times, error rates, etc.
 *   **Monitoring Log**: Records events in a log file for error diagnosis and debugging.
+> ![API Monitoring Panel](./README_Images/api-monitoring-panel.png)
 
 ### 8. User Administration
 *   **Register New User**: Admins can create new users with username, full name, password, and profile picture.
 *   **Delete User**: Admins can remove existing users.
 *   **View Users**: Admins can view full details of all users. Standard users can only see the names of other users.
 *   **Edit Profile**: Users can update their own profile information (full name, password, profile picture).
+> ![Users Profiles](./README_Images/users-profiles.png)
 
 ## 🛠️ Technologies Used
 
